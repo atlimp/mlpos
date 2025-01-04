@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+      <UserSecretsId>936549c9-9b91-4266-a5dc-e67db9df79ab</UserSecretsId>
+  </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="wwwroot\lib\**" />
+      <Content Remove="wwwroot\lib\**" />
+      <EmbeddedResource Remove="wwwroot\lib\**" />
+      <None Remove="wwwroot\lib\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Views\Login\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MLPos.Core\MLPos.Core.csproj" />
+      <ProjectReference Include="..\MLPos.Data\MLPos.Data.csproj" />
+      <ProjectReference Include="..\MLPos.Services\MLPos.Services.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Home\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Home\Privacy.cshtml" />
+      <_ContentIncludedByDefault Remove="App_Code\Helpers.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Product\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Product\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\fonts\" />
+      <Folder Include="wwwroot\img\customers\" />
+      <Folder Include="wwwroot\img\paymentMethods\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Areas\Admin\Views\Customer\Details.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Customer\Index.cshtml" />
+      <AdditionalFiles Include="Views\Login\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.11" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
+      <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    </ItemGroup>
+
+</Project>

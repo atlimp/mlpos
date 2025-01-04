@@ -1,0 +1,108 @@
+.admincontainer {
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.headercontainer {
+    background-color: var(--green);
+    height: 4em;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.headercontainer > img {
+    margin: auto 1em auto 1em;
+    height: 80%;
+}
+
+#hamburger {
+    height: 50%;
+}
+
+.navbar {
+    padding: 2em 0 0 0;
+    flex-direction: column;
+    background-color: var(--green);
+    height: 100%;
+}
+
+.navbar.hidden {
+    display: none;
+}
+
+@media(min-width: 750px) {
+    .admincontainer {
+        flex-direction: row;
+    }
+
+    .navbar.hidden {
+        display: block;
+    }
+}
+
+.logoutButton, .loginButton {
+    align-self: flex-end;
+    margin: 2em auto;
+    width: 90%;
+}
+
+.navbar .hidden {
+    /*display: none;*/
+}
+
+.navbarItem {
+    display: flex;
+    padding-left: 0.5em;
+    min-height: 2em;
+    line-height: 2em;
+    font-size: 2em;
+    text-decoration: none;
+    vertical-align: central;
+    color: var(--yellow);
+}
+
+.navIcon {
+  height: 1em;
+  width: auto;
+  margin: auto 1em auto 0;
+}
+
+.navBarItem:hover {
+  background-color: var(--coral);
+  color: var(--jet);
+}
+
+.formcontainer {
+    flex-direction: column;
+    width: 90%;
+    margin: 2em auto 0 auto;
+}
+
+.detailsContainer {
+    flex-direction: row;
+}
+
+.pageContainer {
+    margin: 1em 0 0 1em;
+    flex-direction: column;
+}
+
+.card {
+  border: 1px solid var(--jet);
+  border-radius: 10px;
+  width: 20em;
+  height: 25em;
+  margin: 0 2em 1em 0;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  color: var(--jet);
+}
+
+.card img {
+  margin: 0 auto;
+  max-height: 15em;
+  max-width: 16em;
+  width: auto;
+  height: auto;
+}

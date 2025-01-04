@@ -1,0 +1,89 @@
+:root {
+  --white: #fffffa;
+  --yellow: #E9D758;
+  --green: #297373;
+  --coral: #FF8552;
+  --platinum: #E6E6E6;
+  --jet: #39393A;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  color: var(--jet);
+  overflow-y: hidden;
+}
+
+input, select, textarea {
+  background-color: var(--platinum);
+  padding: 0.5em;
+  border: none;
+  border-radius: 5px;
+}
+
+input:disabled, select:disabled, textarea:disabled {
+  background-color: var(--white);
+}
+
+a {
+  text-decoration: none;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  margin: auto 0;
+  display: flex;
+}
+
+.button {
+  font-size: 1.5em;
+  display: block;
+  padding: 0.2em 0.5em;
+  
+  border: none;
+  border-radius: 5px;
+  
+  height: fit-content;
+  width: fit-content;
+  
+  text-align: center;
+  vertical-align: central;
+  
+  cursor: pointer;
+}
+
+.buttonPrimary {
+  background-color: var(--green);
+  color: var(--yellow);
+}
+
+.buttonSecondary {
+  background-color: var(--coral);
+  color: var(--jet);
+}
+
+.inputLabel {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5em 0;
+  font-size: 1.25em;
+}
+
+.inputLabel input, .inputLabel select, .inputLabel textarea {
+  font-size: 1.25em;
+}
+
+.validationErrors {
+    min-height: 3em;
+    color: red;
+    list-style: none;
+}

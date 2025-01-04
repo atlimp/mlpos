@@ -1,0 +1,37 @@
+@using MLPos.Web.Models
+@using MLPos.Core.Model
+@using MLPos.Web.Utils
+@model ProductListViewModel
+@{
+    Layout = "_Admin_Layout";
+    ViewData["Title"] = "Products";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Products.css">
+}
+
+<div class="container pageContainer">
+    <div class="headerContainer">
+        <h1>@ViewData["Title"]</h1>
+        <div>
+            <input class="search" type="search" placeholder="Search..."/>
+            <a href="@Url.Action("Edit", "Product")" id="newProductButton" class="button buttonPrimary">New Product</a>
+        </div>
+    </div>
+    <div class="flexList productList">
+        @foreach (Product product in Model.Products)
+        {
+            <a class="productCard" href="@Url.Action("Details", "Product", new { id = product.Id })" id="@product.Id">
+                <div class="productImageContainer">
+                    @Html.ImageOrDefault(product?.Image)
+                </div>
+                <div>
+                    <p class="productDesc">@product.Description</p>
+                    <p class="productType">@product.Type.ToString()</p>
+                    <p class="productPrice">@product.Price kr.</p>
+                </div>
+            </a>
+        }
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="~/css/styles.css" />
+    <link rel="stylesheet" href="~/css/adminStyles.css" />
+    @await RenderSectionAsync("Styles", required: false)
+    <title>@ViewData["Title"]</title>
+    <style>
+        @@font-face {
+            font-family: "Jost";
+            src: url("@Url.Content("~/fonts/Jost.ttf")");
+        }
+
+        body {
+            font-family: "Jost", sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div class="container admincontainer">
+    <div class="container headercontainer">
+        <img src="~/img/logo.png" id="navbarlogo"/>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <img src="~/img/icons/hamburger.png" id="hamburger" />
+        }
+    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <nav class="container navbar hidden" id="navbar">
+            <a class="navbarItem" href="@Url.Action("Index", "Product")"><img class="navIcon" src="~/img/icons/product.png"/>Products</a>
+            <a class="navbarItem" href="@Url.Action("Index", "Customer")"><img class="navIcon" src="~/img/icons/customer.png"/>Customers</a>
+            <a class="navbarItem" href="@Url.Action("Index", "PaymentMethod")"><img class="navIcon" src="~/img/icons/paymentmethod.png"/>Payment methods</a>
+            <a href="~/Admin/Logout" class="button buttonSecondary logoutButton">Logout</a>
+        </nav>
+    }
+    <div class="container">
+        @RenderBody()
+    </div>
+</div>
+<script src="~/js/admin.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

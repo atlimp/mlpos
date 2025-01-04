@@ -1,0 +1,79 @@
+@using MLPos.Web.Models
+@using MLPos.Web.Utils
+@model CustomerDetailsViewModel
+@{
+    Layout = "_Admin_Layout";
+    ViewData["Title"] = Model.Customer?.Name ?? "New Customer";
+    
+    string submitBtnText = Model.Customer == null ? "Create" : "Update";
+
+    string formAction = Model.Customer == null ? @Url.Action("Edit") : @Url.Action("Edit", "Customer", new { id = Model.Customer.Id });
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Customer.css">
+}
+@if (Model.ValidationErrors != null && Model.ValidationErrors.Any())
+{
+    <div class="validationErrors">
+        @foreach (var error in Model.ValidationErrors)
+        {
+            <p>@error.Error</p>
+        }
+    </div>
+    
+}
+<form class="editForm" method="POST" action="@formAction" enctype="multipart/form-data">
+    <div class="detailsContainer">
+        @Html.ImageOrDefault(Model.Customer?.Image)
+        <div>
+            @if (Model.Editing)
+            {
+                <label class="inputLabel" for="image">
+                    Image:
+                    <input type="file" name="image" id="image"/>
+                </label>
+            }
+            <label class="inputLabel" for="name">
+                Name:
+                @Html.TextBoxFor(m => m.Customer.Name, new { id = "name" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+            </label>
+            <label class="inputLabel" for="email">
+                Email:
+                @Html.TextBoxFor(m => m.Customer.Email, new { id = "email", type = "email" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+            </label>
+
+            @if (Model.Customer != null && Model.Customer.DateInserted != DateTime.MinValue)
+            {
+                <p>Customer created at @Model.Customer.DateInserted</p>
+            }
+            @if (Model.Customer != null && Model.Customer.DateUpdated != DateTime.MinValue && Model.Customer.DateInserted != Model.Customer?.DateUpdated)
+            {
+                <p>Customer last updated at @Model.Customer.DateUpdated</p>
+            }
+        </div>
+    </div>
+
+    <div class="formButtons">
+        <a class="button buttonSecondary" href="@Url.Action("Index")">Back</a>
+        
+        @if (!Model.Editing)
+        {
+            <a class="button buttonPrimary" href="@formAction">Edit</a>
+        }
+        else
+        {
+            <button class="button buttonPrimary" type="submit">@submitBtnText</button>
+        }
+    </div>
+    @Html.CheckBoxFor(m => m.NewCustomer, new { hidden = "hidden", @checked = Model.NewCustomer })
+    @Html.TextBoxFor(m => m.Customer.Id, new { hidden = "hidden" })
+    @Html.TextBoxFor(m => m.Customer.Image, new { hidden = "hidden" })
+</form>
+
+@if (Model.Editing && !Model.NewCustomer)
+{
+    <form method="post" action="@Url.Action("Delete", "Customer", new { id = Model.Customer.Id })">
+        <button class="button buttonSecondary">Delete Customer</button>
+    </form>
+}

@@ -1,0 +1,36 @@
+@using MLPos.Web.Models
+@using MLPos.Core.Model
+@using MLPos.Web.Utils
+@model PaymentMethodListViewModel
+@{
+    Layout = "_Admin_Layout";
+    ViewData["Title"] = "Payment methods";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/PaymentMethods.css">
+}
+
+<div class="pageContainer">
+    <div class="headerContainer">
+        <h1>@ViewData["Title"]</h1>
+        <div>
+            <input class="search" type="search" placeholder="Search..."/>
+            <a href="@Url.Action("Edit", "PaymentMethod")" id="newPaymentMethodButton" class="button buttonPrimary">New Payment method</a>
+        </div>
+    </div>
+    <div class="flexList">
+        @foreach (PaymentMethod paymentMethod in Model.PaymentMethods)
+        {
+            <a class="card" href="@Url.Action("Details", "PaymentMethod", new { id = paymentMethod.Id })" id="@paymentMethod.Id">
+                <div class="cardImageContainer">
+                    @Html.ImageOrDefault(paymentMethod?.Image)
+                </div>
+                <div>
+                    <p class="paymentMethodName">@paymentMethod.Name</p>
+                    <p class="paymentMethodDescr">@paymentMethod.Description</p>
+                </div>
+            </a>
+        }
+    </div>
+</div>
