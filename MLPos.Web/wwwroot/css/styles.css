@@ -56,7 +56,6 @@ a {
   width: fit-content;
   
   text-align: center;
-  vertical-align: central;
   
   cursor: pointer;
 }
@@ -73,6 +72,7 @@ a {
 
 .inputLabel {
   display: flex;
+  width: 100%;
   flex-direction: column;
   margin: 0.5em 0;
   font-size: 1.25em;
@@ -80,6 +80,7 @@ a {
 
 .inputLabel input, .inputLabel select, .inputLabel textarea {
   font-size: 1.25em;
+  width: 100%;
 }
 
 .validationErrors {

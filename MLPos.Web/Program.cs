@@ -52,6 +52,7 @@ public class Program
         {
             var supportedCultures = new[]
             {
+                "en-US",
                 "is-IS",
                 "en-US",
             };
