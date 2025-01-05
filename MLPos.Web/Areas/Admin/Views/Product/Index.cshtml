@@ -1,10 +1,14 @@
 @using MLPos.Web.Models
 @using MLPos.Core.Model
 @using MLPos.Web.Utils
+@using Microsoft.AspNetCore.Mvc.Localization
+@using MLPos.Web
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
 @model ProductListViewModel
 @{
     Layout = "_Admin_Layout";
-    ViewData["Title"] = "Products";
+    
+    ViewData["Title"] = SharedLocalizer["Products"];
 }
 
 @section Styles {
@@ -13,10 +17,10 @@
 
 <div class="container pageContainer">
     <div class="headerContainer">
-        <h1>@ViewData["Title"]</h1>
+        <h1>@SharedLocalizer["Products"]</h1>
         <div>
             <input class="search" type="search" placeholder="Search..."/>
-            <a href="@Url.Action("Edit", "Product")" id="newProductButton" class="button buttonPrimary">New Product</a>
+            <a href="@Url.Action("Edit", "Product")" id="newProductButton" class="button buttonPrimary">@SharedLocalizer["NewProduct"]</a>
         </div>
     </div>
     <div class="flexList productList">
@@ -28,7 +32,7 @@
                 </div>
                 <div>
                     <p class="productDesc">@product.Description</p>
-                    <p class="productType">@product.Type.ToString()</p>
+                    <p class="productType">@SharedLocalizer[product.Type.ToString()]</p>
                     <p class="productPrice">@product.Price kr.</p>
                 </div>
             </a>

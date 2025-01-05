@@ -4,6 +4,7 @@ using MLPos.Core.Interfaces.Services;
 using MLPos.Data.Postgres;
 using MLPos.Services;
 using MLPos.Web.Middleware;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace MLPos.Web;
@@ -43,7 +44,26 @@ public class Program
 
         builder.Logging.AddLog4Net();
 
+        builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+        builder.Services.AddMvc()
+            .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix);
+
+        builder.Services.Configure<RequestLocalizationOptions>(options =>
+        {
+            var supportedCultures = new[]
+            {
+                "is-IS",
+                "en-US",
+            };
+
+            options.SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+        });
+
         var app = builder.Build();
+
+        app.UseRequestLocalization();
 
         app.UseMiddleware<ApiExceptionMiddleware>();
         app.UseMiddleware<LoggingMiddleware>();
