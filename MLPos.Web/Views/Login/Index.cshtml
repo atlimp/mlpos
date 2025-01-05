@@ -1,34 +1,37 @@
 @using MLPos.Web.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@using MLPos.Web
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
 @model LoginViewModel
 @{
     Layout = "_Admin_Layout";
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = SharedLocalizer["Login"];
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/Login.css">
 }
 
-<div class="container formcontainer">
+<div class="container formContainer">
     <ul class="validationErrors">
     @if (Model != null && !string.IsNullOrEmpty(Model.Error))
     {
             <li>@Model.Error</li>
     }
     </ul>
-    <form class="loginform" method="POST">
+    <form class="loginForm" method="POST">
         <div class="container detailsContainer">
             <div>
                 <label class="inputLabel" for="username">
-                    Name:
+                    @SharedLocalizer["Username"]:
                     @Html.TextBoxFor(m => m.Username, new { id = "username" })
                 </label>
                 <label class="inputLabel" for="password">
-                    Password:
+                    @SharedLocalizer["Password"]:
                     @Html.TextBoxFor(m => m.Password, new { id = "password", type = "password" })
                 </label>
             </div>
+            <button class="button buttonPrimary loginButton" type="submit">@SharedLocalizer["Login"]</button>
         </div>
-        <button class="button buttonPrimary loginButton" type="submit">Login</button>
     </form>
 </div>

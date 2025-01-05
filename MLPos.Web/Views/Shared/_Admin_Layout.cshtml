@@ -22,23 +22,25 @@
     </style>
 </head>
 <body>
-<div class="container admincontainer">
-    <div class="container headercontainer">
-        <img src="~/img/logo.png" id="navbarlogo"/>
+<div class="container adminContainer">
+    <div class="container navContainer">
+        <div class="container headerContainer">
+            <img src="~/img/logo.png" id="navbarlogo"/>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <img src="~/img/icons/hamburger.png" id="hamburger" />
+            }
+        </div>
         @if (User.Identity.IsAuthenticated)
         {
-            <img src="~/img/icons/hamburger.png" id="hamburger" />
+            <nav class="container navbar hidden" id="navbar">
+                <a class="navbarItem" href="@Url.Action("Index", "Product")"><img class="navIcon" src="~/img/icons/product.png"/>@SharedLocalizer["Products"]</a>
+                    <a class="navbarItem" href="@Url.Action("Index", "Customer")"><img class="navIcon" src="~/img/icons/customer.png" />@SharedLocalizer["Customers"]</a>
+                    <a class="navbarItem" href="@Url.Action("Index", "PaymentMethod")"><img class="navIcon" src="~/img/icons/paymentmethod.png" />@SharedLocalizer["PaymentMethods"]</a>
+                <a href="~/Admin/Logout" class="button buttonSecondary logoutButton">@SharedLocalizer["Logout"]</a>
+            </nav>
         }
     </div>
-    @if (User.Identity.IsAuthenticated)
-    {
-        <nav class="container navbar hidden" id="navbar">
-            <a class="navbarItem" href="@Url.Action("Index", "Product")"><img class="navIcon" src="~/img/icons/product.png"/>@SharedLocalizer["Products"]</a>
-                <a class="navbarItem" href="@Url.Action("Index", "Customer")"><img class="navIcon" src="~/img/icons/customer.png" />@SharedLocalizer["Customers"]</a>
-                <a class="navbarItem" href="@Url.Action("Index", "PaymentMethod")"><img class="navIcon" src="~/img/icons/paymentmethod.png" />@SharedLocalizer["PaymentMethods"]</a>
-            <a href="~/Admin/Logout" class="button buttonSecondary logoutButton">@SharedLocalizer["Logout"]</a>
-        </nav>
-    }
     <div class="container">
         @RenderBody()
     </div>

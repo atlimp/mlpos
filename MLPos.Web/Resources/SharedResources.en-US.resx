@@ -120,13 +120,22 @@
   <data name="Customers" xml:space="preserve">
     <value>Customers</value>
   </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
   <data name="Logout" xml:space="preserve">
     <value>Log out</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
   </data>
   <data name="PaymentMethods" xml:space="preserve">
     <value>Payment methods</value>
   </data>
   <data name="Products" xml:space="preserve">
     <value>Products</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
   </data>
 </root>

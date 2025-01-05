@@ -120,13 +120,22 @@
   <data name="Customers" xml:space="preserve">
     <value>Viðskiptamenn</value>
   </data>
+  <data name="Login" xml:space="preserve">
+    <value>Skrá inn</value>
+  </data>
   <data name="Logout" xml:space="preserve">
     <value>Skrá út</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Lykilorð</value>
   </data>
   <data name="PaymentMethods" xml:space="preserve">
     <value>Greiðslutegundir</value>
   </data>
   <data name="Products" xml:space="preserve">
     <value>Vörur</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Notendanafn</value>
   </data>
 </root>

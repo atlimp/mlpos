@@ -1,18 +1,25 @@
-.admincontainer {
+.adminContainer {
     flex-direction: column;
     justify-content: flex-start;
 }
 
-.headercontainer {
+.headerContainer {
     background-color: var(--green);
+    margin: 0;
     height: 4em;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.headercontainer > img {
+.headerContainer > img {
     margin: auto 1em auto 1em;
     height: 80%;
+}
+
+.navContainer {
+    flex-direction: column;
+    justify-content: flex-start;
+    height: auto;
 }
 
 #hamburger {
@@ -23,6 +30,7 @@
     padding: 2em 0 0 0;
     flex-direction: column;
     background-color: var(--green);
+
     height: 100%;
 }
 
@@ -30,19 +38,36 @@
     display: none;
 }
 
-@media(min-width: 750px) {
-    .admincontainer {
+@media(min-width: 650px) {
+    .adminContainer {
         flex-direction: row;
     }
 
+    .navContainer {
+        height: 100%;
+        max-width: 25em;
+        background-color: var(--green);
+    }
+
     .navbar.hidden {
-        display: block;
+        display: flex;
+    }
+
+    #hamburger {
+        display: none;
     }
 }
 
-.logoutButton, .loginButton {
+.logoutButton,.loginButton {
     align-self: flex-end;
-    margin: 2em auto;
+    margin: auto auto 0.5em auto;
+}
+
+.loginButton {
+    width: 100%;
+}
+
+.logoutButton {
     width: 90%;
 }
 
@@ -57,7 +82,6 @@
     line-height: 2em;
     font-size: 2em;
     text-decoration: none;
-    vertical-align: central;
     color: var(--yellow);
 }
 
@@ -67,27 +91,71 @@
   margin: auto 1em auto 0;
 }
 
-.navBarItem:hover {
+.navbarItem:hover {
   background-color: var(--coral);
   color: var(--jet);
 }
 
-.formcontainer {
+.formContainer {
+    max-width: 40em;
     flex-direction: column;
     width: 90%;
     margin: 2em auto 0 auto;
 }
 
 .detailsContainer {
-    flex-direction: row;
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1;
 }
 
 .pageContainer {
-    margin: 1em 0 0 1em;
+    margin: 1em;
+    padding-bottom: 1em;
+    flex-direction: column;
+    justify-content: flex-start;
+    max-width: 1920px;
+}
+
+.pageTitle {
+    width: auto;
+}
+
+.titleContainer {
+    width: auto;
+    height: auto;
+    min-height: 10em;
+    margin: 1em;
+    justify-content: space-between;
     flex-direction: column;
 }
 
+.titleContainer > div {
+    display: flex;
+    flex-direction: row;
+    height: auto;
+    margin: 0;
+}
+
+.search {
+    font-size: 1.25em;
+    width: 100%;
+    max-width: 30em;
+}
+
+.titleContainer > div > a {
+    margin-left: auto;
+}
+
+.flexList {
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
 .card {
+    margin:auto;
   border: 1px solid var(--jet);
   border-radius: 10px;
   width: 20em;
