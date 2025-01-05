@@ -1,12 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MLPos.Core", "MLPos.Core\MLPos.Core.csproj", "{5B119D48-2D14-4301-BBB9-400CDFE65B67}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34714.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLPos.Core", "MLPos.Core\MLPos.Core.csproj", "{5B119D48-2D14-4301-BBB9-400CDFE65B67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MLPos.Services", "MLPos.Services\MLPos.Services.csproj", "{A15FC6AF-8B78-4BA9-AB13-1B2E23F00C20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLPos.Services", "MLPos.Services\MLPos.Services.csproj", "{A15FC6AF-8B78-4BA9-AB13-1B2E23F00C20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MLPos.Web", "MLPos.Web\MLPos.Web.csproj", "{202381DA-B6D5-4878-9703-564CAF2556AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLPos.Web", "MLPos.Web\MLPos.Web.csproj", "{202381DA-B6D5-4878-9703-564CAF2556AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MLPos.Data", "MLPos.Data\MLPos.Data.csproj", "{0B95218D-8F54-4422-9EC3-FFBA259F3B42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLPos.Data", "MLPos.Data\MLPos.Data.csproj", "{0B95218D-8F54-4422-9EC3-FFBA259F3B42}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{C5952832-2281-4948-B96C-6C39C738DF5D}"
 EndProject
@@ -32,5 +35,11 @@ Global
 		{0B95218D-8F54-4422-9EC3-FFBA259F3B42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B95218D-8F54-4422-9EC3-FFBA259F3B42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B95218D-8F54-4422-9EC3-FFBA259F3B42}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FEDB5237-1D7B-444A-B2B6-D632116F12CD}
 	EndGlobalSection
 EndGlobal
