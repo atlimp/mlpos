@@ -24,6 +24,11 @@ namespace MLPos.Web.Controllers
         [HttpGet("Login")]
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Redirect("~/Admin");
+            }
+
             if (TempData["ErrorMessage"] != null)
             {
                 return View(new LoginViewModel
