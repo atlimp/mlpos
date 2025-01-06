@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MLPos.Web.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class AdminControllerBase : Controller
     {
     }
