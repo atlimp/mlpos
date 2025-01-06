@@ -80,7 +80,7 @@
         @if (Model.Editing && !Model.NewCustomer)
         {
             <form method="post" class="deleteForm" action="@Url.Action("Delete", "Customer", new { id = Model.Customer.Id })">
-                <button class="button buttonSecondary deleteButton">Delete Customer</button>
+                <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
             </form>
         }
     </div>

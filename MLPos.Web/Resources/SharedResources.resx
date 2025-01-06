@@ -159,14 +159,23 @@
   <data name="NewCustomer" xml:space="preserve">
     <value>New customer</value>
   </data>
+  <data name="NewPaymentMethod" xml:space="preserve">
+    <value>New payment method</value>
+  </data>
   <data name="NewProduct" xml:space="preserve">
     <value>New product</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="PaymentMethodCreatedAt" xml:space="preserve">
+    <value>Payment method created at {0}</value>
+  </data>
   <data name="PaymentMethods" xml:space="preserve">
     <value>Payment methods</value>
+  </data>
+  <data name="PaymentMethodUpdatedAt" xml:space="preserve">
+    <value>Payment method updated at {0}</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Price</value>

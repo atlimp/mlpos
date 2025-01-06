@@ -25,11 +25,21 @@ public class PaymentMethodService : IPaymentMethodService
 
     public async Task<PaymentMethod> CreatePaymentMethodAsync(PaymentMethod paymentMethod)
     {
+        if (paymentMethod.Image == null)
+        {
+            paymentMethod.Image = string.Empty;
+        }
+
         return await _paymentMethodRepository.CreatePaymentMethodAsync(paymentMethod);
     }
 
     public async Task<PaymentMethod> UpdatePaymentMethodAsync(PaymentMethod paymentMethod)
     {
+        if (paymentMethod.Image == null)
+        {
+            paymentMethod.Image = string.Empty;
+        }
+
         return await _paymentMethodRepository.UpdatePaymentMethodAsync(paymentMethod);
     }
 

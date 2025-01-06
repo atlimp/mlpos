@@ -94,7 +94,7 @@
         @if (Model.Editing && !Model.NewProduct)
         {
             <form method="post" class="deleteForm" action="@Url.Action("Delete", "Product", new { id = Model.Product.Id })">
-                <button class="button buttonSecondary deleteButton">Delete Product</button>
+                <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
             </form>
         }
     </div>

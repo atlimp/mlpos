@@ -1,15 +1,12 @@
 @using MLPos.Web.Models
 @using MLPos.Web.Utils
+@using Microsoft.Extensions.Localization
+@using MLPos.Web
+@inject IStringLocalizer<SharedResources> SharedLocalizer
 @model PaymentMethodDetailsViewModel
 @{
     Layout = "_Admin_Layout";
-    ViewData["Title"] = Model.PaymentMethod?.Name ?? "New Payment method";
-    string imageSrc = Model.PaymentMethod == null ? Url.Content("~/img/default.jpg") : Model.PaymentMethod.Image;
-    
-    if (string.IsNullOrEmpty(imageSrc))
-    {
-        imageSrc = Url.Content("~/img/default.jpg");
-    }
+    ViewData["Title"] = Model.PaymentMethod?.Name ?? SharedLocalizer["NewCustomer"];
     
     string submitBtnText = Model.PaymentMethod == null ? "Create" : "Update";
 
@@ -19,67 +16,73 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/PaymentMethods.css">
 }
-@if (Model.ValidationErrors != null && Model.ValidationErrors.Any())
-{
-    <div class="validationErrors">
-        @foreach (var error in Model.ValidationErrors)
+
+<div class="container pageContainer">
+    <div class="container formContainer">
+        <ul class="validationErrors">
+            @if (Model.ValidationErrors != null && Model.ValidationErrors.Any())
+            {
+                @foreach (var error in Model.ValidationErrors)
+                {
+                    <li>@error.Error</li>
+                }
+            }
+        </ul>
+        <form class="editForm" method="POST" action="@formAction" enctype="multipart/form-data">
+            <div class="container detailsContainer">
+                <div class="cardImageContainer">
+                    @Html.ImageOrDefault(Model.PaymentMethod?.Image, "cardImage")
+                </div>
+                <div>
+                    @if (Model.Editing)
+                    {
+                        <label class="inputLabel" for="image">
+                            @SharedLocalizer["Image"]:
+                            <input type="file" name="image" id="image" class="formInput" />
+                        </label>
+                    }
+                    <label class="inputLabel" for="name">
+                        @SharedLocalizer["Name"]:
+                        @Html.TextBoxFor(m => m.PaymentMethod.Name, new { id = "name", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
+                    <label class="inputLabel" for="email">
+                        @SharedLocalizer["Description"]:
+                        @Html.TextAreaFor(m => m.PaymentMethod.Description, new { id = "description", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
+
+                    @if (Model.PaymentMethod != null && Model.PaymentMethod.DateInserted != DateTime.MinValue)
+                    {
+                        <p>@SharedLocalizer["PaymentMethodCreatedAt", Model.PaymentMethod.DateInserted]</p>
+                    }
+                    @if (Model.PaymentMethod != null && Model.PaymentMethod.DateUpdated != DateTime.MinValue && Model.PaymentMethod.DateInserted != Model.PaymentMethod?.DateUpdated)
+                    {
+                        <p>@SharedLocalizer["PaymentMethodUpdatedAt", Model.PaymentMethod.DateUpdated]</p>
+                    }
+                </div>
+            </div>
+
+            <div class="formButtons">
+                <a class="button buttonSecondary formButton" href="@Url.Action("Index")">@SharedLocalizer["Back"]</a>
+
+                @if (!Model.Editing)
+                {
+                    <a class="button buttonPrimary formButton" href="@formAction">@SharedLocalizer["Edit"]</a>
+                }
+                else
+                {
+                    <button class="button buttonPrimary formButton" type="submit">@submitBtnText</button>
+                }
+            </div>
+            @Html.CheckBoxFor(m => m.NewPaymentMethod, new { hidden = "hidden", @checked = Model.NewPaymentMethod })
+            @Html.TextBoxFor(m => m.PaymentMethod.Id, new { hidden = "hidden" })
+            @Html.TextBoxFor(m => m.PaymentMethod.Image, new { hidden = "hidden" })
+
+        </form>
+        @if (Model.Editing && !Model.NewPaymentMethod)
         {
-            <p>@error.Error</p>
+            <form method="post" class="deleteForm" action="@Url.Action("Delete", "PaymentMethod", new { id = Model.PaymentMethod.Id })">
+                <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
+            </form>
         }
     </div>
-    
-}
-<form class="editForm" method="POST" action="@formAction" enctype="multipart/form-data">
-    <div class="detailsContainer">
-        @Html.ImageOrDefault(Model.PaymentMethod?.Image)
-        <div>
-            @if (Model.Editing)
-            {
-                <label class="inputLabel" for="image">
-                    Image:
-                    <input type="file" name="image" id="image"/>
-                </label>
-            }
-            <label class="inputLabel" for="name">
-                Name:
-                @Html.TextBoxFor(m => m.PaymentMethod.Name, new { id = "name" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
-            </label>
-            <label class="inputLabel" for="description">
-                Description:
-                @Html.TextAreaFor(m => m.PaymentMethod.Description, new { id = "description" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
-            </label>
-
-            @if (Model.PaymentMethod != null && Model.PaymentMethod.DateInserted != DateTime.MinValue)
-            {
-                <p>Payment method created at @Model.PaymentMethod.DateInserted</p>
-            }
-            @if (Model.PaymentMethod != null && Model.PaymentMethod.DateUpdated != DateTime.MinValue && Model.PaymentMethod.DateInserted != Model.PaymentMethod?.DateUpdated)
-            {
-                <p>Payment method last updated at @Model.PaymentMethod.DateUpdated</p>
-            }
-        </div>
-    </div>
-
-    <div class="formButtons">
-        <a class="button buttonSecondary" href="@Url.Action("Index")">Back</a>
-        
-        @if (!Model.Editing)
-        {
-            <a class="button buttonPrimary" href="@formAction">Edit</a>
-        }
-        else
-        {
-            <button class="button buttonPrimary" type="submit">@submitBtnText</button>
-        }
-    </div>
-    @Html.CheckBoxFor(m => m.NewPaymentMethod, new { hidden = "hidden", @checked = Model.NewPaymentMethod })
-    @Html.TextBoxFor(m => m.PaymentMethod.Id, new { hidden = "hidden" })
-    @Html.TextBoxFor(m => m.PaymentMethod.Image, new { hidden = "hidden" })
-</form>
-
-@if (Model.Editing && !Model.NewPaymentMethod)
-{
-    <form method="post" action="@Url.Action("Delete", "Customer", new { id = Model.PaymentMethod.Id })">
-        <button class="button buttonSecondary">Delete Customer</button>
-    </form>
-}
+</div>

@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using MLPos.Core.Exceptions;
 using MLPos.Core.Interfaces.Services;
 using MLPos.Core.Model;
 using MLPos.Web.Models;
+using System.Transactions;
 
 namespace MLPos.Web.Controllers;
 
@@ -11,15 +13,18 @@ public class PaymentMethodController : AdminControllerBase
     private readonly IPaymentMethodService _paymentMethodService;
     private readonly IImageService _imageService;
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly ILogger<PaymentMethodController> _logger; 
 
     public PaymentMethodController(
         IPaymentMethodService paymentMethodService,
         IImageService imageService,
-        IWebHostEnvironment webHostEnvironment)
+        IWebHostEnvironment webHostEnvironment,
+        ILogger<PaymentMethodController> logger)
     {
         _paymentMethodService = paymentMethodService;
         _imageService = imageService;
         _webHostEnvironment = webHostEnvironment;
+        _logger = logger;
     }
     
     [HttpGet]
@@ -51,7 +56,17 @@ public class PaymentMethodController : AdminControllerBase
     public async Task<IActionResult> Edit(int id = -1)
     { 
         PaymentMethodDetailsViewModel model = new PaymentMethodDetailsViewModel() { Editing = true, NewPaymentMethod = true };
-        PaymentMethod paymentMethod = await _paymentMethodService.GetPaymentMethodAsync(id);
+        PaymentMethod paymentMethod = null;
+
+        try
+        {
+            _logger.LogInformation("Fetching payment method with id {id}", id);
+            paymentMethod = await _paymentMethodService.GetPaymentMethodAsync(id);
+        }
+        catch (EntityNotFoundException e)
+        {
+            _logger.LogInformation("Payment method with id {id} was not found.  Creating new payment method", id);
+        }
         
         if (paymentMethod != null)
         {
@@ -87,6 +102,7 @@ public class PaymentMethodController : AdminControllerBase
         
         if (!validationResults.Item1)
         {
+            model.Editing = true;
             model.ValidationErrors = validationResults.Item2;
             return View("Details", model);
         }
