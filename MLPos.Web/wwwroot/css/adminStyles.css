@@ -38,25 +38,6 @@
     display: none;
 }
 
-@media(min-width: 650px) {
-    .adminContainer {
-        flex-direction: row;
-    }
-
-    .navContainer {
-        height: 100%;
-        max-width: 25em;
-        background-color: var(--green);
-    }
-
-    .navbar.hidden {
-        display: flex;
-    }
-
-    #hamburger {
-        display: none;
-    }
-}
 
 .logoutButton,.loginButton {
     align-self: flex-end;
@@ -97,10 +78,11 @@
 }
 
 .formContainer {
-    max-width: 40em;
+    max-width: 50em;
     flex-direction: column;
     width: 90%;
-    margin: 2em auto 0 auto;
+    margin: auto;
+    overflow-y: scroll;
 }
 
 .detailsContainer {
@@ -111,10 +93,12 @@
 
 .pageContainer {
     margin: 1em;
+    margin-bottom: 5em;
     padding-bottom: 1em;
     flex-direction: column;
     justify-content: flex-start;
     max-width: 1920px;
+    height: auto;
 }
 
 .pageTitle {
@@ -151,26 +135,121 @@
     margin: 1em;
     display: flex;
     flex-direction: column;
+    padding-bottom: 5em;
+    flex-direction: column;
     justify-content: flex-start;
+    overflow-y: scroll;
+}
+
+.cardImageContainer {
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    background-color: var(--platinum);
+    height: 9em;
+    margin-bottom: 2em;
+}
+
+.cardImage {
+    max-width: 12em;
+    max-height: 9em;
+    width: auto;
+    height: auto;
+    margin: auto;
 }
 
 .card {
-    margin:auto;
-  border: 1px solid var(--jet);
-  border-radius: 10px;
-  width: 20em;
-  height: 25em;
-  margin: 0 2em 1em 0;
-  padding: 1em;
-  display: flex;
-  flex-direction: column;
-  color: var(--jet);
+    margin: 0 auto 1em auto;
+    border: 1px solid var(--jet);
+    border-radius: 10px;
+    max-width: 24em;
+    width: 100%;
+    height: auto;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    color: var(--jet);
+    justify-content: space-between;
 }
 
-.card img {
-  margin: 0 auto;
-  max-height: 15em;
-  max-width: 16em;
-  width: auto;
-  height: auto;
+.formButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.formButton {
+    min-width: 5em;
+    min-height: 2em;
+}
+
+.formInput {
+}
+
+.hideCard {
+    display: none;
+}
+
+.deleteForm {
+    width: 100%;
+    margin-top: 5em;
+}
+
+.deleteButton {
+    width: 100%;
+    background-color: red;
+    height: 2em;
+}
+
+@media(min-width: 600px) {
+    .cardImage {
+        max-width: 16em;
+        max-height: 12em;
+    }
+
+    .cardImageContainer {
+        height: 12em;
+    }
+}
+@media(min-width: 850px) {
+    .cardImage {
+        max-width: 18em;
+        max-height: 13.5em;
+    }
+
+    .cardImageContainer {
+        height: 13.5em;
+    }
+
+    .adminContainer {
+        flex-direction: row;
+    }
+
+    .navContainer {
+        height: 100%;
+        max-width: 25em;
+        background-color: var(--green);
+    }
+
+    .navbar.hidden {
+        display: flex;
+    }
+
+    #hamburger {
+        display: none;
+    }
+
+    .flexList {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        margin: 0 0.5em 1em 0.5em;
+    }
+
+    .formContainer {
+        margin-left: 2em;
+        margin-right: auto;
+    }
 }

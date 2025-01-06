@@ -1,9 +1,9 @@
 @using MLPos.Web.Models
 @using MLPos.Core.Model
 @using MLPos.Web.Utils
-@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
 @using MLPos.Web
-@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
 @model ProductListViewModel
 @{
     Layout = "_Admin_Layout";
@@ -15,20 +15,35 @@
     <link rel="stylesheet" href="~/css/Products.css">
 }
 
+@section Scripts {
+    <script src="~/js/search.js"></script>
+    <script type="text/javascript">
+        const productList = document.querySelector('#productList');
+        const searchInput = document.querySelector('#search');
+        new Search({
+            searchInput,
+            listElement: productList,
+            cardClassName: '.productCard',
+            hideClassName: 'hideCard',
+            lookupClasses: [ '.productDesc' ]
+        });
+    </script>
+}
+
 <div class="container pageContainer">
-    <div class="headerContainer">
-        <h1>@SharedLocalizer["Products"]</h1>
+    <div class="container titleContainer">
         <div>
-            <input class="search" type="search" placeholder="Search..."/>
+            <h1>@SharedLocalizer["Products"]</h1>
             <a href="@Url.Action("Edit", "Product")" id="newProductButton" class="button buttonPrimary">@SharedLocalizer["NewProduct"]</a>
         </div>
+        <input class="search" type="search" placeholder="@SharedLocalizer["Search"]" id="search"/>
     </div>
-    <div class="flexList productList">
+    <div class="flexList productList" id="productList">
         @foreach (Product product in Model.Products)
         {
-            <a class="productCard" href="@Url.Action("Details", "Product", new { id = product.Id })" id="@product.Id">
-                <div class="productImageContainer">
-                    @Html.ImageOrDefault(product?.Image)
+            <a class="card productCard" href="@Url.Action("Details", "Product", new { id = product.Id })" id="product-@product.Id">
+                <div class="cardImageContainer">
+                    @Html.ImageOrDefault(product?.Image, "cardImage")
                 </div>
                 <div>
                     <p class="productDesc">@product.Description</p>

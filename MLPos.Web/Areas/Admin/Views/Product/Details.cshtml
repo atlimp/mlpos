@@ -2,19 +2,22 @@
 @using MLPos.Core.Model
 @using MLPos.Web.Models
 @using MLPos.Web.Utils
+@using Microsoft.Extensions.Localization
+@using MLPos.Web
+@inject IStringLocalizer<SharedResources> SharedLocalizer
 @model ProductDetailsViewModel
 @{
     Layout = "_Admin_Layout";
-    ViewData["Title"] = Model.Product?.Description ?? "New Product";
+    ViewData["Title"] = Model.Product?.Description ?? SharedLocalizer["NewProduct"];
     
     Dictionary<int, string> productTypes = new Dictionary<int, string>();
 
     foreach (int val in Enum.GetValues(typeof(ProductType)))
     {
-        productTypes[val] = ((ProductType)val).ToString();
+        productTypes[val] = SharedLocalizer[((ProductType)val).ToString()];
     }
     
-    string submitBtnText = Model.Product == null ? "Create" : "Update";
+    string submitBtnText = Model.Product == null ? @SharedLocalizer["Create"] : @SharedLocalizer["Update"];
 
     string formAction = Model.Product == null ? @Url.Action("Edit") : @Url.Action("Edit", "Product", new { id = Model.Product.Id });
 }
@@ -22,71 +25,77 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/Products.css">
 }
-@if (Model.ValidationErrors != null && Model.ValidationErrors.Any())
-{
-    <div class="validationErrors">
-        @foreach (var error in Model.ValidationErrors)
-        {
-            <p>@error.Error</p>
-        }
-    </div>
-    
-}
-<form class="editForm" method="POST" action="@formAction" enctype="multipart/form-data">
-    <div class="detailsContainer">
-        @Html.ImageOrDefault(Model.Product?.Image)
-        <div>
-            @if (Model.Editing)
-            {
-                <label class="inputLabel" for="image">
-                    Image:
-                    <input type="file" name="image" id="image"/>
-                </label>
-            }
-            <label class="inputLabel" for="description">
-                Description:
-                @Html.TextBoxFor(m => m.Product.Description, new { id = "description" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
-            </label>
-            <label class="inputLabel" for="type">
-                Description:
-                @Html.DropDownListFor(m => m.Product.Type, new SelectList(productTypes, "Key", "Value"), new { id = "type" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
-            </label>
-            <label class="inputLabel" for="price">
-                Price:
-                @Html.TextBoxFor(m => m.Product.Price, new { id = "price", type = "number" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
-            </label>
 
-            @if (Model.Product != null && Model.Product.DateInserted != DateTime.MinValue)
+<div class="container pageContainer">
+    <div class="container formContainer">
+        <ul class="validationErrors">
+            @if (Model.ValidationErrors != null && Model.ValidationErrors.Any())
             {
-                <p>Product created at @Model.Product.DateInserted</p>
+                @foreach (var error in Model.ValidationErrors)
+                {
+                    <li>@error.Error</li>
+                }
             }
-            @if (Model.Product != null && Model.Product.DateUpdated != DateTime.MinValue && Model.Product.DateInserted != Model.Product?.DateUpdated)
-            {
-                <p>Product last updated at @Model.Product.DateUpdated</p>
-            }
-        </div>
-    </div>
+        </ul>
+        <form class="editForm" method="POST" action="@formAction" enctype="multipart/form-data">
+            <div class="container detailsContainer">
+                <div class="cardImageContainer">
+                    @Html.ImageOrDefault(Model.Product?.Image, "cardImage")
+                </div>
+                <div>
+                    @if (Model.Editing)
+                    {
+                        <label class="inputLabel" for="image">
+                            @SharedLocalizer["Image"]:
+                            <input type="file" name="image" id="image" class="formInput"/>
+                        </label>
+                    }
+                    <label class="inputLabel" for="description">
+                        @SharedLocalizer["Description"]:
+                        @Html.TextBoxFor(m => m.Product.Description, new { id = "description", @class="formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
+                    <label class="inputLabel" for="type">
+                        @SharedLocalizer["ProductType"]:
+                        @Html.DropDownListFor(m => m.Product.Type, new SelectList(productTypes, "Key", "Value"), new { id = "type", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
+                    <label class="inputLabel" for="price">
+                        @SharedLocalizer["Price"]:
+                        @Html.TextBoxFor(m => m.Product.Price, new { id = "price", type = "number", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
 
-    <div class="formButtons">
-        <a class="button buttonSecondary" href="@Url.Action("Index")">Back</a>
+                    @if (Model.Product != null && Model.Product.DateInserted != DateTime.MinValue)
+                    {
+                        <p>@SharedLocalizer["ProductCreatedAt", Model.Product.DateInserted]</p>
+                    }
+                    @if (Model.Product != null && Model.Product.DateUpdated != DateTime.MinValue && Model.Product.DateInserted != Model.Product?.DateUpdated)
+                    {
+                        <p>@SharedLocalizer["ProductUpdatedAt", Model.Product.DateUpdated]</p>
+                    }
+                </div>
+            </div>
+
+            <div class="formButtons">
+                <a class="button buttonSecondary formButton" href="@Url.Action("Index")">@SharedLocalizer["Back"]</a>
         
-        @if (!Model.Editing)
+                @if (!Model.Editing)
+                {
+                    <a class="button buttonPrimary formButton" href="@formAction">@SharedLocalizer["Edit"]</a>
+                }
+                else
+                {
+                    <button class="button buttonPrimary formButton" type="submit">@submitBtnText</button>
+                }
+            </div>
+            @Html.CheckBoxFor(m => m.NewProduct, new { hidden = "hidden", @checked = Model.NewProduct })
+            @Html.TextBoxFor(m => m.Product.Id, new { hidden = "hidden" })
+            @Html.TextBoxFor(m => m.Product.Image, new { hidden = "hidden" })
+
+        </form>
+        @if (Model.Editing && !Model.NewProduct)
         {
-            <a class="button buttonPrimary" href="@formAction">Edit</a>
-        }
-        else
-        {
-            <button class="button buttonPrimary" type="submit">@submitBtnText</button>
+            <form method="post" class="deleteForm" action="@Url.Action("Delete", "Product", new { id = Model.Product.Id })">
+                <button class="button buttonSecondary deleteButton">Delete Product</button>
+            </form>
         }
     </div>
-    @Html.CheckBoxFor(m => m.NewProduct, new { hidden = "hidden", @checked = Model.NewProduct })
-    @Html.TextBoxFor(m => m.Product.Id, new { hidden = "hidden" })
-    @Html.TextBoxFor(m => m.Product.Image, new { hidden = "hidden" })
-</form>
-
-@if (Model.Editing && !Model.NewProduct)
-{
-    <form method="post" action="@Url.Action("Delete", "Product", new { id = Model.Product.Id })">
-        <button class="button buttonSecondary">Delete Product</button>
-    </form>
-}
+</div>

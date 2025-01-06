@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MLPos.Core.Exceptions;
 using MLPos.Core.Interfaces.Services;
 using MLPos.Core.Model;
 using MLPos.Web.Models;
@@ -54,8 +55,18 @@ public class ProductController : AdminControllerBase
     public async Task<IActionResult> Edit(int id = -1)
     { 
         ProductDetailsViewModel model = new ProductDetailsViewModel() { Editing = true, NewProduct = true };
-        Product product = await _productService.GetProductAsync(id);
+        Product product = null;
         
+        try
+        {
+            _logger.LogInformation("Fetching product with id {id}", id);
+            product = await _productService.GetProductAsync(id);
+        }
+        catch(EntityNotFoundException e)
+        {
+            _logger.LogInformation("Product with id {id} was not found.  Creating new product", id);
+        }
+
         if (product != null)
         {
             model.NewProduct = false;
@@ -90,6 +101,7 @@ public class ProductController : AdminControllerBase
         
         if (!validationResults.Item1)
         {
+            model.Editing = true;
             model.ValidationErrors = validationResults.Item2;
             return View("Details", model);
         }

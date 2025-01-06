@@ -35,6 +35,9 @@
     <ItemGroup>
       <Folder Include="wwwroot\fonts\" />
       <Folder Include="wwwroot\img\customers\" />
+      <Folder Include="wwwroot\img\customers\" />
+      <Folder Include="wwwroot\img\paymentMethods\" />
+      <Folder Include="wwwroot\img\products\" />
       <Folder Include="wwwroot\img\paymentMethods\" />
     </ItemGroup>
 

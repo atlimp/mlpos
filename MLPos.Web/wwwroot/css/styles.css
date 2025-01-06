@@ -22,6 +22,16 @@ body {
   overflow-y: hidden;
 }
 
+-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
 input, select, textarea {
   background-color: var(--platinum);
   padding: 0.5em;
@@ -76,11 +86,6 @@ a {
   flex-direction: column;
   margin: 0.5em 0;
   font-size: 1.25em;
-}
-
-.inputLabel input, .inputLabel select, .inputLabel textarea {
-  font-size: 1.25em;
-  width: 100%;
 }
 
 .validationErrors {

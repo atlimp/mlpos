@@ -117,8 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Back" xml:space="preserve">
+    <value>Til baka</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Stofna</value>
+  </data>
   <data name="Customers" xml:space="preserve">
     <value>Viðskiptamenn</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Lýsing</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Breyta</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Mynd</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>Vara</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Skrá inn</value>
@@ -126,14 +144,38 @@
   <data name="Logout" xml:space="preserve">
     <value>Skrá út</value>
   </data>
+  <data name="NewProduct" xml:space="preserve">
+    <value>Ný vara</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Lykilorð</value>
   </data>
   <data name="PaymentMethods" xml:space="preserve">
     <value>Greiðslutegundir</value>
   </data>
+  <data name="Price" xml:space="preserve">
+    <value>Verð</value>
+  </data>
+  <data name="ProductCreatedAt" xml:space="preserve">
+    <value>Vara stofnuð {0}</value>
+  </data>
   <data name="Products" xml:space="preserve">
     <value>Vörur</value>
+  </data>
+  <data name="ProductType" xml:space="preserve">
+    <value>Tegund</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Leita...</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Þjónusta</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Uppfæra</value>
+  </data>
+  <data name="UpdatedCreatedAt" xml:space="preserve">
+    <value>Vara uppfærð {0}</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Notendanafn</value>

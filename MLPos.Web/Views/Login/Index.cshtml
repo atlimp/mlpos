@@ -1,7 +1,7 @@
 @using MLPos.Web.Models
-@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
 @using MLPos.Web
-@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IStringLocalizer<SharedResources> SharedLocalizer
 @model LoginViewModel
 @{
     Layout = "_Admin_Layout";
