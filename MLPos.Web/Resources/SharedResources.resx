@@ -123,14 +123,23 @@
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="CustomerCreatedAt" xml:space="preserve">
+    <value>Created at {0}</value>
+  </data>
   <data name="Customers" xml:space="preserve">
     <value>Customers</value>
+  </data>
+  <data name="CustomerUpdatedAt" xml:space="preserve">
+    <value>Customer updated at {0}</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
   </data>
   <data name="Image" xml:space="preserve">
     <value>Image</value>
@@ -143,6 +152,12 @@
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Log out</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NewCustomer" xml:space="preserve">
+    <value>New customer</value>
   </data>
   <data name="NewProduct" xml:space="preserve">
     <value>New product</value>

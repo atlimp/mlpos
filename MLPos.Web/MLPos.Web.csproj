@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Remove="Areas\Admin\Views\Customer\Details - Copy.cshtml" />
       <Content Remove="Views\Login\Index.cshtml" />
     </ItemGroup>
 
@@ -42,6 +43,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <AdditionalFiles Include="Areas\Admin\Views\Customer\Details - Copy.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Customer\Details.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Customer\Index.cshtml" />
       <AdditionalFiles Include="Views\Login\Index.cshtml" />

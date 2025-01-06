@@ -1,33 +1,52 @@
 @using MLPos.Web.Models
 @using MLPos.Core.Model
 @using MLPos.Web.Utils
+@using Microsoft.Extensions.Localization
+@using MLPos.Web
+@inject IStringLocalizer<SharedResources> SharedLocalizer
 @model CustomerListViewModel
 @{
     Layout = "_Admin_Layout";
-    ViewData["Title"] = "Customers";
+    ViewData["Title"] = SharedLocalizer["Customers"];
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/Customers.css">
 }
 
-<div class="pageContainer">
-    <div class="headerContainer">
-        <h1>@ViewData["Title"]</h1>
+@section Scripts {
+    <script src="~/js/search.js"></script>
+    <script type="text/javascript">
+        const productList = document.querySelector('#customerList');
+        const searchInput = document.querySelector('#search');
+        new Search({
+            searchInput,
+            listElement: productList,
+            cardClassName: '.customerCard',
+            hideClassName: 'hideCard',
+            lookupClasses: [ '.customerName', '.customerEmail' ]
+        });
+    </script>
+}
+
+
+<div class="container pageContainer">
+    <div class="container titleContainer">
         <div>
-            <input class="search" type="search" placeholder="Search..."/>
-            <a href="@Url.Action("Edit", "Customer")" id="newCustomerButton" class="button buttonPrimary">New Customer</a>
+            <h1>@SharedLocalizer["Customers"]</h1>
+            <a href="@Url.Action("Edit", "Customer")" id="newProductButton" class="button buttonPrimary">@SharedLocalizer["NewCustomer"]</a>
         </div>
+        <input class="search" type="search" placeholder="@SharedLocalizer["Search"]" id="search" />
     </div>
-    <div class="flexList">
+    <div class="flexList customerList" id="customerList">
         @foreach (Customer customer in Model.Customers)
         {
-            <a class="card" href="@Url.Action("Details", "Customer", new { id = customer.Id })" id="@customer.Id">
+            <a class="card customerCard" href="@Url.Action("Details", "Customer", new { id = customer.Id })" id="@customer.Id">
                 <div class="cardImageContainer">
-                    @Html.ImageOrDefault(customer?.Image)
+                    @Html.ImageOrDefault(customer?.Image, "cardImage")
                 </div>
                 <div>
-                    <p class="customerName">@customer.Name</p>
+                    <p class="cardTitle customerName">@customer.Name</p>
                     <p class="customerEmail">@customer.Email</p>
                 </div>
             </a>

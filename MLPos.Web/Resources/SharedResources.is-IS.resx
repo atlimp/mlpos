@@ -123,14 +123,23 @@
   <data name="Create" xml:space="preserve">
     <value>Stofna</value>
   </data>
+  <data name="CustomerCreatedAt" xml:space="preserve">
+    <value>Viðskiptamaður stofnaður {0}</value>
+  </data>
   <data name="Customers" xml:space="preserve">
     <value>Viðskiptamenn</value>
+  </data>
+  <data name="CustomerUpdatedAt" xml:space="preserve">
+    <value>Viðskiptamaður uppfærður {0}</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Lýsing</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Breyta</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Tölvupóstur</value>
   </data>
   <data name="Image" xml:space="preserve">
     <value>Mynd</value>
@@ -143,6 +152,12 @@
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Skrá út</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nafn</value>
+  </data>
+  <data name="NewCustomer" xml:space="preserve">
+    <value>Nýr viðskiptamaður</value>
   </data>
   <data name="NewProduct" xml:space="preserve">
     <value>Ný vara</value>

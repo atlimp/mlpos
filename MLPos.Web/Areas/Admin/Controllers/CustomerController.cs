@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using MLPos.Core.Exceptions;
 using MLPos.Core.Interfaces.Services;
 using MLPos.Core.Model;
+using MLPos.Services;
 using MLPos.Web.Models;
 
 namespace MLPos.Web.Controllers;
@@ -11,15 +13,18 @@ public class CustomerController : AdminControllerBase
     private readonly ICustomerService _customerService;
     private readonly IImageService _imageService;
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly ILogger<CustomerController> _logger;
 
     public CustomerController(
         ICustomerService customerService,
         IImageService imageService,
-        IWebHostEnvironment webHostEnvironment)
+        IWebHostEnvironment webHostEnvironment,
+        ILogger<CustomerController> logger)
     {
         _customerService = customerService;
         _imageService = imageService;
         _webHostEnvironment = webHostEnvironment;
+        _logger = logger;
     }
     
     [HttpGet]
@@ -51,7 +56,17 @@ public class CustomerController : AdminControllerBase
     public async Task<IActionResult> Edit(int id = -1)
     { 
         CustomerDetailsViewModel model = new CustomerDetailsViewModel() { Editing = true, NewCustomer = true };
-        Customer customer = await _customerService.GetCustomerAsync(id);
+        Customer customer = null;
+
+        try
+        {
+            _logger.LogInformation("Fetching customer with id {id}", id);
+            customer = await _customerService.GetCustomerAsync(id);
+        }
+        catch (EntityNotFoundException e)
+        {
+            _logger.LogInformation("Customer with id {id} was not found.  Creating new customer", id);
+        }
         
         if (customer != null)
         {
@@ -87,6 +102,7 @@ public class CustomerController : AdminControllerBase
         
         if (!validationResults.Item1)
         {
+            model.Editing = true;
             model.ValidationErrors = validationResults.Item2;
             return View("Details", model);
         }

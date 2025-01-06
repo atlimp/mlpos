@@ -138,6 +138,7 @@
     padding-bottom: 5em;
     flex-direction: column;
     justify-content: flex-start;
+    gap: 1em;
     overflow-y: scroll;
 }
 
@@ -158,8 +159,12 @@
     margin: auto;
 }
 
+.cardTitle {
+    font-weight: bold;
+}
+
 .card {
-    margin: 0 auto 1em auto;
+    margin: 0 auto;
     border: 1px solid var(--jet);
     border-radius: 10px;
     max-width: 24em;
@@ -245,7 +250,7 @@
     }
 
     .card {
-        margin: 0 0.5em 1em 0.5em;
+        margin: 0;
     }
 
     .formContainer {
