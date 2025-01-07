@@ -7,7 +7,7 @@ namespace MLPos.Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return RedirectPermanent("/posclient");
         }
     }
 }

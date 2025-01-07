@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.FileProviders;
 using MLPos.Core.Interfaces.Repositories;
 using MLPos.Core.Interfaces.Services;
 using MLPos.Data.Postgres;
@@ -14,8 +15,6 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-
 
         string connectionString = builder.Configuration.GetConnectionString("Postgres") ?? "";
         string DBUser = builder.Configuration["DBUser"] ?? "";
@@ -39,6 +38,8 @@ public class Program
                 options.LoginPath = "/Admin/Login";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
             });
+
+        builder.Services.AddCors();
 
         builder.Services.AddHttpContextAccessor();
 
@@ -64,7 +65,13 @@ public class Program
 
         var app = builder.Build();
 
+        app.UseCors(builder => builder
+            .AllowAnyHeader()
+            .AllowAnyOrigin()
+            .AllowAnyMethod());
+
         app.UseRequestLocalization();
+
 
         app.UseMiddleware<ApiExceptionMiddleware>();
         app.UseMiddleware<LoggingMiddleware>();
@@ -76,6 +83,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseDefaultFiles();
         app.UseStaticFiles();
 
         app.UseRouting();
@@ -87,6 +95,7 @@ public class Program
             areaName: "Admin",
             pattern: "Admin/{controller}/{action}/{id?}",
             defaults: new { controller = "Product", action = "Index" });
+
 
         app.Run();
     }

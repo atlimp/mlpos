@@ -20,6 +20,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="PosClient\src\api\api.ts" />
+      <None Remove="PosClient\src\components\Product\Product.tsx" />
+      <None Remove="PosClient\src\interface.d.ts" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\MLPos.Core\MLPos.Core.csproj" />
       <ProjectReference Include="..\MLPos.Data\MLPos.Data.csproj" />
       <ProjectReference Include="..\MLPos.Services\MLPos.Services.csproj" />
@@ -34,6 +40,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="PosClient\public\" />
+      <Folder Include="PosClient\src\assets\" />
       <Folder Include="wwwroot\fonts\" />
       <Folder Include="wwwroot\img\customers\" />
       <Folder Include="wwwroot\img\customers\" />
@@ -53,6 +61,12 @@
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.11" />
       <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <TypeScriptCompile Include="PosClient\src\api\api.ts" />
+      <TypeScriptCompile Include="PosClient\src\components\Product\Product.tsx" />
+      <TypeScriptCompile Include="PosClient\src\interface.d.ts" />
     </ItemGroup>
 
 </Project>

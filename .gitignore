@@ -41,6 +41,9 @@ bld/
 MLPos.Web/wwwroot/img/products/*
 MLPos.Web/wwwroot/img/customers/*
 
+#dist folder for posclient
+MLPos.Web/wwwroot/posclient/*
+
 # Visual Studio 2017 auto generated files
 Generated\ Files/
 
@@ -483,3 +486,5 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+wwwroot/
