@@ -98,7 +98,15 @@ namespace MLPos.Services
 
         public async Task<IEnumerable<TransactionHeader>> GetActiveTransactionsAsync()
         {
-            return await _headerRepository.GetAllTransactionHeaderAsync();
+            var transactionHeaders = await _headerRepository.GetAllTransactionHeaderAsync();
+
+            List<TransactionHeader> activeTransactions = new List<TransactionHeader>();
+            foreach (var transactionHeader in transactionHeaders)
+            {
+                activeTransactions.Add(await GetTransactionHeaderAsync(transactionHeader.Id));
+            }
+
+            return activeTransactions;
         }
     }
 }
