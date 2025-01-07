@@ -25,9 +25,9 @@ namespace MLPos.Services
             _productRepository = productRepository;
         }
 
-        public async Task<TransactionHeader?> GetTransactionHeaderAsync(long transactionId)
+        public async Task<TransactionHeader?> GetTransactionHeaderAsync(long transactionId, long posClientId)
         {
-            TransactionHeader? transactionHeader = await _headerRepository.GetTransactionHeaderAsync(transactionId);
+            TransactionHeader? transactionHeader = await _headerRepository.GetTransactionHeaderAsync(transactionId, posClientId);
 
             if (transactionHeader == null || transactionHeader.Customer == null)
             {
@@ -36,7 +36,7 @@ namespace MLPos.Services
 
             transactionHeader.Customer = await _customerRepository.GetCustomerAsync(transactionHeader.Customer.Id);
 
-            transactionHeader.Lines = await _lineRepository.GetAllTransactionLinesAsync(transactionId);
+            transactionHeader.Lines = await _lineRepository.GetAllTransactionLinesAsync(transactionId, posClientId);
 
             foreach (TransactionLine line in transactionHeader.Lines)
             {
@@ -60,29 +60,28 @@ namespace MLPos.Services
             newLine.Quantity = qty;
             newLine.Amount = newLine.Quantity * product.Price;
 
-            await _lineRepository.CreateTransactionLineAsync(transactionHeader.Id, newLine);
+            await _lineRepository.CreateTransactionLineAsync(transactionHeader.Id, transactionHeader.PosClientId, newLine);
 
-            return await GetTransactionHeaderAsync(transactionHeader.Id);
+            return await GetTransactionHeaderAsync(transactionHeader.Id, transactionHeader.PosClientId);
         }
 
-        public async Task<TransactionHeader?> CreateTransactionAsync(Customer customer)
+        public async Task<TransactionHeader?> CreateTransactionAsync(long posClientId, Customer customer)
         {
             ThrowIf.Null(customer);
-            ThrowIf.Null(customer);
 
-            TransactionHeader? header = await _headerRepository.CreateTransactionHeaderAsync(new TransactionHeader { Customer = customer });
+            TransactionHeader? header = await _headerRepository.CreateTransactionHeaderAsync(new TransactionHeader { Customer = customer, PosClientId = posClientId });
 
             if (header != null)
             {
-                return await GetTransactionHeaderAsync(header.Id);
+                return await GetTransactionHeaderAsync(header.Id, header.PosClientId);
             }
 
             return null;
         }
 
-        public async Task DeleteTransactionAsync(long id)
+        public async Task DeleteTransactionAsync(long id, long posClientId)
         {
-            await _headerRepository.DeleteTransactionHeaderAsync(id);
+            await _headerRepository.DeleteTransactionHeaderAsync(id, posClientId);
         }
 
         public Task PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
@@ -90,20 +89,20 @@ namespace MLPos.Services
             throw new NotImplementedException();
         }
 
-        public async Task<TransactionHeader?> RemoveItemAsync(long transactionId, long lineId)
+        public async Task<TransactionHeader?> RemoveItemAsync(long transactionId, long posClientId, long lineId)
         {
-            await _lineRepository.DeleteTransactionLineAsync(transactionId, lineId);
-            return await GetTransactionHeaderAsync(transactionId);
+            await _lineRepository.DeleteTransactionLineAsync(transactionId, posClientId, lineId);
+            return await GetTransactionHeaderAsync(transactionId, posClientId);
         }
 
-        public async Task<IEnumerable<TransactionHeader>> GetActiveTransactionsAsync()
+        public async Task<IEnumerable<TransactionHeader>> GetActiveTransactionsAsync(long posClientId)
         {
-            var transactionHeaders = await _headerRepository.GetAllTransactionHeaderAsync();
+            var transactionHeaders = await _headerRepository.GetAllTransactionHeaderAsync(posClientId);
 
             List<TransactionHeader> activeTransactions = new List<TransactionHeader>();
             foreach (var transactionHeader in transactionHeaders)
             {
-                activeTransactions.Add(await GetTransactionHeaderAsync(transactionHeader.Id));
+                activeTransactions.Add(await GetTransactionHeaderAsync(transactionHeader.Id, transactionHeader.PosClientId));
             }
 
             return activeTransactions;

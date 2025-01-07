@@ -162,6 +162,9 @@
   <data name="NewPaymentMethod" xml:space="preserve">
     <value>New payment method</value>
   </data>
+  <data name="NewPosClient" xml:space="preserve">
+    <value>New pos client</value>
+  </data>
   <data name="NewProduct" xml:space="preserve">
     <value>New product</value>
   </data>
@@ -176,6 +179,15 @@
   </data>
   <data name="PaymentMethodUpdatedAt" xml:space="preserve">
     <value>Payment method updated at {0}</value>
+  </data>
+  <data name="PosClientCreatedAt" xml:space="preserve">
+    <value>Pos client created at {0}</value>
+  </data>
+  <data name="PosClients" xml:space="preserve">
+    <value>PosClients</value>
+  </data>
+  <data name="PosClientUpdatedAt" xml:space="preserve">
+    <value>Pos client updated at {0}</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Price</value>

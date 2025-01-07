@@ -19,3 +19,5 @@ INSERT INTO PRODUCT(name, type, price, image) VALUES('Mótsgjald', 1, 3500, 'http
 INSERT INTO PAYMENTMETHOD(name, description, image) VALUES('Í Reikning', 'Upphæð {amount} verður skráð sem úttekt.  Gert er upp í lok mánaðar.', 'https://media.istockphoto.com/id/495477978/photo/open-book.jpg?s=612x612&w=0&k=20&c=vwJ6__M7CVPdjkQFUv9j2pr7QJiQ9bWW_5jXjR9TcjY=');
 INSERT INTO PAYMENTMETHOD(name, description, image) VALUES('Millifært', 'Vinsamlega legðu inn {amount} á reikning 0111-26-0000001', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxJh203_wQQ4n2Mw8y8y15xviF0qG80AjFJA&s');
 INSERT INTO PAYMENTMETHOD(name, description, image) VALUES('Aur', 'Vinsamlega borgaðu {amount} með Aur með símanúmer 58-12345', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKszQVt1ulGzdMZ9EzaWWI0j2BBFMbKzmQFg&s');
+
+INSERT INTO POSCLIENT(name, description) VALUES('Aðal client', '');

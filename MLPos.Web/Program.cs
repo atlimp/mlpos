@@ -105,6 +105,7 @@ public class Program
         services.AddSingleton<IProductRepository, MLPos.Data.Postgres.ProductRepository>(r => new ProductRepository(connectionString));
         services.AddSingleton<ICustomerRepository, MLPos.Data.Postgres.CustomerRepository>(r => new CustomerRepository(connectionString));
         services.AddSingleton<IPaymentMethodRepository, MLPos.Data.Postgres.PaymentMethodRepository>(r => new PaymentMethodRepository(connectionString));
+        services.AddSingleton<IPosClientRepository, MLPos.Data.Postgres.PosClientRepository>(r => new PosClientRepository(connectionString));
         services.AddSingleton<ITransactionHeaderRepository, MLPos.Data.Postgres.TransactionHeaderRepository>(r => new TransactionHeaderRepository(connectionString));
         services.AddSingleton<ITransactionLineRepository, MLPos.Data.Postgres.TransactionLineRepository>(r => new TransactionLineRepository(connectionString));
     }
@@ -114,6 +115,7 @@ public class Program
         services.AddTransient<IProductService, ProductService>();
         services.AddTransient<ICustomerService, CustomerService>();
         services.AddTransient<IPaymentMethodService, PaymentMethodService>();
+        services.AddTransient<IPosClientService, PosClientService>();
         services.AddTransient<IImageService, ImageService>();
         services.AddTransient<ITransactionService, TransactionService>();
         services.AddTransient<ILoginService, SimpleLoginService>();

@@ -21,9 +21,9 @@ namespace MLPos.Data.Postgres
         public async Task<TransactionHeader?> CreateTransactionHeaderAsync(TransactionHeader transactionHeader)
         {
             IEnumerable<TransactionHeader> transactionHeaders = await SqlHelper.ExecuteQuery(_connectionString,
-            "INSERT INTO TRANSACTIONHEADER(customer_id) VALUES (@customer_id) RETURNING id, customer_id, date_inserted, date_updated",
-            MapToTransactionHeader,
-                new Dictionary<string, object>() { ["@customer_id"] = transactionHeader.Customer.Id }
+                "INSERT INTO TRANSACTIONHEADER(customer_id, posclient_id) VALUES (@customer_id, @posclient_id) RETURNING id, posclient_id, customer_id, date_inserted, date_updated",
+                MapToTransactionHeader,
+                new Dictionary<string, object>() { ["@posclient_id"] = transactionHeader.PosClientId, ["@customer_id"] = transactionHeader.Customer.Id }
             );
 
             if (transactionHeaders.Any())
@@ -34,17 +34,17 @@ namespace MLPos.Data.Postgres
             return null;
         }
 
-        public async Task DeleteTransactionHeaderAsync(long id)
+        public async Task DeleteTransactionHeaderAsync(long id, long posClientId)
         {
-            await SqlHelper.ExecuteNonQuery(_connectionString, "DELETE FROM TRANSACTIONHEADER WHERE id=@id", new Dictionary<string, object>() { ["@id"] = id });
+            await SqlHelper.ExecuteNonQuery(_connectionString, "DELETE FROM TRANSACTIONHEADER WHERE id=@id AND posclient_id = @posclient_id", new Dictionary<string, object>() { ["@id"] = id, ["@posclient_id"] = posClientId });
         }
 
-        public async Task<TransactionHeader?> GetTransactionHeaderAsync(long id)
+        public async Task<TransactionHeader?> GetTransactionHeaderAsync(long id, long posClientId)
         {
             IEnumerable<TransactionHeader> transactionHeaders = await SqlHelper.ExecuteQuery(_connectionString,
-            "SELECT id, customer_id, date_inserted, date_updated FROM TRANSACTIONHEADER WHERE id = @id",
-            MapToTransactionHeader,
-                new Dictionary<string, object>() { ["@id"] = id }
+                "SELECT id, posclient_id, customer_id, date_inserted, date_updated FROM TRANSACTIONHEADER WHERE id = @id AND posclient_id = @posclient_id",
+                MapToTransactionHeader,
+                new Dictionary<string, object>() { ["@id"] = id, ["@posclient_id"] = posClientId }
             );
 
             if (transactionHeaders.Any())
@@ -55,11 +55,12 @@ namespace MLPos.Data.Postgres
             return null;
         }
 
-        public async Task<IEnumerable<TransactionHeader>> GetAllTransactionHeaderAsync()
+        public async Task<IEnumerable<TransactionHeader>> GetAllTransactionHeaderAsync(long posClientId)
         {
             return await SqlHelper.ExecuteQuery(_connectionString,
-                "SELECT id, customer_id, date_inserted, date_updated FROM TRANSACTIONHEADER",
-                MapToTransactionHeader
+                "SELECT id, posclient_id, customer_id, date_inserted, date_updated FROM TRANSACTIONHEADER WHERE posclient_id = @posclient_id",
+                MapToTransactionHeader,
+                new Dictionary<string, object> { ["@posclient_id"] = posClientId }
             );
         }
 
@@ -68,12 +69,13 @@ namespace MLPos.Data.Postgres
             return new TransactionHeader()
             {
                 Id = reader.GetInt64(0),
+                PosClientId = reader.GetInt64(1),
                 Customer = new Customer
                 {
-                    Id = reader.GetInt64(1)
+                    Id = reader.GetInt64(2)
                 },
-                DateInserted = reader.GetDateTime(2),
-                DateUpdated = reader.GetDateTime(3),
+                DateInserted = reader.GetDateTime(3),
+                DateUpdated = reader.GetDateTime(4),
             };
         }
     }

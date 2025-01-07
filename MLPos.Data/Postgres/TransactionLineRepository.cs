@@ -19,12 +19,12 @@ namespace MLPos.Data.Postgres
             _connectionString = connectionString;
         }
 
-        public async Task<TransactionLine?> CreateTransactionLineAsync(long transactionId, TransactionLine line)
+        public async Task<TransactionLine?> CreateTransactionLineAsync(long transactionId, long posClientId, TransactionLine line)
         {
             IEnumerable<TransactionLine> transactionLines = await SqlHelper.ExecuteQuery(_connectionString,
-            "INSERT INTO TRANSACTIONLINE(transaction_id, product_id, amount, quantity) VALUES (@transaction_id, @product_id, @amount, @quantity) RETURNING id, product_id, amount, quantity, date_inserted, date_updated",
+            "INSERT INTO TRANSACTIONLINE(transaction_id, posclient_id, product_id, amount, quantity) VALUES (@transaction_id, @posclient_id, @product_id, @amount, @quantity) RETURNING id, product_id, amount, quantity, date_inserted, date_updated",
             MapToTransactionLine,
-                new Dictionary<string, object>() { ["@transaction_id"] = transactionId, ["@product_id"] = line.Product.Id, ["@amount"] = line.Amount, ["@quantity"] = line.Quantity }
+                new Dictionary<string, object>() { ["@transaction_id"] = transactionId, ["@posclient_id"] = posClientId, ["@product_id"] = line.Product.Id, ["@amount"] = line.Amount, ["@quantity"] = line.Quantity }
             );
 
             if (transactionLines.Any())
@@ -35,26 +35,28 @@ namespace MLPos.Data.Postgres
             return null;
         }
 
-        public async Task DeleteTransactionLineAsync(long transactionId, long lineId)
+        public async Task DeleteTransactionLineAsync(long transactionId, long posClientId, long lineId)
         {
-            await SqlHelper.ExecuteNonQuery(_connectionString, "DELETE FROM TRANSACTIONLINE WHERE id=@id AND transaction_id = @transaction_id", new Dictionary<string, object>() { ["@id"] = lineId, ["@transaction_id"] = transactionId });
-        }
-
-        public async Task<IEnumerable<TransactionLine>> GetAllTransactionLinesAsync(long transactionId)
-        {
-            return await SqlHelper.ExecuteQuery(_connectionString,
-                "SELECT id, product_id, amount, quantity, date_inserted, date_updated FROM TRANSACTIONLINE WHERE transaction_id = @transaction_id",
-                MapToTransactionLine,
-                new Dictionary<string, object>() { ["@transaction_id"] = transactionId }
+            await SqlHelper.ExecuteNonQuery(_connectionString, "DELETE FROM TRANSACTIONLINE WHERE id=@id AND transaction_id = @transaction_id AND posclient_id = @posclient_id",
+                new Dictionary<string, object>() { ["@id"] = lineId, ["@transaction_id"] = transactionId, ["@posclient_id"] = posClientId }
             );
         }
 
-        public async Task<TransactionLine?> GetTransactionLineAsync(long transactionId, long lineId)
+        public async Task<IEnumerable<TransactionLine>> GetAllTransactionLinesAsync(long transactionId, long posClientId)
+        {
+            return await SqlHelper.ExecuteQuery(_connectionString,
+                "SELECT id, product_id, amount, quantity, date_inserted, date_updated FROM TRANSACTIONLINE WHERE transaction_id = @transaction_id AND posclient_id = @posclient_id",
+                MapToTransactionLine,
+                new Dictionary<string, object>() { ["@transaction_id"] = transactionId, ["@posclient_id"] = posClientId }
+            );
+        }
+
+        public async Task<TransactionLine?> GetTransactionLineAsync(long transactionId, long posClientId, long lineId)
         {
             IEnumerable<TransactionLine> transactionLines = await SqlHelper.ExecuteQuery(_connectionString,
-                "SELECT id, product_id, amount, quantity, date_inserted, date_updated FROM TRANSACTIONLINE WHERE transaction_id = @transaction_id AND id = @id",
+                "SELECT id, product_id, amount, quantity, date_inserted, date_updated FROM TRANSACTIONLINE WHERE transaction_id = @transaction_id AND posclient_id = @posclient_id AND id = @id",
                 MapToTransactionLine,
-                new Dictionary<string, object>() { ["@transaction_id"] = transactionId, ["@id"] = lineId }
+                new Dictionary<string, object>() { ["@transaction_id"] = transactionId, ["@posclient_id"] = posClientId, ["@id"] = lineId }
             );
 
             if (transactionLines.Any())

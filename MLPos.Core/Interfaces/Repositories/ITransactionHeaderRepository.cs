@@ -9,10 +9,10 @@ namespace MLPos.Core.Interfaces.Repositories
 {
     public interface ITransactionHeaderRepository
     {
-        public Task<TransactionHeader?> GetTransactionHeaderAsync(long id);
-        public Task<IEnumerable<TransactionHeader>> GetAllTransactionHeaderAsync();
+        public Task<TransactionHeader?> GetTransactionHeaderAsync(long id, long posClientId);
+        public Task<IEnumerable<TransactionHeader>> GetAllTransactionHeaderAsync(long posClientId);
         public Task<TransactionHeader?> CreateTransactionHeaderAsync(TransactionHeader transactionHeader);
-        public Task DeleteTransactionHeaderAsync(long id);
+        public Task DeleteTransactionHeaderAsync(long id, long posClientId);
 
     }
 }

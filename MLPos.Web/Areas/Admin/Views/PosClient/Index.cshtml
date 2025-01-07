@@ -1,0 +1,50 @@
+@using MLPos.Web.Models
+@using MLPos.Core.Model
+@using MLPos.Web.Utils
+@using Microsoft.Extensions.Localization
+@using MLPos.Web
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model PosClientListViewModel
+@{
+    Layout = "_Admin_Layout";
+    ViewData["Title"] = SharedLocalizer["PosClients"];
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/PosClients.css">
+}
+
+@section Scripts {
+    <script src="~/js/search.js"></script>
+    <script type="text/javascript">
+        const productList = document.querySelector('#posClientList');
+        const searchInput = document.querySelector('#search');
+        new Search({
+            searchInput,
+            listElement: productList,
+            cardClassName: '.posClientCard',
+            hideClassName: 'hideCard',
+            lookupClasses: [ '.posClientName' ]
+        });
+    </script>
+}
+
+<div class="container pageContainer">
+    <div class="container titleContainer">
+        <div>
+            <h1>@SharedLocalizer["PosClients"]</h1>
+            <a href="@Url.Action("Edit", "PosClient")" class="button buttonPrimary">@SharedLocalizer["NewPosClient"]</a>
+        </div>
+        <input class="search" type="search" placeholder="@SharedLocalizer["Search"]" id="search" />
+    </div>
+    <div class="flexList posClientList" id="posClientList">
+        @foreach (PosClient posClient in Model.PosClients)
+        {
+            <a class="card posClientCard" href="@Url.Action("Details", "PosClient", new { id = posClient.Id })" id="@posClient.Id">
+                <div>
+                    <p class="cardTitle posClientName">@posClient.Name</p>
+                </div>
+            </a>
+        }
+    </div>
+</div>

@@ -9,6 +9,7 @@ namespace MLPos.Core.Model
     public class TransactionHeader : Entity
     {
         public Customer? Customer { get; set; }
+        public long PosClientId { get; set; }
         public IEnumerable<TransactionLine> Lines { get; set; } = Enumerable.Empty<TransactionLine>();
     }
 }

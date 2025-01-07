@@ -57,7 +57,7 @@ public class PaymentMethodService : IPaymentMethodService
         
         if (!exists)
         {
-            validationErrors.Add(new ValidationError{ Error = $"PaymentMethod with Id {paymentMethod.Id} does not exist!" });
+            validationErrors.Add(new ValidationError{ Error = $"Payment method with Id {paymentMethod.Id} does not exist!" });
             ret = false;
         }
         

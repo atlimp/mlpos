@@ -15,7 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Remove="Areas\Admin\Views\Customer\Details - Copy.cshtml" />
       <Content Remove="Views\Login\Index.cshtml" />
     </ItemGroup>
 
@@ -51,7 +50,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Areas\Admin\Views\Customer\Details - Copy.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Customer\Details.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Customer\Index.cshtml" />
       <AdditionalFiles Include="Views\Login\Index.cshtml" />
@@ -65,6 +63,12 @@
 
     <ItemGroup>
       <TypeScriptCompile Include="PosClient\src\api\api.ts" />
+      <TypeScriptCompile Include="PosClient\src\components\TransactionSummary\TransactionSummary.tsx">
+        <SubType>Code</SubType>
+      </TypeScriptCompile>
+      <TypeScriptCompile Include="PosClient\src\components\TransactionList\TransactionList.tsx">
+        <SubType>Code</SubType>
+      </TypeScriptCompile>
       <TypeScriptCompile Include="PosClient\src\components\Product\Product.tsx" />
       <TypeScriptCompile Include="PosClient\src\interface.d.ts" />
     </ItemGroup>
