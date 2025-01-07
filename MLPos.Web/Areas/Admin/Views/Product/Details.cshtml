@@ -50,9 +50,13 @@
                             <input type="file" name="image" id="image" class="formInput"/>
                         </label>
                     }
+                    <label class="inputLabel" for="name">
+                        @SharedLocalizer["Name"]:
+                        @Html.TextBoxFor(m => m.Product.Name, new { id = "name", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
                     <label class="inputLabel" for="description">
                         @SharedLocalizer["Description"]:
-                        @Html.TextBoxFor(m => m.Product.Description, new { id = "description", @class="formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                        @Html.TextAreaFor(m => m.Product.Description, new { id = "description", @class="formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
                     </label>
                     <label class="inputLabel" for="type">
                         @SharedLocalizer["ProductType"]:

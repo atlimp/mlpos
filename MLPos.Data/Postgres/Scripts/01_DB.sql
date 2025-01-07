@@ -14,6 +14,7 @@ $$ language 'plpgsql';
 
 CREATE TABLE IF NOT EXISTS PRODUCT(
     id SERIAL PRIMARY KEY,
+    name varchar(100) DEFAULT '',
     description varchar(500) DEFAULT '',
     type int DEFAULT 0,
     image varchar(500) DEFAULT '',

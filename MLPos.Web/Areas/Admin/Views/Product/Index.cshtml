@@ -46,7 +46,7 @@
                     @Html.ImageOrDefault(product?.Image, "cardImage")
                 </div>
                 <div>
-                    <p class="productDesc cardTitle">@product.Description</p>
+                    <p class="productName cardTitle">@product.Name</p>
                     <p class="productType">@SharedLocalizer[product.Type.ToString()]</p>
                     <p class="productPrice">@product.Price kr.</p>
                 </div>

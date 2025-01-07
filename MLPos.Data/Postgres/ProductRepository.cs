@@ -18,7 +18,7 @@ public class ProductRepository : IProductRepository
     public async Task<Product> GetProductAsync(long id)
     {
         IEnumerable<Product> products = await SqlHelper.ExecuteQuery<Product>(_connectionString,
-            "select id, description, type, image, price, date_inserted, date_updated from product where id = @id",
+            "select id, name, description, type, image, price, date_inserted, date_updated from product where id = @id",
             MapToProduct,
                 new Dictionary<string, object>(){ ["@id"] = id }
             );
@@ -34,17 +34,17 @@ public class ProductRepository : IProductRepository
     public async Task<IEnumerable<Product>> GetProductsAsync()
     {
         return await SqlHelper.ExecuteQuery<Product>(_connectionString,
-            "SELECT id, description, type, image, price, date_inserted, date_updated FROM PRODUCT",
+            "SELECT id, name, description, type, image, price, date_inserted, date_updated FROM PRODUCT",
             MapToProduct);
     }
 
     public async Task<Product> CreateProductAsync(Product product)
     {
         IEnumerable<Product> products = await SqlHelper.ExecuteQuery<Product>(_connectionString,
-            @"INSERT INTO PRODUCT(description, type, image, price)
-                    VALUES(@description, @type, @image, @price) RETURNING id, description, type, image, price, date_inserted, date_updated",
+            @"INSERT INTO PRODUCT(name, description, type, image, price)
+                    VALUES(@name, @description, @type, @image, @price) RETURNING id, name, description, type, image, price, date_inserted, date_updated",
             MapToProduct,
-            new Dictionary<string, object>(){ ["@description"] = product.Description, ["@type"] = (int)product.Type, ["@image"] = product.Image, ["@price"] = product.Price }
+            new Dictionary<string, object>(){ ["@name"] = product.Name, ["@description"] = product.Description, ["@type"] = (int)product.Type, ["@image"] = product.Image, ["@price"] = product.Price }
         );
         
         if (products.Any())
@@ -58,9 +58,9 @@ public class ProductRepository : IProductRepository
     public async Task<Product> UpdateProductAsync(Product product)
     {
         IEnumerable<Product> products = await SqlHelper.ExecuteQuery<Product>(_connectionString,
-            @"UPDATE PRODUCT set description = @description, type = @type, image = @image, price = @price WHERE id = @id RETURNING id, description, type, image, price, date_inserted, date_updated",
+            @"UPDATE PRODUCT set name=@name, description = @description, type = @type, image = @image, price = @price WHERE id = @id RETURNING id, name, description, type, image, price, date_inserted, date_updated",
             MapToProduct,
-            new Dictionary<string, object>(){ ["@id"] = product.Id, ["@description"] = product.Description, ["@type"] = (int)product.Type, ["@image"] = product.Image, ["@price"] = product.Price }
+            new Dictionary<string, object>(){ ["@id"] = product.Id, ["@name"] = product.Name, ["@description"] = product.Description, ["@type"] = (int)product.Type, ["@image"] = product.Image, ["@price"] = product.Price }
         );
         
         if (products.Any())
@@ -96,12 +96,13 @@ public class ProductRepository : IProductRepository
         return new Product()
         {
             Id = reader.GetInt32(0),
-            Description = reader.GetString((1)),
-            Type = (ProductType)reader.GetInt32(2),
-            Image = reader.GetString(3),
-            Price = (decimal)reader.GetDecimal(4),
-            DateInserted = reader.GetDateTime(5),
-            DateUpdated = reader.GetDateTime(6),
+            Name = reader.GetString(1),
+            Description = reader.GetString(2),
+            Type = (ProductType)reader.GetInt32(3),
+            Image = reader.GetString(4),
+            Price = (decimal)reader.GetDecimal(5),
+            DateInserted = reader.GetDateTime(6),
+            DateUpdated = reader.GetDateTime(7),
         };
     }
 }
