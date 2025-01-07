@@ -26,8 +26,13 @@ namespace MLPos.Web.Controllers
         {
             Customer customer = await _customerService.GetCustomerAsync(request.CustomerId);
 
-
             return Ok(await _transactionService.CreateTransactionAsync(customer));
+        }
+
+        [HttpGet("active")]
+        public async Task<IActionResult> GetActiveTransactions()
+        {
+            return Ok(await _transactionService.GetActiveTransactionsAsync());
         }
 
         [HttpGet("{transactionId}")]

@@ -95,5 +95,10 @@ namespace MLPos.Services
             await _lineRepository.DeleteTransactionLineAsync(transactionId, lineId);
             return await GetTransactionHeaderAsync(transactionId);
         }
+
+        public async Task<IEnumerable<TransactionHeader>> GetActiveTransactionsAsync()
+        {
+            return await _headerRepository.GetAllTransactionHeaderAsync();
+        }
     }
 }
