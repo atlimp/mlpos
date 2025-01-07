@@ -6,9 +6,9 @@
 @model PaymentMethodDetailsViewModel
 @{
     Layout = "_Admin_Layout";
-    ViewData["Title"] = Model.PaymentMethod?.Name ?? SharedLocalizer["NewCustomer"];
+    ViewData["Title"] = Model.PaymentMethod?.Name ?? SharedLocalizer["NewPaymentMethod"];
     
-    string submitBtnText = Model.PaymentMethod == null ? "Create" : "Update";
+    string submitBtnText = Model.PaymentMethod == null ? @SharedLocalizer["Create"] : @SharedLocalizer["Update"];
 
     string formAction = Model.PaymentMethod == null ? @Url.Action("Edit") : @Url.Action("Edit", "PaymentMethod", new { id = Model.PaymentMethod.Id });
 }

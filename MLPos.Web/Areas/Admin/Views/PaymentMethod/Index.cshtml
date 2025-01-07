@@ -17,14 +17,14 @@
 @section Scripts {
     <script src="~/js/search.js"></script>
     <script type="text/javascript">
-        const productList = document.querySelector('#customerList');
+        const productList = document.querySelector('#paymentMethodList');
         const searchInput = document.querySelector('#search');
         new Search({
             searchInput,
             listElement: productList,
-            cardClassName: '.customerCard',
+            cardClassName: '.paymentMethodCard',
             hideClassName: 'hideCard',
-            lookupClasses: [ '.customerName', '.customerEmail' ]
+            lookupClasses: [ '.paymentMethodName' ]
         });
     </script>
 }
@@ -37,15 +37,15 @@
         </div>
         <input class="search" type="search" placeholder="@SharedLocalizer["Search"]" id="search" />
     </div>
-    <div class="flexList customerList" id="customerList">
+    <div class="flexList paymentMethodList" id="paymentMethodList">
         @foreach (PaymentMethod paymentMethod in Model.PaymentMethods)
         {
-            <a class="card customerCard" href="@Url.Action("Details", "PaymentMethod", new { id = paymentMethod.Id })" id="@paymentMethod.Id">
+            <a class="card paymentMethodCard" href="@Url.Action("Details", "PaymentMethod", new { id = paymentMethod.Id })" id="@paymentMethod.Id">
                 <div class="cardImageContainer">
                     @Html.ImageOrDefault(paymentMethod?.Image, "cardImage")
                 </div>
                 <div>
-                    <p class="cardTitle customerName">@paymentMethod.Name</p>
+                    <p class="cardTitle paymentMethodName">@paymentMethod.Name</p>
                 </div>
             </a>
         }
