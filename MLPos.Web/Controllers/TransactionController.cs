@@ -38,7 +38,7 @@ namespace MLPos.Web.Controllers
         [HttpGet("{posClientId}/{transactionId}")]
         public async Task<IActionResult> GetTransaction(long posClientId, long transactionId)
         {
-            TransactionHeader transactionHeader = await _transactionService.GetTransactionHeaderAsync(posClientId, transactionId);
+            TransactionHeader transactionHeader = await _transactionService.GetTransactionHeaderAsync(transactionId, posClientId);
 
             if (transactionHeader == null)
             {
@@ -51,14 +51,14 @@ namespace MLPos.Web.Controllers
         [HttpDelete("{posClientId}/{transactionId}")]
         public async Task<IActionResult> DeleteTransaction(long posClientId, long transactionId)
         {
-            await _transactionService.DeleteTransactionAsync(posClientId, transactionId);
+            await _transactionService.DeleteTransactionAsync(transactionId, posClientId);
             return NoContent();
         }
         
         [HttpPost("{posClientId}/{transactionId}/Lines")]
         public async Task<IActionResult> AddItem(long posClientId, long transactionId, AddItemRequest request)
         {
-            TransactionHeader transactionHeader = await _transactionService.GetTransactionHeaderAsync(posClientId, transactionId);
+            TransactionHeader transactionHeader = await _transactionService.GetTransactionHeaderAsync(transactionId, posClientId);
 
             Product product = await _productService.GetProductAsync(request.ProductId);
 
