@@ -13,6 +13,8 @@ namespace MLPos.Core.Interfaces.Repositories
         public Task<IEnumerable<TransactionHeader>> GetAllTransactionHeaderAsync(long posClientId);
         public Task<TransactionHeader?> CreateTransactionHeaderAsync(TransactionHeader transactionHeader);
         public Task DeleteTransactionHeaderAsync(long id, long posClientId);
+        public Task<TransactionSummary> GetTransactionSummaryAsync(long id, long posClientId);
+        public Task<IEnumerable<TransactionSummary>> GetAllTransactionSummaryAsync(long posClientId);
 
     }
 }

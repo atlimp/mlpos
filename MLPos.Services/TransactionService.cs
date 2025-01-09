@@ -107,5 +107,15 @@ namespace MLPos.Services
 
             return activeTransactions;
         }
+
+        public async Task<TransactionSummary> GetTransactionSummaryAsync(long transactionId, long posClientId)
+        {
+            return await _headerRepository.GetTransactionSummaryAsync(transactionId, posClientId);
+        }
+
+        public async Task<IEnumerable<TransactionSummary>> GetAllTransactionSummaryAsync(long posClientId)
+        {
+            return await _headerRepository.GetAllTransactionSummaryAsync(posClientId);
+        }
     }
 }

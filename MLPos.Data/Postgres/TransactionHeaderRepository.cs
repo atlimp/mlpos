@@ -78,5 +78,67 @@ namespace MLPos.Data.Postgres
                 DateUpdated = reader.GetDateTime(4),
             };
         }
+
+        private TransactionSummary MapToTransactionSummary(NpgsqlDataReader reader)
+        {
+            return new TransactionSummary()
+            {
+                Id = reader.GetInt64(0),
+                PosClientId = reader.GetInt64(1),
+                CustomerName = reader.GetString(2),
+                CustomerImage = reader.GetString(3),
+                TotalAmount = reader.GetDecimal(4),
+            };
+        }
+
+        public async Task<TransactionSummary> GetTransactionSummaryAsync(long id, long posClientId)
+        {
+            IEnumerable<TransactionSummary> transactionHeaders = await SqlHelper.ExecuteQuery(_connectionString,
+                            @"SELECT
+	                            t1.id,
+	                            t1.posclient_id,
+	                            t2.name,
+	                            t2.image,
+	                            coalesce(sum(t3.amount), 0) total_amount
+                            FROM TRANSACTIONHEADER t1
+	                            join CUSTOMER t2 on t1.customer_id = t2.id
+	                            join TRANSACTIONLINE t3 on t1.id = t3.transaction_id and t1.posclient_id = t3.posclient_id
+	                            WHERE 
+		                            t1.id = @id
+		                            AND t1.posclient_id = @posclient_id
+	                            GROUP BY
+		                            t1.id, t1.posclient_id, t2.name, t2.image",
+                            MapToTransactionSummary,
+                            new Dictionary<string, object>() { ["@id"] = id, ["@posclient_id"] = posClientId }
+                        );
+
+            if (transactionHeaders.Any())
+            {
+                return transactionHeaders.First();
+            }
+
+            return null;
+        }
+
+        public async Task<IEnumerable<TransactionSummary>> GetAllTransactionSummaryAsync(long posClientId)
+        {
+            return await SqlHelper.ExecuteQuery(_connectionString,
+                            @"SELECT
+	                            t1.id,
+	                            t1.posclient_id,
+	                            t2.name,
+	                            t2.image,
+	                            coalesce(sum(t3.amount), 0) total_amount
+                            FROM TRANSACTIONHEADER t1
+	                            join CUSTOMER t2 on t1.customer_id = t2.id
+	                            left outer join TRANSACTIONLINE t3 on t1.id = t3.transaction_id and t1.posclient_id = t3.posclient_id
+	                            WHERE 
+		                            t1.posclient_id = @posclient_id
+	                            GROUP BY
+		                            t1.id, t1.posclient_id, t2.name, t2.image",
+                            MapToTransactionSummary,
+                            new Dictionary<string, object>() { ["@posclient_id"] = posClientId }
+                        );
+        }
     }
 }

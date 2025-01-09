@@ -48,6 +48,25 @@ namespace MLPos.Web.Controllers
             return Ok(transactionHeader);
         }
 
+        [HttpGet("{posClientId}/active/summary")]
+        public async Task<IActionResult> GetActiveTransactionsSummary(long posClientId)
+        {
+            return Ok(await _transactionService.GetAllTransactionSummaryAsync(posClientId));
+        }
+
+        [HttpGet("{posClientId}/{transactionId}/summary")]
+        public async Task<IActionResult> GetTransactionSummary(long posClientId, long transactionId)
+        {
+            TransactionSummary summary = await _transactionService.GetTransactionSummaryAsync(transactionId, posClientId);
+
+            if (summary == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(summary);
+        }
+
         [HttpDelete("{posClientId}/{transactionId}")]
         public async Task<IActionResult> DeleteTransaction(long posClientId, long transactionId)
         {
