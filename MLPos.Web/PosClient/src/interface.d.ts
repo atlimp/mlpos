@@ -22,3 +22,51 @@ interface Customer extends Entity {
     email: string;
     image: string;
 }
+
+interface TransactionLine {
+    id: number;
+    amount: number;
+    quantity: number;
+    product: Product;
+}
+
+interface Transaction {
+    id: number;
+    customer: Customer
+    lines: TransactionLine[];
+}
+
+interface TransactionSummary {
+    id: number;
+    posClientId: number;
+    customerName: string;
+    customerImage: string;
+    totalAmount: number;
+}
+
+interface ApiParams {
+    posClientId: number;
+}
+
+interface PosProps {
+    transaction: Transaction;
+}
+
+interface TransactionListProps {
+    transactions: TransactionSummary[];
+}
+
+interface LineDisplayProps {
+    lines: TransactionLine[];
+    onDeleteLine: (id: number) => void;
+}
+
+interface ControlPanelProps {
+    transaction: Transaction;
+    onDeleteTransaction: () => void;
+    onAddItem: () => void;
+    onFinishTransaction: () => void;
+}
+interface ProductSelectProps {
+    onSelectProduct: (id: number) => void;
+}

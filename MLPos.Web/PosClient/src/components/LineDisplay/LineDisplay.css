@@ -1,0 +1,100 @@
+﻿.lineDisplay {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.tableContainer {
+    overflow: scroll;
+    height:100%;
+    max-height: 25em;
+}
+
+.itemLineHeader {
+    position: sticky;
+    top: 0;
+    padding: 0 0.25em;
+}
+
+.itemLineHeader > th {
+    padding: 0 0.25em;
+}
+
+.itemLine {
+    height: 2em;
+}
+
+.itemLine td {
+    border: 1px solid #ddd;
+    height: 2em;
+}
+
+.itemLineImageContainer {
+    height: 2em;
+    width: 2em;
+    display: flex;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.itemLineImage {
+    max-width: 2em;
+    max-height: 2em;
+    width: auto;
+    height: auto;
+    margin: auto;
+}
+
+.itemLineName {
+    padding: 0 0.25em;
+    width: 100%;
+    max-width: 5em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.itemLinePrice {
+    text-align: right;
+    padding-left: 0.25em;
+    width: 100%;
+}
+
+.itemLineQuantity {
+    text-align: right;
+    padding-left: 0.25em;
+    max-width: 3em;
+}
+
+.itemLineAmount {
+    text-align: right;
+    padding-left: 0.25em;
+    width: 100%;
+}
+
+.itemLineDelete {
+    padding-left: 0.25em;
+    width: 100%;
+}
+
+
+.itemLineHeader {
+    background-color: var(--platinum);
+    font-weight: bold;
+}
+
+.deleteButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.itemLine:nth-child(even) {
+    background-color: var(--platinum);
+}
+
+.itemLine > td, .itemLineHeader > th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

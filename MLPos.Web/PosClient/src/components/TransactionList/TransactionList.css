@@ -1,0 +1,10 @@
+﻿.transactionSelectionContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    overflow-x: scroll;
+    height: 15%;
+    max-height: 6em;
+    margin: 0;
+    background-color: var(--green);
+}

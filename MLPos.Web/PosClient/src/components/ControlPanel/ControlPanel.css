@@ -1,0 +1,17 @@
+﻿.controlPanel {
+
+}
+
+.transactionInfo {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5em;
+}
+
+.customerName {
+    font-weight: bold;
+}
+
+.totals {
+    font-size: 1.25em;
+}
