@@ -91,8 +91,7 @@ namespace MLPos.Web.Controllers
         [HttpDelete("{posClientId}/{transactionId}/Lines/{lineId}")]
         public async Task<IActionResult> DeleteLine(long posClientId, long transactionId, long lineId)
         {
-            await _transactionService.RemoveItemAsync(transactionId, posClientId, lineId);
-            return NoContent();
+            return Ok(await _transactionService.RemoveItemAsync(transactionId, posClientId, lineId));
         }
     }
 }
