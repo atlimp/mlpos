@@ -32,6 +32,8 @@ function App() {
 
         if (transactions.length > 0)
             setActiveTransactionId(transactions[0].id);
+        else
+            setActiveTransactionId(-1);
     };
 
     return (<div className="appContainer">

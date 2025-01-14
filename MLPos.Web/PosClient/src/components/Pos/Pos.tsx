@@ -14,6 +14,24 @@ function Pos({ refreshTransactions }: PosProps) {
     const [paymentMethodSelect, setPaymentMethodSelect] = useState<boolean>(false);
 
     const getActiveTransaction = async (posClientId: number, activeTransactionId: number) => {
+        if (activeTransactionId === -1) {
+            const emptyTransaction: Transaction = {
+                id: -1,
+                customer: {
+                    name: '',
+                    email: '',
+                    image: '',
+                    id: 0
+                },
+                lines: []
+            };
+
+            setActiveTransaction(emptyTransaction);
+
+            return;
+        }
+
+
         const api = new Api({ posClientId });
         const transaction = await api.getTransaction(activeTransactionId);
         if (transaction)
