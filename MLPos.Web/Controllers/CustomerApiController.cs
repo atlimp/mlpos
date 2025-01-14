@@ -21,7 +21,6 @@ namespace MLPos.Web.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllCustomers()
         {
-            throw new NotImplementedException();
             return Ok(await _customerService.GetCustomersAsync());
 
         }
