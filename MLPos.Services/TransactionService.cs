@@ -14,13 +14,19 @@ namespace MLPos.Services
     {
         private readonly ITransactionHeaderRepository _headerRepository;
         private readonly ITransactionLineRepository _lineRepository;
+        private readonly IPosClientRepository _posClientRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
 
-        public TransactionService(ITransactionHeaderRepository headerRepository, ITransactionLineRepository lineRepository, ICustomerRepository customerRepository, IProductRepository productRepository)
+        public TransactionService(ITransactionHeaderRepository headerRepository,
+            ITransactionLineRepository lineRepository,
+            IPosClientRepository posClientRepository,
+            ICustomerRepository customerRepository,
+            IProductRepository productRepository)
         {
             _headerRepository = headerRepository;
             _lineRepository = lineRepository;
+            _posClientRepository = posClientRepository;
             _customerRepository = customerRepository;
             _productRepository = productRepository;
         }
@@ -68,6 +74,8 @@ namespace MLPos.Services
         public async Task<TransactionHeader?> CreateTransactionAsync(long posClientId, Customer customer)
         {
             ThrowIf.Null(customer);
+
+            PosClient client = await _posClientRepository.GetPosClientAsync(posClientId);
 
             TransactionHeader? header = await _headerRepository.CreateTransactionHeaderAsync(new TransactionHeader { Customer = customer, PosClientId = posClientId });
 

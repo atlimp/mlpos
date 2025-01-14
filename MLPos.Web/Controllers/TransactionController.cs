@@ -21,12 +21,12 @@ namespace MLPos.Web.Controllers
             _productService = productService;
         }
 
-        [HttpPost("")]
-        public async Task<IActionResult> CreateTransaction(CreateTransactionRequest request)
+        [HttpPost("{posClientId}")]
+        public async Task<IActionResult> CreateTransaction(long posClientId, CreateTransactionRequest request)
         {
             Customer customer = await _customerService.GetCustomerAsync(request.CustomerId);
 
-            return Ok(await _transactionService.CreateTransactionAsync(request.PosClientId, customer));
+            return Ok(await _transactionService.CreateTransactionAsync(posClientId, customer));
         }
 
         [HttpGet("{posClientId}/active")]
