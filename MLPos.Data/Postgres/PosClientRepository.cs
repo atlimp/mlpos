@@ -100,8 +100,8 @@ namespace MLPos.Data.Postgres
             return new PosClient()
             {
                 Id = reader.GetInt32(0),
-                Name = reader.GetString((1)),
-                Description = reader.GetString(2),
+                Name = reader.GetSafeString((1)),
+                Description = reader.GetSafeString(2),
                 DateInserted = reader.GetDateTime(3),
                 DateUpdated = reader.GetDateTime(4),
             };

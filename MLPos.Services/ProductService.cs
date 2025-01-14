@@ -25,21 +25,11 @@ public class ProductService : IProductService
 
     public async Task<Product> CreateProductAsync(Product product)
     {
-        if (product.Image == null)
-        {
-            product.Image = string.Empty;
-        }
-
         return await _productRepository.CreateProductAsync(product);
     }
 
     public async Task<Product> UpdateProductAsync(Product product)
     {
-        if (product.Image == null)
-        {
-            product.Image = string.Empty;
-        }
-
         return await _productRepository.UpdateProductAsync(product);
     }
 

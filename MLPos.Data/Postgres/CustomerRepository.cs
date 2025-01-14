@@ -96,9 +96,9 @@ public class CustomerRepository : ICustomerRepository
         return new Customer()
         {
             Id = reader.GetInt32(0),
-            Name = reader.GetString((1)),
-            Email = reader.GetString(2),
-            Image = reader.GetString(3),
+            Name = reader.GetSafeString((1)),
+            Email = reader.GetSafeString(2),
+            Image = reader.GetSafeString(3),
             DateInserted = reader.GetDateTime(4),
             DateUpdated = reader.GetDateTime(5),
         };

@@ -96,10 +96,10 @@ public class ProductRepository : IProductRepository
         return new Product()
         {
             Id = reader.GetInt32(0),
-            Name = reader.GetString(1),
-            Description = reader.GetString(2),
+            Name = reader.GetSafeString(1),
+            Description = reader.GetSafeString(2),
             Type = (ProductType)reader.GetInt32(3),
-            Image = reader.GetString(4),
+            Image = reader.GetSafeString(4),
             Price = (decimal)reader.GetDecimal(5),
             DateInserted = reader.GetDateTime(6),
             DateUpdated = reader.GetDateTime(7),

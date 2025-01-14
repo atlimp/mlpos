@@ -18,5 +18,15 @@ namespace MLPos.Data.Postgres.Helpers
 
             return reader.GetInt64(columnIndex);
         }
+
+        public static string GetSafeString(this NpgsqlDataReader reader, int columnIndex)
+        {
+            if (reader.IsDBNull(columnIndex))
+            {
+                return string.Empty;
+            }
+
+            return reader.GetString(columnIndex);
+        }
     }
 }

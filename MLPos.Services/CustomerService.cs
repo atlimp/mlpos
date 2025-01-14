@@ -25,21 +25,11 @@ public class CustomerService : ICustomerService
 
     public async Task<Customer> CreateCustomerAsync(Customer customer)
     {
-        if (customer.Image == null)
-        {
-            customer.Image = string.Empty;
-        }
-
         return await _customerRepository.CreateCustomerAsync(customer);
     }
 
     public async Task<Customer> UpdateCustomerAsync(Customer customer)
     {
-        if (customer.Image == null)
-        {
-            customer.Image = string.Empty;
-        }
-
         return await _customerRepository.UpdateCustomerAsync(customer);
     }
 
