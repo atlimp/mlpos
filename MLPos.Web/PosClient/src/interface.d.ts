@@ -64,7 +64,6 @@ interface PosProps {
 interface TransactionListProps {
     transactions: TransactionSummary[];
     refreshTransactions: () => void;
-    onAddTransaction: () => void;
 }
 
 interface LineDisplayProps {
@@ -85,9 +84,7 @@ interface CustomerSelectProps {
     onSelectCustomer: (id: number) => void;
 }
 
-
-
 interface PaymentMethodSelectProps {
     onSelectPaymentMethod: (id: number) => void;
-    replacers: object;
+    replacers: { [key: string]: string; };
 }

@@ -21,7 +21,9 @@ function Pos({ refreshTransactions }: PosProps) {
                     name: '',
                     email: '',
                     image: '',
-                    id: 0
+                    id: 0,
+                    dateInserted: new Date(),
+                    dateUpdated: new Date(),
                 },
                 lines: []
             };
@@ -92,7 +94,7 @@ function Pos({ refreshTransactions }: PosProps) {
     const totalsAmount = activeTransaction.lines.reduce((u, k) => u + k.amount, 0);
 
     return <div className="pos">
-        {paymentMethodSelect && <PaymentMethodSelect onSelectPaymentMethod={onPaymentMethodSelected} replacers={{ amount: totalsAmount }}></PaymentMethodSelect>}
+        {paymentMethodSelect && <PaymentMethodSelect onSelectPaymentMethod={onPaymentMethodSelected} replacers={{ 'amount': totalsAmount.toString() }}></PaymentMethodSelect>}
         {productSelect && <ProductSelect onSelectProduct={onProductSelected}></ProductSelect>}
         <LineDisplay lines={activeTransaction?.lines ?? []} onDeleteLine={onDeleteLine} />
         <ControlPanel
