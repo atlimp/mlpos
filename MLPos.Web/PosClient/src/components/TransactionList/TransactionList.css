@@ -8,3 +8,12 @@
     margin: 0;
     background-color: var(--green);
 }
+
+.newTransactionImage {
+    max-width: 4.5em;
+    max-height: 4.5em;
+    width: auto;
+    height: auto;
+    margin: auto;
+    object-fit: contain;
+}

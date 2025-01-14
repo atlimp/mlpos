@@ -40,8 +40,8 @@ function App() {
                 </div>
                 <div className="app">
                     <PosClientIdContext.Provider value={{ posClientId, setPosClientId }}>
-                        <TransactionContext.Provider value={{ activeTransactionId, setActiveTransactionId }}>
-                            <TransactionList transactions={transactions} />
+                <TransactionContext.Provider value={{ activeTransactionId, setActiveTransactionId }}>
+                    <TransactionList transactions={transactions} refreshTransactions={() => { getActiveTransactions(posClientId) }} />
                             <Pos refreshTransactions={() => { getActiveTransactions(posClientId) }} />
                         </TransactionContext.Provider>
                     </PosClientIdContext.Provider>

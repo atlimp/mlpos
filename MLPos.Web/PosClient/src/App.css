@@ -56,6 +56,10 @@ body {
     display: flex;
 }
 
+.modalContent {
+    margin: auto;
+}
+
 input, select, textarea {
     background-color: var(--platinum);
     padding: 0.5em;

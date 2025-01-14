@@ -11,10 +11,10 @@ function TransactionSummary({ transaction }: { transaction: TransactionSummary }
     }
 
     return <div className={"container transactionSummaryContainer " + (activeTransactionId === transaction.id ? "activeTransaction" : "")} onClick={transactionClicked}>
-        <div className="transactionImageContainer">
-            <img className="transactionImage" src={transaction.customerImage}></img>
+                <div className="transactionImageContainer">
+                    <img className="transactionImage" src={transaction.customerImage}></img>
                 </div>
-            </div>
+           </div>
 }
 
 export default TransactionSummary;

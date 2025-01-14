@@ -1,11 +1,11 @@
-﻿.productSelection {
+﻿.customerSelection {
     width: 90%;
     height: 40em;
     background-color: var(--white);
     margin: auto;
 }
 
-.productList {
+.customerList {
     display: flex;
     width: 100%;
     height: 35em;
@@ -14,7 +14,7 @@
     overflow-y: scroll;
 }
 
-.productCard {
+.customerCard {
     display: flex;
     justify-content: space-between;
     margin: 0em 0.5em 1em 0.5em;
@@ -22,7 +22,7 @@
     padding: 0.5em;
 }
 
-.productCard:hover {
+.customerCard:hover {
     background-color: var(--coral);
 }
 
@@ -31,25 +31,25 @@
     width: 2em;
 }
 
-.productImageContainer {
+.customerImageContainer {
     width: 3em;
     height: 3em;
     overflow: hidden;
 }
 
-.productImageContainer > img {
+.customerImageContainer > img {
     max-width: 3em;
     max-height: 3em;
     width: auto;
     height: auto;
 }
 
-.productInfoContainer {
+.customerInfoContainer {
     display:flex;
     flex-direction: column;
 }
 
-.productName, .productPrice {
+.customerName, .customerEmail {
     text-align: right;
 }
 

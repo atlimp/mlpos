@@ -5,11 +5,13 @@ import ProductSelect from '../ProductSelect/ProductSelect';
 import { useContext, useEffect, useState } from 'react';
 import { PosClientIdContext, TransactionContext } from '../../context';
 import Api from '../../api/api';
-function Pos({ refreshTransactions }) {
+import PaymentMethodSelect from '../PaymentMethodSelect/PaymentMethodSelect';
+function Pos({ refreshTransactions }: PosProps) {
     const { activeTransactionId } = useContext(TransactionContext);
     const { posClientId } = useContext(PosClientIdContext);
     const [activeTransaction, setActiveTransaction] = useState<Transaction>();
     const [productSelect, setProductSelect] = useState<boolean>(false);
+    const [paymentMethodSelect, setPaymentMethodSelect] = useState<boolean>(false);
 
     const getActiveTransaction = async (posClientId: number, activeTransactionId: number) => {
         const api = new Api({ posClientId });
@@ -18,7 +20,7 @@ function Pos({ refreshTransactions }) {
             setActiveTransaction(transaction);
     }
 
-    const onDeleteLine = async (lineId) => {
+    const onDeleteLine = async (lineId: number) => {
         const api = new Api({ posClientId });
         const transaction = await api.deleteTransactionLine(activeTransactionId, lineId);
         if (transaction)
@@ -32,13 +34,24 @@ function Pos({ refreshTransactions }) {
         }
     }
 
+    const onPostTransaction = async () => {
+        setPaymentMethodSelect(true);
+    }
+
+    const onPaymentMethodSelected = async (paymentMethodId: number) => {
+        setPaymentMethodSelect(false);
+        if (paymentMethodId === -1)
+            return;
+
+        const api = new Api({ posClientId });
+        await api.postTransaction(activeTransactionId, paymentMethodId);    }
+
     const onProductSelection = () => {
         setProductSelect(true);
     }
 
     const onProductSelected = async (productId: number) => {
         setProductSelect(false);
-        console.log(productId)
         if (productId === -1)
             return;
 
@@ -56,13 +69,17 @@ function Pos({ refreshTransactions }) {
         return <div>Loading...</div>
     }
 
+    const totalsAmount = activeTransaction.lines.reduce((u, k) => u + k.amount, 0);
+
     return <div className="pos">
+        {paymentMethodSelect && <PaymentMethodSelect onSelectPaymentMethod={onPaymentMethodSelected} replacers={{ amount: totalsAmount }}></PaymentMethodSelect>}
         {productSelect && <ProductSelect onSelectProduct={onProductSelected}></ProductSelect>}
         <LineDisplay lines={activeTransaction?.lines ?? []} onDeleteLine={onDeleteLine} />
         <ControlPanel
             transaction={activeTransaction}
             onDeleteTransaction={onDeleteTransaction}
-            onAddItem={onProductSelection} />        
+            onFinishTransaction={onPostTransaction}
+            onAddProduct={onProductSelection} />        
     </div>
 }
 

@@ -59,6 +59,16 @@
         return [];
     }
 
+    async getAllPaymentMethods(): Promise<PaymentMethod[]> {
+        const response = await this.fetchJson('/api/PaymentMethod/all');
+
+        if (response) {
+            return response as PaymentMethod[];
+        }
+
+        return [];
+    }
+
     async getActiveTransactions(): Promise<Transaction[]> {
         const response = await this.fetchJson(`/api/Transaction/${this.posClientId}/active`);
 
@@ -79,8 +89,33 @@
         return null;
     }
 
+    async postTransaction(transactionId: number): Promise<PostedTransaction | null> {
+        const response = await this.fetchJson(`/api/Transaction/${this.posClientId}/${transactionId}/post`);
+
+        if (response) {
+            return response as Transaction;
+        }
+
+        return null;
+    }
+
     async deleteTransactionLine(transactionId: number, lineId: number): Promise<Transaction | null> {
         const response = await this.fetchJson(`/api/Transaction/${this.posClientId}/${transactionId}/lines/${lineId}`, 'DELETE');
+
+        if (response) {
+            return response as Transaction;
+        }
+
+        return null;
+    }
+
+    async createTransaction(customerId: number): Promise<Transaction | null> {
+        const response = await this.fetchJson(`/api/Transaction/${this.posClientId}`,
+            'POST',
+            {
+                customerId
+            }
+        );
 
         if (response) {
             return response as Transaction;

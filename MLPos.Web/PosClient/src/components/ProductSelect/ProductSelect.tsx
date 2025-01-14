@@ -1,7 +1,7 @@
 ﻿import './ProductSelect.css';
 import { useEffect, useState } from 'react';
 import Api from '../../api/api';
-import leftArrow from '../../assets/left-arrow.png';
+import leftArrow from '../../assets/icons/left-arrow.png';
 
 function ProductSelect({ onSelectProduct }: ProductSelectProps) {
     const [products, setProducts] = useState<Product[]>([]);
@@ -18,7 +18,7 @@ function ProductSelect({ onSelectProduct }: ProductSelectProps) {
 
     return (
         <div className="modal">
-            <div className="productSelection">
+            <div className="modalContent productSelection">
                 <img className="back" src={leftArrow} onClick={() => { onSelectProduct(-1) }} />
                 <div className="productList">
                     {products.map((product: Product) => {

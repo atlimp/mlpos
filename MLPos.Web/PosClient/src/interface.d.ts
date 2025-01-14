@@ -22,6 +22,11 @@ interface Customer extends Entity {
     email: string;
     image: string;
 }
+interface PaymentMethod extends Entity {
+    name: string;
+    description: string;
+    image: string;
+}
 
 interface TransactionLine {
     id: number;
@@ -32,8 +37,12 @@ interface TransactionLine {
 
 interface Transaction {
     id: number;
-    customer: Customer
+    customer: Customer;
     lines: TransactionLine[];
+}
+interface PostedTransaction {
+    id: number;
+    customer: Customer;
 }
 
 interface TransactionSummary {
@@ -49,11 +58,13 @@ interface ApiParams {
 }
 
 interface PosProps {
-    transaction: Transaction;
+    refreshTransactions: () => void;
 }
 
 interface TransactionListProps {
     transactions: TransactionSummary[];
+    refreshTransactions: () => void;
+    onAddTransaction: () => void;
 }
 
 interface LineDisplayProps {
@@ -64,9 +75,19 @@ interface LineDisplayProps {
 interface ControlPanelProps {
     transaction: Transaction;
     onDeleteTransaction: () => void;
-    onAddItem: () => void;
+    onAddProduct: () => void;
     onFinishTransaction: () => void;
 }
 interface ProductSelectProps {
     onSelectProduct: (id: number) => void;
+}
+interface CustomerSelectProps {
+    onSelectCustomer: (id: number) => void;
+}
+
+
+
+interface PaymentMethodSelectProps {
+    onSelectPaymentMethod: (id: number) => void;
+    replacers: object;
 }
