@@ -6,7 +6,7 @@ INSERT INTO CUSTOMER(name, email, image) VALUES('Forstjóri Forstjórason', 'forst
 INSERT INTO CUSTOMER(name, email, image) VALUES('Jónína Jóhannsdóttir', 'jonina@ble.is', 'https://cdn.create.vista.com/api/media/small/250363326/stock-photo-smiling-attractive-woman-white-sweater-looking-camera-isolated-pink');
 
 INSERT INTO PRODUCT(name, type, price, image) VALUES('Coca cola', 0, 250, 'https://dtgxwmigmg3gc.cloudfront.net/imagery/assets/derivations/icon/512/512/true/eyJpZCI6ImUzODdkNmM1NmRmNWRlYzNiYmFiN2UzNTIyNGY0ZDM5Iiwic3RvcmFnZSI6InB1YmxpY19zdG9yZSJ9?signature=561844f30ebfd64c2a24c454cb2e8f734450a35af1577252ae03284a741a7f34');
-INSERT INTO PRODUCT(name, type, price, image) VALUES('Kristall', 0, 250, 'https://dtgxwmigmg3gc.cloudfront.net/imagery/assets/derivations/icon/512/512/true/eyJpZCI6ImUzODdkNmM1NmRmNWRlYzNiYmFiN2UzNTIyNGY0ZDM5Iiwic3RvcmFnZSI6InB1YmxpY19zdG9yZSJ9?signature=561844f30ebfd64c2a24c454cb2e8f734450a35af1577252ae03284a741a7f34');
+INSERT INTO PRODUCT(name, type, price, image) VALUES('Kristall', 0, 250, 'https://topiceland.com/cdn/shop/products/Kristall-blar.jpg?v=1685564783&width=600');
 INSERT INTO PRODUCT(name, type, price, image) VALUES('Egils Gull', 0, 500, 'https://nammi.is/cdn/shop/products/egils-gull-5-33-cl-667386.jpg?v=1650211909');
 INSERT INTO PRODUCT(name, type, price, image) VALUES('Tuborg Classic', 0, 500, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg0CMN-L2eLeUBOpsntWXMkdeQ8icbwr0G4A&s');
 INSERT INTO PRODUCT(name, type, price, image) VALUES('Egils Lite', 0, 500, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5WQRgsg1SnSbClSPxMuHR9iA65VUZS7CsZA&s');
