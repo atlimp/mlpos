@@ -89,8 +89,8 @@
         return null;
     }
 
-    async postTransaction(transactionId: number): Promise<PostedTransaction | null> {
-        const response = await this.fetchJson(`/api/Transaction/${this.posClientId}/${transactionId}/post`);
+    async postTransaction(transactionId: number, paymentMethodId: number): Promise<PostedTransaction | null> {
+        const response = await this.fetchJson(`/api/Transaction/${this.posClientId}/${transactionId}/post`, 'POST', { paymentMethodId });
 
         if (response) {
             return response as Transaction;

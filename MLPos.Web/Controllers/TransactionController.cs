@@ -13,12 +13,14 @@ namespace MLPos.Web.Controllers
         private readonly ITransactionService _transactionService;
         private readonly ICustomerService _customerService;
         private readonly IProductService _productService;
+        private readonly IPaymentMethodService _paymentMethodService;
 
-        public TransactionApiController(ITransactionService transactionService, ICustomerService customerService, IProductService productService)
+        public TransactionApiController(ITransactionService transactionService, ICustomerService customerService, IProductService productService, IPaymentMethodService paymentMethodService)
         {
             _transactionService = transactionService;
             _customerService = customerService;
             _productService = productService;
+            _paymentMethodService = paymentMethodService;
         }
 
         [HttpPost("{posClientId}")]
@@ -73,7 +75,15 @@ namespace MLPos.Web.Controllers
             await _transactionService.DeleteTransactionAsync(transactionId, posClientId);
             return NoContent();
         }
-        
+
+        [HttpPost("{posClientId}/{transactionId}/post")]
+        public async Task<IActionResult> PostTransaction(long posClientId, long transactionId, PostTransactionRequest request)
+        {
+            TransactionHeader transactionHeader = await _transactionService.GetTransactionHeaderAsync(transactionId, posClientId);
+            PaymentMethod paymentMethod = await _paymentMethodService.GetPaymentMethodAsync(request.PaymentMethodId);
+            return Ok(await _transactionService.PostTransactionAsync(transactionHeader, paymentMethod));
+        }
+
         [HttpPost("{posClientId}/{transactionId}/Lines")]
         public async Task<IActionResult> AddItem(long posClientId, long transactionId, AddItemRequest request)
         {

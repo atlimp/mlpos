@@ -1,4 +1,5 @@
-﻿using MLPos.Core.Interfaces.Repositories;
+﻿using MLPos.Core.Enums;
+using MLPos.Core.Interfaces.Repositories;
 using MLPos.Core.Interfaces.Services;
 using MLPos.Core.Model;
 using MLPos.Core.Utilities;
@@ -14,18 +15,21 @@ namespace MLPos.Services
     {
         private readonly ITransactionHeaderRepository _headerRepository;
         private readonly ITransactionLineRepository _lineRepository;
+        private readonly IPostedTransactionHeaderRepository _postedTransactionHeaderRepository;
         private readonly IPosClientRepository _posClientRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
 
         public TransactionService(ITransactionHeaderRepository headerRepository,
             ITransactionLineRepository lineRepository,
+            IPostedTransactionHeaderRepository postedTransactionHeaderRepository,
             IPosClientRepository posClientRepository,
             ICustomerRepository customerRepository,
             IProductRepository productRepository)
         {
             _headerRepository = headerRepository;
             _lineRepository = lineRepository;
+            _postedTransactionHeaderRepository = postedTransactionHeaderRepository;
             _posClientRepository = posClientRepository;
             _customerRepository = customerRepository;
             _productRepository = productRepository;
@@ -89,12 +93,16 @@ namespace MLPos.Services
 
         public async Task DeleteTransactionAsync(long id, long posClientId)
         {
+            TransactionHeader transactionHeader = await _headerRepository.GetTransactionHeaderAsync(id, posClientId);
+            await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(CreateFrom(transactionHeader, null));
             await _headerRepository.DeleteTransactionHeaderAsync(id, posClientId);
         }
 
-        public Task PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
+        public async Task<PostedTransactionHeader> PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
         {
-            throw new NotImplementedException();
+            PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(CreateFrom(transactionHeader, paymentMethod));
+            await _headerRepository.DeleteTransactionHeaderAsync(transactionHeader.Id, transactionHeader.PosClientId);
+            return postedTransactionHeader;
         }
 
         public async Task<TransactionHeader?> RemoveItemAsync(long transactionId, long posClientId, long lineId)
@@ -124,6 +132,19 @@ namespace MLPos.Services
         public async Task<IEnumerable<TransactionSummary>> GetAllTransactionSummaryAsync(long posClientId)
         {
             return await _headerRepository.GetAllTransactionSummaryAsync(posClientId);
+        }
+
+        private PostedTransactionHeader CreateFrom(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
+        {
+            return new PostedTransactionHeader()
+            {
+                Id = transactionHeader.Id,
+                PosClientId = transactionHeader.PosClientId,
+                Status = paymentMethod == null ? TransactionStatus.Canceled : TransactionStatus.Posted,
+                Customer = transactionHeader.Customer,
+                PaymentMethod = paymentMethod,
+
+            };
         }
     }
 }

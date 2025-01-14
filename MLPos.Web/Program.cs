@@ -108,6 +108,7 @@ public class Program
         services.AddSingleton<IPosClientRepository, MLPos.Data.Postgres.PosClientRepository>(r => new PosClientRepository(connectionString));
         services.AddSingleton<ITransactionHeaderRepository, MLPos.Data.Postgres.TransactionHeaderRepository>(r => new TransactionHeaderRepository(connectionString));
         services.AddSingleton<ITransactionLineRepository, MLPos.Data.Postgres.TransactionLineRepository>(r => new TransactionLineRepository(connectionString));
+        services.AddSingleton<IPostedTransactionHeaderRepository, MLPos.Data.Postgres.PostedTransactionHeaderRepository>(r => new PostedTransactionHeaderRepository(connectionString));
     }
 
     private static void InitServices(IServiceCollection services)

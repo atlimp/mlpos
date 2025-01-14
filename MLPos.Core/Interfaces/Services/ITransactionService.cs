@@ -16,7 +16,7 @@ namespace MLPos.Core.Interfaces.Services
         public Task<TransactionHeader> AddItemAsync(TransactionHeader transactionHeader, Product product, decimal qty);
         public Task<TransactionHeader> RemoveItemAsync(long transactionId, long posClientId, long lineId);
         public Task DeleteTransactionAsync(long id, long posClientId);
-        public Task PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod);
+        public Task<PostedTransactionHeader> PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod);
         public Task<TransactionSummary> GetTransactionSummaryAsync(long transactionId, long posClientId);
         public Task<IEnumerable<TransactionSummary>> GetAllTransactionSummaryAsync(long posClientId);
     }

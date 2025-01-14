@@ -44,7 +44,9 @@ function Pos({ refreshTransactions }: PosProps) {
             return;
 
         const api = new Api({ posClientId });
-        await api.postTransaction(activeTransactionId, paymentMethodId);    }
+        await api.postTransaction(activeTransactionId, paymentMethodId);
+        refreshTransactions();
+    }
 
     const onProductSelection = () => {
         setProductSelect(true);
