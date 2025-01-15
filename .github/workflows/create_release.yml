@@ -1,0 +1,99 @@
+name: Create Release
+
+on:
+  push:
+    branches: [ master, test ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+          working-directory: ${{ github.workspace }}/MLPos.Web/PosClient
+
+    steps:
+      - name: Set env variables
+        run: |
+            release_version="0.0.0.${{ github.run_number }}"
+            release_name="v0.0.0.${{ github.run_number }}"
+            is_prerelease=false
+
+            if [ ${{ github.ref_name }} != "master" ]; then
+                release_name="v0.0.0.${{ github.run_number }}"
+                is_prerelease=true
+            fi
+
+            artifact_name=$(echo ${{ github.repository }} | cut -f 2 -d '/')
+            artifact_name="$artifact_name-$release_name"
+
+            echo release_version=$release_version >> $GITHUB_ENV
+            echo release_name=$release_name >> $GITHUB_ENV
+            echo is_prerelease=$is_prerelease >> $GITHUB_ENV
+            echo artiface_name=$artifact_name >> $GITHUB_ENV
+                
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: '8'
+
+      - name: Install dependencies
+        working-directory: ${{ github.workspace }}/MLPos.Web/PosClient
+        run: npm install
+      
+      - name: Run TS Build
+        working-directory: ${{ github.workspace }}/MLPos.Web/PosClient
+        run: npm run build
+
+      - name: Publish dotnet app linux-x64
+        run: dotnet publish MLPos.Web/MLPos.Web.csproj -c Release --self-contained -r linux-x64 -o ./linux-x64
+
+      - name: Publish dotnet app windows-x64
+        run: dotnet publish MLPos.Web/MLPos.Web.csproj -c Release --self-contained -r win-x64 -o ./win-x64
+
+      - name: Zip builds
+        run: |
+            zip -r "${{ env.artifact_name }}-${{ env.release_name }}_linux-x64.zip" ./linux-x64/
+            zip -r "${{ env.artifact_name }}-${{ env.release_name }}_win-x64.zip" ./win-x64/
+
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: ${{ env.is_prerelease }}
+          release_name: ${{ env.release_name }}
+          tag_name: ${{ env.release_name }}
+        env:
+            GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Upload Release Asset linux-x64
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+            GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./${{ env.artifact_name }}_linux-x64.zip.zip
+          asset_name: ${{ env.artifact_name }}_linux-x64.zip.zip
+          asset_content_type: application/zip
+      
+      - name: Upload Release Asset win-x64
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+            GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./${{ env.artifact_name }}_win-x64.zip.zip
+          asset_name: ${{ env.artifact_name }}_win-x64.zip.zip
+          asset_content_type: application/zip
+

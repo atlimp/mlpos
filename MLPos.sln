@@ -17,9 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{073C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{84D3383E-E311-4B33-92C1-B477205D0145}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\lint_and_pretty.yml = .github\workflows\lint_and_pretty.yml
-		.github\workflows\validate_dotnet_build.yml = .github\workflows\validate_dotnet_build.yml
-		.github\workflows\validate_ts_build.yml = .github\workflows\validate_ts_build.yml
+		.github\workflows\create_release.yml = .github\workflows\create_release.yml
+		.github\workflows\validate_build.yml = .github\workflows\validate_build.yml
 	EndProjectSection
 EndProject
 Global
