@@ -1,11 +1,11 @@
-name: Pretty and lint
+name: Validate build
 
 on:
   pull_request:
     branches: [ master ]
 
 jobs:
-  lint:
+  build:
 
     runs-on: ubuntu-latest
     defaults:
@@ -24,8 +24,5 @@ jobs:
       - name: Install dependencies
         run: npm install
       
-      - name: Run pretty check
-        run: npm run check
-
-      - name: Run linter
-        run: npm run lint
+      - name: Run Build
+        run: npm run build

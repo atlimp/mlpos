@@ -13,6 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLPos.Data", "MLPos.Data\ML
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{C5952832-2281-4948-B96C-6C39C738DF5D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{073CD77D-CE5D-415B-8B24-168771384251}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{84D3383E-E311-4B33-92C1-B477205D0145}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\lint_and_pretty.yml = .github\workflows\lint_and_pretty.yml
+		.github\workflows\validate_dotnet_build.yml = .github\workflows\validate_dotnet_build.yml
+		.github\workflows\validate_ts_build.yml = .github\workflows\validate_ts_build.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +47,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{84D3383E-E311-4B33-92C1-B477205D0145} = {073CD77D-CE5D-415B-8B24-168771384251}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FEDB5237-1D7B-444A-B2B6-D632116F12CD}

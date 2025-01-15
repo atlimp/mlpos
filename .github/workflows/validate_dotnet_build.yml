@@ -1,0 +1,19 @@
+name: Validate dotnet build
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: '8'
+        run: dotnet build MLPos.sln
