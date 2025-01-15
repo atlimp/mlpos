@@ -24,7 +24,7 @@ function App() {
   }, [posClientId]);
 
   const getActiveTransactions = async (posClientId: number) => {
-    const api = new Api({ posClientId });
+          const api = new Api({ posClientId });
     const transactions = await api.getActiveTransactionSummaries();
     setTransactions(transactions);
 

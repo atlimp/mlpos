@@ -20,4 +20,4 @@ const TransactionContextDefaultState = {
 } as TransactionContextInterface;
 
 export const TransactionContext = createContext(TransactionContextDefaultState);
-export const PosClientIdContext = createContext(PosClientIdContextDefaultState);
+export const PosClientIdContext = createContext(0);

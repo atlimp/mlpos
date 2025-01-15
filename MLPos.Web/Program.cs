@@ -63,6 +63,8 @@ public class Program
                 .AddSupportedUICultures(supportedCultures);
         });
 
+        ble
+
         var app = builder.Build();
 
         app.UseCors(builder => builder
