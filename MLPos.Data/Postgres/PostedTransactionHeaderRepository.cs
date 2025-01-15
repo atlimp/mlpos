@@ -1,4 +1,5 @@
-﻿using MLPos.Core.Interfaces.Repositories;
+﻿using MLPos.Core.Enums;
+using MLPos.Core.Interfaces.Repositories;
 using MLPos.Core.Model;
 using MLPos.Data.Postgres.Helpers;
 using Npgsql;
@@ -21,10 +22,11 @@ namespace MLPos.Data.Postgres
         public async Task<PostedTransactionHeader> CreatePostedTransactionHeaderAsync(PostedTransactionHeader transactionHeader)
         {
             IEnumerable<PostedTransactionHeader> transactionHeaders = await SqlHelper.ExecuteQuery(_connectionString,
-                "INSERT INTO POSTEDTRANSACTIONHEADER(id, posclient_id, customer_id, paymentmethod_id) VALUES (@id, @posclient_id, @customer_id, @paymentmethod_id) RETURNING id, posclient_id, customer_id, paymentmethod_id, date_inserted, date_updated",
+                "INSERT INTO POSTEDTRANSACTIONHEADER(id, status, posclient_id, customer_id, paymentmethod_id) VALUES (@id, @status, @posclient_id, @customer_id, @paymentmethod_id) RETURNING id, status, posclient_id, customer_id, paymentmethod_id, date_inserted, date_updated",
                 MapToPostedTransactionHeader,
                 new Dictionary<string, object>() {
                     ["@id"] = transactionHeader.Id,
+                    ["@status"] = (int)transactionHeader.Status,
                     ["@posclient_id"] = transactionHeader.PosClientId,
                     ["@customer_id"] = transactionHeader.Customer.Id,
                     ["@paymentmethod_id"] = transactionHeader.PaymentMethod?.Id
@@ -44,17 +46,18 @@ namespace MLPos.Data.Postgres
             return new PostedTransactionHeader()
             {
                 Id = reader.GetInt64(0),
-                PosClientId = reader.GetInt64(1),
+                Status = (TransactionStatus)reader.GetInt32(1),
+                PosClientId = reader.GetInt64(2),
                 Customer = new Customer
                 {
-                    Id = reader.GetInt64(2)
+                    Id = reader.GetInt64(3)
                 },
                 PaymentMethod = new PaymentMethod
                 {
-                    Id = reader.GetSafeInt64(3)
+                    Id = reader.GetSafeInt64(4)
                 },
-                DateInserted = reader.GetDateTime(4),
-                DateUpdated = reader.GetDateTime(5),
+                DateInserted = reader.GetDateTime(5),
+                DateUpdated = reader.GetDateTime(6),
             };
         }
     }
