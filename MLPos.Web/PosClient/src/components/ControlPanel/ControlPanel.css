@@ -1,38 +1,38 @@
 ﻿.controlPanel {
-    height: 12em;
+  height: 12em;
 }
 
 .transactionInfo {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5em;
-    font-size: 1.25em;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5em;
+  font-size: 1.25em;
 }
 
 .customerName {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .totals {
 }
 
 .commandButtons {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 0.25em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0.25em;
 }
 
 .commandButton {
-    height: 4em;
-    width: 4em;
-    display: flex;
+  height: 4em;
+  width: 4em;
+  display: flex;
 }
 
 .commandButton > img {
-    margin: auto;
-    max-width: 3em;
-    max-height: 3em;
-    width: auto;
-    height: auto;
+  margin: auto;
+  max-width: 3em;
+  max-height: 3em;
+  width: auto;
+  height: auto;
 }

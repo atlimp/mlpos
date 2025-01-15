@@ -1,158 +1,184 @@
 ﻿class Api {
-    posClientId;
+  posClientId;
 
-    constructor({ posClientId }: ApiParams) {
-        this.posClientId = posClientId;
+  constructor({ posClientId }: ApiParams) {
+    this.posClientId = posClientId;
+  }
+
+  async fetchJson(endpoint: string, method: string = "GET", body: object = {}) {
+    const baseUrl = import.meta.env.VITE_API_URL;
+
+    const options: RequestInit = {
+      method,
+    };
+
+    if (method !== "GET") {
+      options.body = JSON.stringify(body);
+      options.headers = [["Content-Type", "application/json"]];
     }
 
-    async fetchJson(endpoint: string, method: string = 'GET', body: object = {}) {
-        const baseUrl = import.meta.env.VITE_API_URL;
+    const response = await fetch(`${baseUrl}${endpoint}`, options);
 
-        const options: RequestInit = {
-            method,
-        };
-
-        if (method !== 'GET') {
-            options.body = JSON.stringify(body);
-            options.headers = [['Content-Type', 'application/json']]
-        }
-
-
-        const response = await fetch(`${baseUrl}${endpoint}`, options);
-
-        if (response.status >= 200 && response.status < 300) {
-            return await response.json();
-        }
-
-        return null;
+    if (response.status >= 200 && response.status < 300) {
+      return await response.json();
     }
 
-    async fetch(endpoint: string, method: string = 'GET') {
-        const baseUrl = import.meta.env.VITE_API_URL;
+    return null;
+  }
 
-        const response = await fetch(`${baseUrl}${endpoint}`, { method });
+  async fetch(endpoint: string, method: string = "GET") {
+    const baseUrl = import.meta.env.VITE_API_URL;
 
-        if (response.status >= 200 && response.status < 300) {
-            return true;
-        }
+    const response = await fetch(`${baseUrl}${endpoint}`, { method });
 
-        return false;
+    if (response.status >= 200 && response.status < 300) {
+      return true;
     }
 
-    async getAllProducts(): Promise<Product[]> {
-        const response = await this.fetchJson('/api/Product/all');
+    return false;
+  }
 
-        if (response) {
-            return response as Product[];
-        }
+  async getAllProducts(): Promise<Product[]> {
+    const response = await this.fetchJson("/api/Product/all");
 
-        return [];
+    if (response) {
+      return response as Product[];
     }
 
-    async getAllCustomers(): Promise<Customer[]> {
-        const response = await this.fetchJson('/api/Customer/all');
+    return [];
+  }
 
-        if (response) {
-            return response as Customer[];
-        }
+  async getAllCustomers(): Promise<Customer[]> {
+    const response = await this.fetchJson("/api/Customer/all");
 
-        return [];
+    if (response) {
+      return response as Customer[];
     }
 
-    async getAllPaymentMethods(): Promise<PaymentMethod[]> {
-        const response = await this.fetchJson('/api/PaymentMethod/all');
+    return [];
+  }
 
-        if (response) {
-            return response as PaymentMethod[];
-        }
+  async getAllPaymentMethods(): Promise<PaymentMethod[]> {
+    const response = await this.fetchJson("/api/PaymentMethod/all");
 
-        return [];
+    if (response) {
+      return response as PaymentMethod[];
     }
 
-    async getActiveTransactions(): Promise<Transaction[]> {
-        const response = await this.fetchJson(`/api/Transaction/${this.posClientId}/active`);
+    return [];
+  }
 
-        if (response) {
-            return response as Transaction[];
-        }
+  async getActiveTransactions(): Promise<Transaction[]> {
+    const response = await this.fetchJson(
+      `/api/Transaction/${this.posClientId}/active`,
+    );
 
-        return [];
+    if (response) {
+      return response as Transaction[];
     }
 
-    async getTransaction(transactionId: number): Promise<Transaction | null> {
-        const response = await this.fetchJson(`/api/Transaction/${this.posClientId}/${transactionId}`);
+    return [];
+  }
 
-        if (response) {
-            return response as Transaction;
-        }
+  async getTransaction(transactionId: number): Promise<Transaction | null> {
+    const response = await this.fetchJson(
+      `/api/Transaction/${this.posClientId}/${transactionId}`,
+    );
 
-        return null;
+    if (response) {
+      return response as Transaction;
     }
 
-    async postTransaction(transactionId: number, paymentMethodId: number): Promise<PostedTransaction | null> {
-        const response = await this.fetchJson(`/api/Transaction/${this.posClientId}/${transactionId}/post`, 'POST', { paymentMethodId });
+    return null;
+  }
 
-        if (response) {
-            return response as Transaction;
-        }
+  async postTransaction(
+    transactionId: number,
+    paymentMethodId: number,
+  ): Promise<PostedTransaction | null> {
+    const response = await this.fetchJson(
+      `/api/Transaction/${this.posClientId}/${transactionId}/post`,
+      "POST",
+      { paymentMethodId },
+    );
 
-        return null;
+    if (response) {
+      return response as Transaction;
     }
 
-    async deleteTransactionLine(transactionId: number, lineId: number): Promise<Transaction | null> {
-        const response = await this.fetchJson(`/api/Transaction/${this.posClientId}/${transactionId}/lines/${lineId}`, 'DELETE');
+    return null;
+  }
 
-        if (response) {
-            return response as Transaction;
-        }
+  async deleteTransactionLine(
+    transactionId: number,
+    lineId: number,
+  ): Promise<Transaction | null> {
+    const response = await this.fetchJson(
+      `/api/Transaction/${this.posClientId}/${transactionId}/lines/${lineId}`,
+      "DELETE",
+    );
 
-        return null;
+    if (response) {
+      return response as Transaction;
     }
 
-    async createTransaction(customerId: number): Promise<Transaction | null> {
-        const response = await this.fetchJson(`/api/Transaction/${this.posClientId}`,
-            'POST',
-            {
-                customerId
-            }
-        );
+    return null;
+  }
 
-        if (response) {
-            return response as Transaction;
-        }
+  async createTransaction(customerId: number): Promise<Transaction | null> {
+    const response = await this.fetchJson(
+      `/api/Transaction/${this.posClientId}`,
+      "POST",
+      {
+        customerId,
+      },
+    );
 
-        return null;
+    if (response) {
+      return response as Transaction;
     }
 
-    async addTransactionLine(transactionId: number, productId: number): Promise<Transaction | null> {
-        const response = await this.fetchJson(
-            `/api/Transaction/${this.posClientId}/${transactionId}/Lines`
-            , 'POST'
-            ,{
-                ProductId: productId,
-                Quantity: 1
-            });
+    return null;
+  }
 
-        if (response) {
-            return response as Transaction;
-        }
+  async addTransactionLine(
+    transactionId: number,
+    productId: number,
+  ): Promise<Transaction | null> {
+    const response = await this.fetchJson(
+      `/api/Transaction/${this.posClientId}/${transactionId}/Lines`,
+      "POST",
+      {
+        ProductId: productId,
+        Quantity: 1,
+      },
+    );
 
-        return null;
+    if (response) {
+      return response as Transaction;
     }
 
-    async deleteTransaction(transactionId: number): Promise<boolean> {
-        return await this.fetch(`/api/Transaction/${this.posClientId}/${transactionId}`, 'DELETE');
+    return null;
+  }
+
+  async deleteTransaction(transactionId: number): Promise<boolean> {
+    return await this.fetch(
+      `/api/Transaction/${this.posClientId}/${transactionId}`,
+      "DELETE",
+    );
+  }
+
+  async getActiveTransactionSummaries(): Promise<TransactionSummary[]> {
+    const response = await this.fetchJson(
+      `/api/Transaction/${this.posClientId}/active/summary`,
+    );
+
+    if (response) {
+      return response as TransactionSummary[];
     }
 
-    async getActiveTransactionSummaries(): Promise<TransactionSummary[]> {
-        const response = await this.fetchJson(`/api/Transaction/${this.posClientId}/active/summary`);
-
-        if (response) {
-            return response as TransactionSummary[];
-        }
-
-        return [];
-    }
+    return [];
+  }
 }
 
 export default Api;

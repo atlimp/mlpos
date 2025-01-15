@@ -1,19 +1,19 @@
 ﻿.transactionSelectionContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    overflow-x: scroll;
-    height: 15%;
-    max-height: 6em;
-    margin: 0;
-    background-color: var(--green);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  overflow-x: scroll;
+  height: 15%;
+  max-height: 6em;
+  margin: 0;
+  background-color: var(--green);
 }
 
 .newTransactionImage {
-    max-width: 4.5em;
-    max-height: 4.5em;
-    width: auto;
-    height: auto;
-    margin: auto;
-    object-fit: contain;
+  max-width: 4.5em;
+  max-height: 4.5em;
+  width: auto;
+  height: auto;
+  margin: auto;
+  object-fit: contain;
 }
