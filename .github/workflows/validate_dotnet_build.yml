@@ -1,7 +1,7 @@
 name: Validate dotnet build
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   build:
