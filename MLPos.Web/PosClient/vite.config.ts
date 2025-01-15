@@ -8,4 +8,5 @@ export default defineConfig({
     outDir: "../wwwroot/posclient",
     emptyOutDir: true,
   },
+  base: "/posclient/",
 });
