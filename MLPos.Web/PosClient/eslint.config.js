@@ -4,7 +4,6 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
-import * as eslintPluginPrettier from "./node_modules/eslint-plugin-prettier/eslint-plugin-prettier";
 
 export default tseslint.config(
   { ignores: ["dist"] },
@@ -27,5 +26,5 @@ export default tseslint.config(
       ],
     },
   },
-  eslintPluginPrettier,
+  eslintPluginPrettierRecommended,
 );
