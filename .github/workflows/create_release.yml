@@ -69,8 +69,6 @@ jobs:
           prerelease: ${{ env.is_prerelease }}
           release_name: ${{ env.release_name }}
           tag_name: ${{ env.release_name }}
-        env:
-            GITHUB_TOKEN: ${{ github.token }}
 
       - name: Upload Release Asset linux-x64
         uses: actions/upload-release-asset@v1
