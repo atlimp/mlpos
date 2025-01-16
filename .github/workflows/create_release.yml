@@ -58,8 +58,8 @@ jobs:
 
       - name: Zip builds
         run: |
-            zip --recurse-paths "${{ env.artifact_name }}-${{ env.release_name }}_linux-x64.zip" linux-x64/
-            zip --recurse-paths "${{ env.artifact_name }}-${{ env.release_name }}_win-x64.zip" win-x64/
+            zip --recurse-paths "${{ env.artifact_name }}_linux-x64.zip" linux-x64/
+            zip --recurse-paths "${{ env.artifact_name }}_win-x64.zip" win-x64/
 
       - name: release
         uses: actions/create-release@v1
