@@ -21,7 +21,43 @@ namespace MLPos.Data.Postgres
 
         public async Task<PostedTransactionLine> CreatePostedTransactionLineAsync(long transactionId, long posClientId, PostedTransactionLine line)
         {
-            throw new NotImplementedException();
+            IEnumerable<PostedTransactionLine> transactionLines = await SqlHelper.ExecuteQuery(_connectionString,
+                @"INSERT INTO POSTEDTRANSACTIONLINE(transaction_id, posclient_id, product_id, amount, quantity)
+                    VALUES (@transaction_id, @posclient_id, @product_id, @amount, @quantity)
+                    RETURNING id, product_id, amount, quantity, date_inserted, date_updated",
+                MapToPostedTransactionLine,
+                new Dictionary<string, object>()
+                {
+                    ["@transaction_id"] = transactionId,
+                    ["@posclient_id"] = posClientId,
+                    ["@product_id"] = line.Product.Id,
+                    ["@amount"] = line.Amount,
+                    ["@quantity"] = line.Quantity
+                }
+            );
+
+            if (transactionLines.Any())
+            {
+                return transactionLines.First();
+            }
+
+            return null;
+        }
+
+        private PostedTransactionLine MapToPostedTransactionLine(NpgsqlDataReader reader)
+        {
+            return new PostedTransactionLine()
+            {
+                Id = reader.GetSafeInt64(0),
+                Product = new Product
+                {
+                    Id = reader.GetSafeInt64(1)
+                },
+                Amount = reader.GetDecimal(2),
+                Quantity = reader.GetDecimal(3),
+                DateInserted = reader.GetDateTime(4),
+                DateUpdated = reader.GetDateTime(5),
+            };
         }
     }
 }
