@@ -44,7 +44,12 @@ jobs:
 
       - name: Install dependencies
         working-directory: ${{ github.workspace }}/MLPos.Web/PosClient
-        run: npm install
+        run: npm ci
+
+      - name: Setup Vite env
+        working-directory: ${{ github.workspace }}/MLPos.Web/PosClient
+        run: |
+            echo "VITE_API_URL=" >> .env
       
       - name: Run TS Build
         working-directory: ${{ github.workspace }}/MLPos.Web/PosClient
