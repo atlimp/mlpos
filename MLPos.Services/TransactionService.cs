@@ -16,6 +16,8 @@ namespace MLPos.Services
         private readonly ITransactionHeaderRepository _headerRepository;
         private readonly ITransactionLineRepository _lineRepository;
         private readonly IPostedTransactionHeaderRepository _postedTransactionHeaderRepository;
+        private readonly IPostedTransactionLineRepository _postedTransactionLineRepository;
+
         private readonly IPosClientRepository _posClientRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
@@ -23,6 +25,7 @@ namespace MLPos.Services
         public TransactionService(ITransactionHeaderRepository headerRepository,
             ITransactionLineRepository lineRepository,
             IPostedTransactionHeaderRepository postedTransactionHeaderRepository,
+            IPostedTransactionLineRepository postedTransactionLineRepository,
             IPosClientRepository posClientRepository,
             ICustomerRepository customerRepository,
             IProductRepository productRepository)
@@ -30,6 +33,7 @@ namespace MLPos.Services
             _headerRepository = headerRepository;
             _lineRepository = lineRepository;
             _postedTransactionHeaderRepository = postedTransactionHeaderRepository;
+            _postedTransactionLineRepository = postedTransactionLineRepository;
             _posClientRepository = posClientRepository;
             _customerRepository = customerRepository;
             _productRepository = productRepository;
@@ -94,13 +98,19 @@ namespace MLPos.Services
         public async Task DeleteTransactionAsync(long id, long posClientId)
         {
             TransactionHeader transactionHeader = await _headerRepository.GetTransactionHeaderAsync(id, posClientId);
-            await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(CreateFrom(transactionHeader, null));
+            await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, null));
             await _headerRepository.DeleteTransactionHeaderAsync(id, posClientId);
         }
 
         public async Task<PostedTransactionHeader> PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
         {
-            PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(CreateFrom(transactionHeader, paymentMethod));
+            PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, paymentMethod));
+
+            foreach (PostedTransactionLine line in this.CreateFrom(transactionHeader.Lines))
+            {
+                await _postedTransactionLineRepository.CreatePostedTransactionLineAsync(transactionHeader.Id, transactionHeader.PosClientId, line);
+            }
+
             await _headerRepository.DeleteTransactionHeaderAsync(transactionHeader.Id, transactionHeader.PosClientId);
             return postedTransactionHeader;
         }
@@ -144,6 +154,38 @@ namespace MLPos.Services
                 Customer = transactionHeader.Customer,
                 PaymentMethod = paymentMethod,
 
+            };
+        }
+
+        private IEnumerable<PostedTransactionLine> CreateFrom(IEnumerable<TransactionLine> lines)
+        {
+            List<PostedTransactionLine> postedTransactionLines = new List<PostedTransactionLine>();
+
+            foreach (var line in lines)
+            {
+                PostedTransactionLine found = postedTransactionLines.FirstOrDefault(x => x.Product.Id == line.Product.Id);
+
+                if (found != null)
+                {
+                    found.Amount += line.Amount;
+                    found.Quantity += line.Quantity;
+                }
+                else
+                {
+                    postedTransactionLines.Add(CreateFrom(line));
+                }
+            }
+
+            return postedTransactionLines;
+        }
+
+        private PostedTransactionLine CreateFrom(TransactionLine line)
+        {
+            return new PostedTransactionLine()
+            {
+                Product = line.Product,
+                Amount = line.Amount,
+                Quantity = line.Quantity,
             };
         }
     }
