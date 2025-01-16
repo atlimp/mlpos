@@ -1,0 +1,67 @@
+name: Validate PR
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+          working-directory: ${{ github.workspace }}/MLPos.Web/PosClient
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23
+
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run pretty check
+        run: npm run check
+
+      - name: Run linter
+        run: npm run lint
+
+  dotnet_validate_build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: '8'
+
+      - name: Run build
+        run: dotnet build MLPos.sln
+
+  
+  ts_validate_build:
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+          working-directory: ${{ github.workspace }}/MLPos.Web/PosClient
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23
+
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run Build
+        run: npm run build
