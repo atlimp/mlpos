@@ -1,102 +1,102 @@
 ﻿.paymentmethodSelection {
-    width: 90%;
-    height: 40em;
-    background-color: var(--white);
-    margin: auto;
+  width: 90%;
+  height: 40em;
+  background-color: var(--white);
+  margin: auto;
 }
 
 .paymentmethodList {
-    display: flex;
-    width: 100%;
-    height: 36em;
-    flex-direction: column;
-    justify-content: flex-start;
-    overflow-y: scroll;
+  display: flex;
+  width: 100%;
+  height: 36em;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-y: scroll;
 }
 
 .paymentmethodCard {
-    display: flex;
-    justify-content: space-between;
-    margin: 0em 0.5em 1em 0.5em;
-    border: 1px solid var(--platinum);
-    padding: 0.5em;
-    border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0em 0.5em 1em 0.5em;
+  border: 1px solid var(--platinum);
+  padding: 0.5em;
+  border-radius: 5px;
 }
 
 .paymentmethodCard:hover {
-    background-color: var(--coral);
+  background-color: var(--coral);
 }
 
 .back {
-    margin: 0.5em;
-    width: 2em;
+  margin: 0.5em;
+  width: 2em;
 }
 
 .paymentmethodImageContainer {
-    margin: auto auto auto 0;
-    width: 4em;
-    height: 4em;
-    border-radius: 50%;
-    display: flex;
-    overflow: hidden;
-    background-color: var(--platinum);
+  margin: auto auto auto 0;
+  width: 4em;
+  height: 4em;
+  border-radius: 50%;
+  display: flex;
+  overflow: hidden;
+  background-color: var(--platinum);
 }
 
 .paymentmethodImageContainer > img {
-    max-width: 4em;
-    max-height: 4em;
-    width: auto;
-    height: auto;
-    margin: auto;
-    object-fit: contain;
+  max-width: 4em;
+  max-height: 4em;
+  width: auto;
+  height: auto;
+  margin: auto;
+  object-fit: contain;
 }
 
 .paymentmethodInfoContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 12em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 12em;
 }
 
 .paymentmethodName {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .paymentmethodDescription {
-    word-wrap: anywhere;
+  word-wrap: anywhere;
 }
 
 .paymentmethodName,
 .paymentmethodDescription {
-    text-align: right;
+  text-align: right;
 }
 
-@media(min-width: 750px) {
-    .paymentmethodList {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-content: flex-start;
-    }
+@media (min-width: 750px) {
+  .paymentmethodList {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
 
-    .paymentmethodCard {
-        justify-content: flex-start;
-        width: 30em;
-        height: 8em;
-    }
+  .paymentmethodCard {
+    justify-content: flex-start;
+    width: 30em;
+    height: 8em;
+  }
 
-    .paymentmethodInfoContainer {
-        width: 20em;
-    }
-        .paymentmethodImageContainer {
-        width: 5em;
-        height: 5em;
-        overflow: hidden;
-        border-radius: 50%;
-        background: var(--platinum);
-    }
+  .paymentmethodInfoContainer {
+    width: 20em;
+  }
+  .paymentmethodImageContainer {
+    width: 5em;
+    height: 5em;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--platinum);
+  }
 
-        .paymentmethodImageContainer > img {
-            max-width: 5em;
-            max-height: 5em;
-        }
+  .paymentmethodImageContainer > img {
+    max-width: 5em;
+    max-height: 5em;
+  }
 }
