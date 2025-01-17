@@ -25,6 +25,9 @@ function TransactionSummary({
       <div className="transactionImageContainer">
         <img className="transactionImage" src={transaction.customerImage}></img>
       </div>
+      <div className="transactionSummaryDetails">
+        <div className="transactionSummaryName">{transaction.customerName}</div>
+      </div>
     </div>
   );
 }

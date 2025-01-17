@@ -20,7 +20,10 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 0.25em;
+  margin: auto;
+  background-color: var(--platinum);
+  padding: 0.5em 0.75em;
+  max-width: 40em;
 }
 
 .commandButton {
@@ -35,4 +38,12 @@
   max-height: 3em;
   width: auto;
   height: auto;
+}
+
+#finishTransaction:not(.disabled) {
+  background-color: var(--yellow);
+}
+
+.disabled {
+  background-color: grey;
 }

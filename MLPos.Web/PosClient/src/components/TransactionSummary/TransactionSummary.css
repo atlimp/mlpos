@@ -3,6 +3,7 @@
   width: auto;
   display: flex;
   height: 100%;
+  justify-content: space-between;
 }
 
 .transactionImageContainer {
@@ -26,4 +27,41 @@
 
 .activeTransaction > .transactionImageContainer {
   border: 2px solid var(--coral);
+}
+
+.transactionSummaryDetails {
+  display: none;
+}
+
+@media (min-width: 1000px) {
+  .transactionSummaryContainer {
+    background-color: var(--white);
+    border: 1px solid var(--platinum);
+  }
+  .transactionImageContainer {
+    margin: auto 0.5em;
+  }
+  .transactionSummaryContainer {
+    max-height: 8em;
+  }
+
+  .transactionSummaryDetails {
+    margin: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .transactionSummaryName {
+  }
+
+  .activeTransaction {
+    border: 2px solid var(--coral);
+  }
+
+  .activeTransaction .transactionSummaryName {
+    font-size: 18px;
+    font-weight: bold;
+  }
 }

@@ -34,10 +34,8 @@ function CustomerSelect({ onSelectCustomer }: CustomerSelectProps) {
                 key={customer.id}
                 onClick={() => onSelectCustomer(customer.id)}
               >
-                <div>
-                  <div className="customerImageContainer">
-                    <img src={customer.image}></img>
-                  </div>
+                <div className="customerImageContainer">
+                  <img src={customer.image}></img>
                 </div>
                 <div className="customerInfoContainer">
                   <div className="customerName">{customer.name}</div>
