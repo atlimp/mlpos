@@ -16,6 +16,9 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Configuration
+            .AddEnvironmentVariables("MLPOS_");
+
         string connectionString = builder.Configuration.GetConnectionString("Postgres") ?? "";
         string DBUser = builder.Configuration["DBUser"] ?? "";
         string DBPass = builder.Configuration["DBPass"] ?? "";
