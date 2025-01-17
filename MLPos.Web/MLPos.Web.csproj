@@ -15,10 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Remove="Views\Login\Index.cshtml" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="PosClient\src\api\api.ts" />
       <None Remove="PosClient\src\assets\logo.png" />
       <None Remove="PosClient\src\components\Pos\Pos.tsx" />
@@ -98,6 +94,51 @@
       </TypeScriptCompile>
       <TypeScriptCompile Include="PosClient\src\context.tsx" />
       <TypeScriptCompile Include="PosClient\src\interface.d.ts" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="Areas\Admin\Views\Customer\Details.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Areas\Admin\Views\Customer\Index.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Areas\Admin\Views\PaymentMethod\Details.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Areas\Admin\Views\PaymentMethod\Index.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Areas\Admin\Views\PosClient\Details.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Areas\Admin\Views\PosClient\Index.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Areas\Admin\Views\Product\Details.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Areas\Admin\Views\Product\Index.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="PosClient\package.json">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </Content>
+      <Content Update="PosClient\tsconfig.json">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Views\Login\Index.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Views\Shared\Error.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Views\Shared\_Admin_Layout.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Views\Shared\_Layout.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
