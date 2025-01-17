@@ -7,7 +7,8 @@
 .tableContainer {
   overflow: scroll;
   height: 100%;
-  max-height: 25em;
+  max-height: 28em;
+  border-bottom: 1px solid var(--platinum);
 }
 
 .itemLineHeader {
@@ -17,16 +18,17 @@
 }
 
 .itemLineHeader > th {
-  padding: 0 0.25em;
+  padding: 0 0.25em 0 1em;
 }
 
 .itemLine {
   height: 2em;
+  border: 1px solid #ddd;
 }
 
-.itemLine td {
-  border: 1px solid #ddd;
+.itemLine td:not(.itemLineImageContainer) {
   height: 2em;
+  padding: 0 0.25em 0 1em;
 }
 
 .itemLineImageContainer {
@@ -46,9 +48,9 @@
 }
 
 .itemLineName {
-  padding: 0 0.25em;
-  width: 100%;
-  max-width: 5em;
+  width: auto;
+  max-width: 8em;
+  min-width: 3em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -56,25 +58,27 @@
 
 .itemLinePrice {
   text-align: right;
-  padding-left: 0.25em;
-  width: 100%;
+  max-width: 8em;
+  min-width: 5em;
+  width: auto;
 }
 
 .itemLineQuantity {
   text-align: right;
-  padding-left: 0.25em;
-  max-width: 3em;
+  max-width: 8em;
+  min-width: 5em;
+  width: auto;
 }
 
 .itemLineAmount {
   text-align: right;
-  padding-left: 0.25em;
-  width: 100%;
+  max-width: 8em;
+  min-width: 5em;
+  width: auto;
 }
 
 .itemLineDelete {
-  padding-left: 0.25em;
-  width: 100%;
+  width: auto;
 }
 
 .itemLineHeader {
@@ -97,4 +101,36 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media (min-height: 850px) {
+  .itemLine {
+    height: 4em;
+  }
+
+  .itemLine td {
+    height: 4em;
+  }
+
+  .itemLineImageContainer {
+    height: 3em;
+    width: 3em;
+  }
+
+  .itemLineImage {
+    max-width: 3em;
+    max-height: 3em;
+  }
+}
+
+@media (min-width: 600px) {
+  .itemLineName {
+    width: 100%;
+  }
+}
+
+@media (min-height: 800px) {
+  .tableContainer {
+    max-height: 44em;
+  }
 }

@@ -17,3 +17,12 @@
   margin: auto;
   object-fit: contain;
 }
+
+@media (min-width: 1000px) {
+  .transactionSelectionContainer {
+    flex-direction: column;
+    height: 100%;
+    width: 20em;
+    max-height: 100%;
+  }
+}

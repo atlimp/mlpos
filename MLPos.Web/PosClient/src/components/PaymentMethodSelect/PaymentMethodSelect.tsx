@@ -45,10 +45,8 @@ function PaymentMethodSelect({
                 key={paymentmethod.id}
                 onClick={() => onSelectPaymentMethod(paymentmethod.id)}
               >
-                <div>
-                  <div className="paymentmethodImageContainer">
-                    <img src={paymentmethod.image}></img>
-                  </div>
+                <div className="paymentmethodImageContainer">
+                  <img src={paymentmethod.image}></img>
                 </div>
                 <div className="paymentmethodInfoContainer">
                   <div className="paymentmethodName">{paymentmethod.name}</div>

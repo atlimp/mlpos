@@ -34,10 +34,8 @@ function ProductSelect({ onSelectProduct }: ProductSelectProps) {
                 key={product.id}
                 onClick={() => onSelectProduct(product.id)}
               >
-                <div>
-                  <div className="productImageContainer">
-                    <img src={product.image}></img>
-                  </div>
+                <div className="productImageContainer">
+                  <img src={product.image}></img>
                 </div>
                 <div className="productInfoContainer">
                   <div className="productName">{product.name}</div>

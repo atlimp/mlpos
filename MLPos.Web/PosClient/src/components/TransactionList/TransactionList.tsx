@@ -36,6 +36,11 @@ function TransactionList({
         <div className="transactionImageContainer">
           <img className="newTransactionImage" src={plusIcon}></img>
         </div>
+
+        <div className="transactionSummaryDetails">
+          <div className="transactionName">Add transaction</div>
+          <div className="transactionTotal"></div>
+        </div>
       </div>
       {transactions.map((transaction) => (
         <TransactionSummary transaction={transaction} key={transaction.id} />
