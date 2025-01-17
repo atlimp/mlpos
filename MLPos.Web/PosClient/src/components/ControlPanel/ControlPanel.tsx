@@ -19,24 +19,36 @@ function ControlPanel({
       </div>
       <div className="commandButtons">
         <button
+          disabled={transaction.id == -1}
           onClick={onDeleteTransaction}
-          className="button buttonSecondary commandButton"
+          className={
+            "button buttonSecondary commandButton " +
+            (transaction.id == -1 && "disabled")
+          }
           id="deleteTransaction"
         >
           <img src={deleteIcon}></img>
         </button>
 
         <button
+          disabled={transaction.id == -1}
           onClick={onAddProduct}
-          className="button buttonPrimary commandButton"
+          className={
+            "button buttonPrimary commandButton " +
+            (transaction.id == -1 && "disabled")
+          }
           id="addItem"
         >
           <img src={plusIcon}></img>
         </button>
 
         <button
+          disabled={transaction.id == -1}
           onClick={onFinishTransaction}
-          className="button buttonPrimary commandButton"
+          className={
+            "button buttonPrimary commandButton " +
+            (transaction.id == -1 && "disabled")
+          }
           id="finishTransaction"
         >
           <img src={checkIcon}></img>
