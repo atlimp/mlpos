@@ -5,9 +5,14 @@
 
     initEventHandlers() {
         const navbar = document.querySelector('#navbar');
-        document.querySelector('#hamburger').addEventListener('click', (e) => {
-            this.toggleVisible(navbar);
-        });
+
+        const hamburger = document.querySelector('#hamburger')
+
+        if (hamburger) {
+            hamburger.addEventListener('click', (e) => {
+                this.toggleVisible(navbar);
+            });
+        }
     }
 
     toggleVisible(e) {
