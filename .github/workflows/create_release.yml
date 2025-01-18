@@ -1,8 +1,10 @@
-name: Create Release
+name: Create release
 
 on:
   push:
     branches: [ master, test ]
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -11,19 +13,17 @@ jobs:
     steps:
       - name: Set env variables
         run: |
-            release_version="0.0.0.${{ github.run_number }}"
-            release_name="v0.0.0.${{ github.run_number }}"
+            release_name="${{ github.ref }}"
             is_prerelease=false
+            artifact_name=$(echo "${{ github.repository }}" | cut -f 2 -d '/')
 
             if [ ${{ github.ref_name }} != "master" ]; then
-                release_name="v0.0.0.${{ github.run_number }}"
+                release_name="$release_name-$artifact_name"
                 is_prerelease=true
             fi
 
-            artifact_name=$(echo "${{ github.repository }}" | cut -f 2 -d '/')
             artifact_name="$artifact_name-$release_name"
-
-            echo release_version=$release_version >> $GITHUB_ENV
+            
             echo release_name=$release_name >> $GITHUB_ENV
             echo is_prerelease=$is_prerelease >> $GITHUB_ENV
             echo artifact_name=$artifact_name >> $GITHUB_ENV
