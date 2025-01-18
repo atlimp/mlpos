@@ -85,8 +85,8 @@ namespace MLPos.Data.Postgres
             {
                 Id = reader.GetInt64(0),
                 PosClientId = reader.GetInt64(1),
-                CustomerName = reader.GetString(2),
-                CustomerImage = reader.GetString(3),
+                CustomerName = reader.GetSafeString(2),
+                CustomerImage = reader.GetSafeString(3),
                 TotalAmount = reader.GetDecimal(4),
             };
         }
