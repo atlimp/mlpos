@@ -141,6 +141,9 @@
   <data name="Email" xml:space="preserve">
     <value>Tölvupóstur</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Villa</value>
+  </data>
   <data name="Image" xml:space="preserve">
     <value>Mynd</value>
   </data>
@@ -207,6 +210,9 @@
   <data name="Service" xml:space="preserve">
     <value>Þjónusta</value>
   </data>
+  <data name="Error500" xml:space="preserve">
+    <value>Upp kom óvænt villa.  Vinsamlega reyndu aftur.q</value>
+  </data>
   <data name="Update" xml:space="preserve">
     <value>Uppfæra</value>
   </data>
@@ -215,5 +221,8 @@
   </data>
   <data name="Username" xml:space="preserve">
     <value>Notendanafn</value>
+  </data>
+  <data name="Error404" xml:space="preserve">
+    <value>Síðan fannst ekki {0}</value>
   </data>
 </root>
