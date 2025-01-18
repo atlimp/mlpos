@@ -75,6 +75,19 @@ public class Program
 
         app.UseRequestLocalization();
 
+        app.Use(async (ctx, next) =>
+        {
+            await next();
+
+            if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
+            {
+                //Re-execute the request so the user gets the error page
+                string originalPath = ctx.Request.Path.Value;
+                ctx.Items["originalPath"] = originalPath;
+                ctx.Request.Path = "/error/404";
+                await next();
+            }
+        });
 
         app.UseMiddleware<ApiExceptionMiddleware>();
         app.UseMiddleware<LoggingMiddleware>();
@@ -82,7 +95,7 @@ public class Program
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Home/Error");
+            app.UseExceptionHandler("/Error/500");
         }
 
         app.UseHttpsRedirection();
