@@ -17,12 +17,25 @@
 }
 
 .transactionImage {
+  z-index: 2;
   max-width: 5em;
   max-height: 5em;
   width: auto;
   height: auto;
   margin: auto;
   object-fit: contain;
+}
+
+.transactionImagePlaceholder {
+  position: fixed;
+  z-index: 0;
+  width: 5rem;
+  height: 5rem;
+  text-align: center;
+  line-height: 5rem;
+  vertical-align: middle;
+  font-size: 36px;
+  font-weight: bold;
 }
 
 .activeTransaction > .transactionImageContainer {
