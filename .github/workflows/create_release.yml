@@ -2,9 +2,7 @@ name: Create release
 
 on:
   push:
-    branches:
-      - main
-      - test
+    branches: [ master, test ]
     tags:
       - 'v*'
 
