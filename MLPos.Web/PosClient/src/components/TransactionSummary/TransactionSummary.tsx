@@ -23,6 +23,9 @@ function TransactionSummary({
       onClick={transactionClicked}
     >
       <div className="transactionImageContainer">
+        <div className="transactionImagePlaceholder">
+          {transaction.customerName[0]}
+        </div>
         <img className="transactionImage" src={transaction.customerImage}></img>
       </div>
       <div className="transactionSummaryDetails">
