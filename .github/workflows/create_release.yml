@@ -12,16 +12,11 @@ jobs:
     steps:
       - name: Set env variables
         run: |
-            release_name="${{ github.ref }}"
+            release_name=$(echo "${{ github.ref }}" | cut -f 3 -d '/')
             is_prerelease=false
             artifact_name=$(echo "${{ github.repository }}" | cut -f 2 -d '/')
 
-            if [ ${{ github.ref_name }} != "master" ]; then
-                release_name="$release_name-$artifact_name"
-                is_prerelease=true
-            fi
-
-            artifact_name="$artifact_name-$release_name"
+            artifact_name="$artifact_name-release_name"
             
             echo release_name=$release_name >> $GITHUB_ENV
             echo is_prerelease=$is_prerelease >> $GITHUB_ENV
@@ -65,7 +60,7 @@ jobs:
             zip --recurse-paths "${{ env.artifact_name }}_linux-x64.zip" linux-x64/
             zip --recurse-paths "${{ env.artifact_name }}_win-x64.zip" win-x64/
 
-      - name: release
+      - name: Create release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
@@ -74,7 +69,7 @@ jobs:
           draft: false
           prerelease: ${{ env.is_prerelease }}
           release_name: ${{ env.release_name }}
-          tag_name: ${{ env.release_name }}
+          tag_name: ${{ github.ref }}
 
       - name: Upload Release Asset linux-x64
         uses: actions/upload-release-asset@v1
