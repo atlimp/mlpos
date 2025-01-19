@@ -101,3 +101,9 @@ interface SingleInputFormProps {
   submitLabel: string;
   onSubmit: (input) => void;
 }
+
+interface ConfirmDialogProps {
+  message: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
