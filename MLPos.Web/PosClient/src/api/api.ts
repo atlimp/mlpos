@@ -180,7 +180,7 @@
     return [];
   }
 
-  async getPosClientByLoginCode(loginCode): Promise<PosClient | null> {
+  async getPosClientByLoginCode(loginCode: string): Promise<PosClient | null> {
     const response = await this.fetchJson(`/api/PosClient/${loginCode}`);
 
     if (response) {
