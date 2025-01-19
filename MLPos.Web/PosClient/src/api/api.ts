@@ -179,6 +179,16 @@
 
     return [];
   }
+
+  async getPosClientByLoginCode(loginCode: string): Promise<PosClient | null> {
+    const response = await this.fetchJson(`/api/PosClient/${loginCode}`);
+
+    if (response) {
+      return response as PosClient;
+    }
+
+    return null;
+  }
 }
 
 export default Api;

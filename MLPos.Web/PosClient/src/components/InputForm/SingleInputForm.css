@@ -1,0 +1,24 @@
+﻿.singleInputForm {
+  margin: auto;
+}
+
+.singleInputFormInput {
+  background-color: var(--platinum);
+  padding: 0.5em;
+  border: none;
+  border-radius: 5px;
+  resize: none;
+}
+
+.singleInputFormLabel {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  margin: 0.5em 0;
+  font-size: 1.25em;
+}
+
+.singleInputFormButton {
+  width: 100%;
+  margin-top: 0.5em;
+}

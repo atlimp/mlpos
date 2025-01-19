@@ -225,4 +225,7 @@
   <data name="Error404" xml:space="preserve">
     <value>Page was not found {0}</value>
   </data>
+  <data name="LoginCode" xml:space="preserve">
+    <value>Login code</value>
+  </data>
 </root>

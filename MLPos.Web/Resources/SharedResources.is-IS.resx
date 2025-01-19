@@ -225,4 +225,7 @@
   <data name="Error404" xml:space="preserve">
     <value>Síðan fannst ekki {0}</value>
   </data>
+  <data name="LoginCode" xml:space="preserve">
+    <value>Innskráningarkóði</value>
+  </data>
 </root>
