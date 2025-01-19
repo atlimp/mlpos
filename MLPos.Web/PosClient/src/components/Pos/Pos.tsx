@@ -6,11 +6,13 @@ import { useContext, useEffect, useState } from "react";
 import { PosClientIdContext, TransactionContext } from "../../context";
 import Api from "../../api/api";
 import PaymentMethodSelect from "../PaymentMethodSelect/PaymentMethodSelect";
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 function Pos({ refreshTransactions }: PosProps) {
   const { activeTransactionId } = useContext(TransactionContext);
   const { posClientId } = useContext(PosClientIdContext);
   const [activeTransaction, setActiveTransaction] = useState<Transaction>();
   const [productSelect, setProductSelect] = useState<boolean>(false);
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const [paymentMethodSelect, setPaymentMethodSelect] =
     useState<boolean>(false);
 
@@ -52,10 +54,16 @@ function Pos({ refreshTransactions }: PosProps) {
   };
 
   const onDeleteTransaction = async () => {
+    setConfirmDelete(true);
+  };
+
+  const deleteTransaction = async () => {
     const api = new Api({ posClientId });
     if (await api.deleteTransaction(activeTransactionId)) {
       refreshTransactions();
     }
+
+    setConfirmDelete(false);
   };
 
   const onPostTransaction = async () => {
@@ -102,6 +110,13 @@ function Pos({ refreshTransactions }: PosProps) {
 
   return (
     <div className="pos">
+      {confirmDelete && (
+        <ConfirmDialog
+          message="Are you sure you want to delete this transaction?"
+          onConfirm={deleteTransaction}
+          onCancel={() => setConfirmDelete(false)}
+        />
+      )}
       {paymentMethodSelect && (
         <PaymentMethodSelect
           onSelectPaymentMethod={onPaymentMethodSelected}
