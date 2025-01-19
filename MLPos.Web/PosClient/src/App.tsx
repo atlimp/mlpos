@@ -7,6 +7,7 @@ import { TransactionContext, PosClientIdContext } from "./context";
 
 import Pos from "./components/Pos/Pos";
 import TransactionList from "./components/TransactionList/TransactionList";
+import SingleInputForm from "./components/InputForm/SingleInputForm";
 
 function App() {
   const [posClientId, setPosClientId] = useState(0);
@@ -14,7 +15,11 @@ function App() {
   const [activeTransactionId, setActiveTransactionId] = useState(-1);
 
   useEffect(() => {
-    setPosClientId(1);
+    const loginCode = window.localStorage.getItem("loginCode");
+
+    if (loginCode) {
+      setPosClientIdFromLoginCode(loginCode);
+    }
   }, []);
 
   useEffect(() => {
@@ -31,6 +36,33 @@ function App() {
     if (transactions.length > 0) setActiveTransactionId(transactions[0].id);
     else setActiveTransactionId(-1);
   };
+
+  const setPosClientIdFromLoginCode = async (loginCode: string) => {
+    const api = new Api({ posClientId: -1 });
+
+    const posClient = await api.getPosClientByLoginCode(loginCode);
+
+    if (posClient) {
+      window.localStorage.setItem("loginCode", loginCode);
+      setPosClientId(posClient.id);
+    }
+  };
+
+  if (posClientId <= 0) {
+    return (
+      <div className="appContainer">
+        <div className="header">
+          <img src={logo}></img>
+        </div>
+        <SingleInputForm
+          label="Login Code"
+          type="text"
+          submitLabel="Login"
+          onSubmit={setPosClientIdFromLoginCode}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="appContainer">

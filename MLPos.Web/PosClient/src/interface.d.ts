@@ -28,6 +28,12 @@ interface PaymentMethod extends Entity {
   image: string;
 }
 
+interface PosClient extends Entity {
+  name: string;
+  description: string;
+  loginCode: string;
+}
+
 interface TransactionLine {
   id: number;
   amount: number;
@@ -87,4 +93,11 @@ interface CustomerSelectProps {
 interface PaymentMethodSelectProps {
   onSelectPaymentMethod: (id: number) => void;
   replacers: { [key: string]: string };
+}
+
+interface SingleInputFormProps {
+  label: string;
+  type: string;
+  submitLabel: string;
+  onSubmit: (input) => void;
 }
