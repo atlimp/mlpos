@@ -64,7 +64,7 @@ namespace MLPos.Data.Postgres
             IEnumerable<PosClient> posClients = await SqlHelper.ExecuteQuery(_connectionString,
                 @"UPDATE POSCLIENT SET name = @name, description = @description, WHERE id = @id RETURNING id, name, description, date_inserted, date_updated",
                 MapToPosClient,
-                new Dictionary<string, object>() { ["@name"] = posClient.Name, ["@email"] = posClient.Description }
+                new Dictionary<string, object>() { ["@id"] = posClient.Id, ["@name"] = posClient.Name, ["@email"] = posClient.Description }
             );
 
             if (posClients.Any())

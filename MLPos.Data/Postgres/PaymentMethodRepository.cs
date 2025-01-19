@@ -61,7 +61,7 @@ public class PaymentMethodRepository : IPaymentMethodRepository
         IEnumerable<PaymentMethod> paymentMethods = await SqlHelper.ExecuteQuery<PaymentMethod>(_connectionString,
             @"UPDATE PAYMENTMETHOD SET name = @name, description = @description, image = @image WHERE id = @id RETURNING id, name, description, image, date_inserted, date_updated",
             MapToPaymentMethod,
-            new Dictionary<string, object>(){ ["@name"] = paymentMethod.Name, ["@email"] = paymentMethod.Description, ["@image"] = paymentMethod.Image }
+            new Dictionary<string, object>(){ ["@id"] = paymentMethod.Id, ["@name"] = paymentMethod.Name, ["@email"] = paymentMethod.Description, ["@image"] = paymentMethod.Image }
         );
         
         if (paymentMethods.Any())
