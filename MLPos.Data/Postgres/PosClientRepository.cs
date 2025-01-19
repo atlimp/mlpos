@@ -62,7 +62,7 @@ namespace MLPos.Data.Postgres
         public async Task<PosClient> UpdatePosClientAsync(PosClient posClient)
         {
             IEnumerable<PosClient> posClients = await SqlHelper.ExecuteQuery(_connectionString,
-                @"UPDATE POSCLIENT SET name = @name, description = @description, WHERE id = @id RETURNING id, name, description, date_inserted, date_updated",
+                @"UPDATE POSCLIENT SET name = @name, description = @description WHERE id = @id RETURNING id, name, description, date_inserted, date_updated",
                 MapToPosClient,
                 new Dictionary<string, object>() { ["@id"] = posClient.Id, ["@name"] = posClient.Name, ["@email"] = posClient.Description }
             );
