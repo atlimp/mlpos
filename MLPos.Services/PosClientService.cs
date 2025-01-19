@@ -75,7 +75,7 @@ namespace MLPos.Services
             return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
         }
 
-        public Task GetPosClientByLoginCodeAsync(string loginCode)
+        public Task<PosClient> GetPosClientByLoginCodeAsync(string loginCode)
         {
             return _posClientRepository.GetPosClientByLoginCodeAsync(loginCode);
         }

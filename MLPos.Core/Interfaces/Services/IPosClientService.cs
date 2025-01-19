@@ -14,7 +14,7 @@ namespace MLPos.Core.Interfaces.Services
         public Task<PosClient> CreatePosClientAsync(PosClient posClient);
         public Task<PosClient> UpdatePosClientAsync(PosClient posClient);
         public Task DeletePosClientAsync(long id);
-        public Task GetPosClientByLoginCodeAsync(string loginCode);
+        public Task<PosClient> GetPosClientByLoginCodeAsync(string loginCode);
         public Task<Tuple<bool, IEnumerable<ValidationError>>> ValidateUpdate(PosClient posClient);
         public Task<Tuple<bool, IEnumerable<ValidationError>>> ValidateInsert(PosClient posClient);
     }
