@@ -10,4 +10,5 @@ public interface IPosClientRepository
     public Task<PosClient> UpdatePosClientAsync(PosClient posClient);
     public Task DeletePosClientAsync(long id);
     public Task<bool> PosClientExistsAsync(long id);
+    public Task<PosClient> GetPosClientByLoginCodeAsync(string loginCode);
 }

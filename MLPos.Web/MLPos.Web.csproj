@@ -52,6 +52,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <TypeScriptCompile Include="PosClient\src\components\ConfirmDialog\ConfirmDialog.tsx" />
+      <TypeScriptCompile Include="PosClient\src\components\InputForm\SingleInputForm.tsx" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Content Include="PosClient\src\assets\fonts\Jost.ttf">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

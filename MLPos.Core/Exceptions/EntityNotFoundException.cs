@@ -10,6 +10,7 @@ namespace MLPos.Core.Exceptions
     {
         public EntityNotFoundException() { }
         public EntityNotFoundException(Type type, long key) : base($"{type.Name}: {key} was not found.") { }
+        public EntityNotFoundException(Type type, string key) : base($"{type.Name}: {key} was not found.") { }
 
         public EntityNotFoundException(string message) : base(message) { }
 

@@ -60,7 +60,7 @@ public class CustomerRepository : ICustomerRepository
         IEnumerable<Customer> customers = await SqlHelper.ExecuteQuery<Customer>(_connectionString,
             @"UPDATE CUSTOMER SET name = @name, email = @email, image = @image WHERE id = @id RETURNING id, name, email, image, date_inserted, date_updated",
             MapToCustomer,
-            new Dictionary<string, object>(){ ["@name"] = customer.Name, ["@email"] = customer.Email, ["@image"] = customer.Image }
+            new Dictionary<string, object>(){ ["@id"] = customer.Id, ["@name"] = customer.Name, ["@email"] = customer.Email, ["@image"] = customer.Image }
         );
         
         if (customers.Any())

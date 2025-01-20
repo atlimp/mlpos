@@ -35,9 +35,13 @@
                         @SharedLocalizer["Name"]:
                         @Html.TextBoxFor(m => m.PosClient.Name, new { id = "name", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
                     </label>
-                    <label class="inputLabel" for="email">
+                    <label class="inputLabel" for="description">
                         @SharedLocalizer["Description"]:
                         @Html.TextAreaFor(m => m.PosClient.Description, new { id = "description", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
+                    <label class="inputLabel" for="logincode">
+                        @SharedLocalizer["LoginCode"]:
+                        @Html.TextBoxFor(m => m.PosClient.LoginCode, new { id = "logincode", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
                     </label>
 
                     @if (Model.PosClient != null && Model.PosClient.DateInserted != DateTime.MinValue)

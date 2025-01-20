@@ -22,7 +22,7 @@ namespace MLPos.Data.Postgres
         public async Task<PosClient> GetPosClientAsync(long id)
         {
             IEnumerable<PosClient> posClients = await SqlHelper.ExecuteQuery(_connectionString,
-                "SELECT id, name, description, date_inserted, date_updated FROM POSCLIENT WHERE id = @id",
+                "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE id = @id",
                 MapToPosClient,
                 new Dictionary<string, object>() { ["@id"] = id }
             );
@@ -38,17 +38,17 @@ namespace MLPos.Data.Postgres
         public async Task<IEnumerable<PosClient>> GetPosClientsAsync()
         {
             return await SqlHelper.ExecuteQuery(_connectionString,
-                "SELECT id, name, description, date_inserted, date_updated FROM POSCLIENT",
+                "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT",
                 MapToPosClient);
         }
 
         public async Task<PosClient> CreatePosClientAsync(PosClient posClient)
         {
             IEnumerable<PosClient> posClients = await SqlHelper.ExecuteQuery(_connectionString,
-                @"INSERT INTO POSCLIENT(name, description)
-                    VALUES(@name, @description) RETURNING id, name, description, date_inserted, date_updated",
+                @"INSERT INTO POSCLIENT(name, description, logincode)
+                    VALUES(@name, @description, @logincode) RETURNING id, name, description, logincode, date_inserted, date_updated",
                 MapToPosClient,
-                new Dictionary<string, object>() { ["@name"] = posClient.Name, ["@description"] = posClient.Description }
+                new Dictionary<string, object>() { ["@name"] = posClient.Name, ["@description"] = posClient.Description, ["@logincode"] = posClient.LoginCode }
             );
 
             if (posClients.Any())
@@ -62,9 +62,9 @@ namespace MLPos.Data.Postgres
         public async Task<PosClient> UpdatePosClientAsync(PosClient posClient)
         {
             IEnumerable<PosClient> posClients = await SqlHelper.ExecuteQuery(_connectionString,
-                @"UPDATE POSCLIENT SET name = @name, description = @description, WHERE id = @id RETURNING id, name, description, date_inserted, date_updated",
+                @"UPDATE POSCLIENT SET name = @name, description = @description, logincode = @logincode WHERE id = @id RETURNING id, name, description, logincode, date_inserted, date_updated",
                 MapToPosClient,
-                new Dictionary<string, object>() { ["@name"] = posClient.Name, ["@email"] = posClient.Description }
+                new Dictionary<string, object>() { ["@id"] = posClient.Id, ["@name"] = posClient.Name, ["@description"] = posClient.Description, ["@logincode"] = posClient.LoginCode }
             );
 
             if (posClients.Any())
@@ -102,9 +102,26 @@ namespace MLPos.Data.Postgres
                 Id = reader.GetInt32(0),
                 Name = reader.GetSafeString((1)),
                 Description = reader.GetSafeString(2),
-                DateInserted = reader.GetDateTime(3),
-                DateUpdated = reader.GetDateTime(4),
+                LoginCode = reader.GetSafeString(3),
+                DateInserted = reader.GetDateTime(4),
+                DateUpdated = reader.GetDateTime(5),
             };
+        }
+
+        public async Task<PosClient> GetPosClientByLoginCodeAsync(string loginCode)
+        {
+            IEnumerable<PosClient> posClients = await SqlHelper.ExecuteQuery(_connectionString,
+                            "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE logincode = @logincode",
+                            MapToPosClient,
+                            new Dictionary<string, object>() { ["@logincode"] = loginCode }
+                        );
+
+            if (posClients.Any())
+            {
+                return posClients.First();
+            }
+
+            throw new EntityNotFoundException(typeof(PosClient), loginCode);
         }
     }
 }

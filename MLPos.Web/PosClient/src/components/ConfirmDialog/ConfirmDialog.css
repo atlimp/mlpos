@@ -1,0 +1,25 @@
+﻿.confirmDialog {
+  background: var(--white);
+  height: 10em;
+  max-width: 20em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1em;
+}
+
+.confirmDialogMessage {
+  margin: 0.5em;
+}
+
+.confirmDialogButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.confirmButton {
+}
+
+.cancelButton {
+}

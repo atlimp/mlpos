@@ -1,0 +1,14 @@
+﻿@using Microsoft.Extensions.Localization
+@using MLPos.Web
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@{
+    Layout = "_Admin_Layout";
+    ViewData["Title"] = SharedLocalizer["Error"];
+}
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Error.css">
+}
+
+<h1 class="error">@ViewData["ErrorMessage"]</h1>

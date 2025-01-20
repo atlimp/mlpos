@@ -13,7 +13,7 @@ public static class HtmlHelperExtension
         string photoUrl = url;
         if (string.IsNullOrEmpty(url))
         {
-            photoUrl = "/img/default.jpg";
+            photoUrl = Constants.DEFAULT_IMAGE_PATH;
         }
         
         string img = $"<img src=\"{photoUrl}\" class=\"{@class}\" />";
