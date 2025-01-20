@@ -1,0 +1,19 @@
+﻿.header {
+  height: 4em;
+  width: 100%;
+  background-color: var(--green);
+  display: flex;
+}
+
+.header > img {
+  max-height: 3.5em;
+  height: auto;
+  width: auto;
+  margin: auto;
+}
+
+.languageSelect {
+  background-color: var(--green);
+  color: var(--yellow);
+  border: none;
+}

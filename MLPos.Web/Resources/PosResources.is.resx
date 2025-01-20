@@ -117,4 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddTransaction" xml:space="preserve">
+    <value>Ný færsla</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Upphæð</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Hætta við</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Staðfesta</value>
+  </data>
+  <data name="DeleteTransactionConfirmMessage" xml:space="preserve">
+    <value>Ertu viss um að þú viljir eyða færslunni?</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Lýsing</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Skrá inn</value>
+  </data>
+  <data name="LoginCode" xml:space="preserve">
+    <value>Innskráningarkóði</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Einingaverð</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Magn</value>
+  </data>
 </root>

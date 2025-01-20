@@ -1,16 +1,29 @@
 ﻿import "./LineDisplay.css";
 
+import { useContext } from "react";
+import { LocalizedStringsContext } from "../../context";
+
 function LineDisplay({ lines, onDeleteLine }: LineDisplayProps) {
+  const { localizedStrings } = useContext(LocalizedStringsContext);
+
   return (
     <div className="tableContainer">
       <table className="lineDisplay">
         <thead>
           <tr className="itemLineHeader">
             <th></th>
-            <th className="itemLineName">Description</th>
-            <th className="itemLinePrice">Price</th>
-            <th className="itemLineQuantity">Quantity</th>
-            <th className="itemLineAmount">Amount</th>
+            <th className="itemLineName">
+              {localizedStrings.strings["Description"]}
+            </th>
+            <th className="itemLinePrice">
+              {localizedStrings.strings["Price"]}
+            </th>
+            <th className="itemLineQuantity">
+              {localizedStrings.strings["Quantity"]}
+            </th>
+            <th className="itemLineAmount">
+              {localizedStrings.strings["Amount"]}
+            </th>
             <th></th>
           </tr>
         </thead>
