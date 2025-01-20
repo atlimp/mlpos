@@ -8,14 +8,14 @@ namespace MLPos.Web.Controllers
     [ApiController]
     public class LocalizationController : ControllerBase
     {
-        private IStringLocalizer<SharedResources> _localizer;
+        private IStringLocalizer<PosResources> _localizer;
 
-        public LocalizationController(IStringLocalizer<SharedResources> localizer)
+        public LocalizationController(IStringLocalizer<PosResources> localizer)
         {
             _localizer = localizer;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> GetLocalizedStrings([FromQuery] string culture)
         {
             
@@ -36,6 +36,24 @@ namespace MLPos.Web.Controllers
             }
 
             return Ok(stringDictionary);
+        }
+
+        [HttpGet("{key}")]
+        public async Task<IActionResult> GetLocalizedStrings(string key, [FromQuery] string culture)
+        {
+
+            if (culture == null)
+            {
+                return BadRequest();
+            }
+
+            string localized = _localizer[key];
+            if (localized == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new Dictionary<string, string> { [key] = localized });
         }
     }
 }
