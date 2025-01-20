@@ -12,20 +12,6 @@
   height: 100%;
 }
 
-.header {
-  height: 4em;
-  width: 100%;
-  background-color: var(--green);
-  display: flex;
-}
-
-.header > img {
-  max-height: 3.5em;
-  height: auto;
-  width: auto;
-  margin: auto;
-}
-
 @media (min-width: 1000px) {
   .app {
     flex-direction: row;

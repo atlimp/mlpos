@@ -1,18 +1,26 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Api from "./api/api";
-import logo from "./assets/logo.png";
 
-import { TransactionContext, PosClientIdContext } from "./context";
+import {
+  TransactionContext,
+  PosClientIdContext,
+  LocalizedStringsContext,
+} from "./context";
 
 import Pos from "./components/Pos/Pos";
 import TransactionList from "./components/TransactionList/TransactionList";
 import SingleInputForm from "./components/InputForm/SingleInputForm";
+import Header from "./components/Header/Header";
 
 function App() {
   const [posClientId, setPosClientId] = useState(0);
   const [transactions, setTransactions] = useState<TransactionSummary[]>([]);
   const [activeTransactionId, setActiveTransactionId] = useState(-1);
+  const [languageId, setLanguageId] = useState(
+    () => localStorage.getItem("languageId") ?? navigator.language,
+  );
+  const [localizedStrings, setLocalizedStrings] = useState<LocalizedStrings>();
 
   useEffect(() => {
     const loginCode = window.localStorage.getItem("loginCode");
@@ -27,6 +35,17 @@ function App() {
       getActiveTransactions(posClientId);
     }
   }, [posClientId]);
+
+  useEffect(() => {
+    getLocalizedStrings(languageId);
+  }, [languageId]);
+
+  const getLocalizedStrings = async (languageId: string) => {
+    const api = new Api({ posClientId: -1 });
+    const strings = await api.getLocalizedStrings(languageId);
+    console.log(strings);
+    setLocalizedStrings(strings);
+  };
 
   const getActiveTransactions = async (posClientId: number) => {
     const api = new Api({ posClientId });
@@ -48,16 +67,24 @@ function App() {
     }
   };
 
+  if (!localizedStrings) {
+    return <div>Loading...</div>;
+  }
+
   if (posClientId <= 0) {
     return (
       <div className="appContainer">
-        <div className="header">
-          <img src={logo}></img>
-        </div>
+        <Header
+          selectedLanguage={languageId}
+          onSelectLanguage={(languageId) => {
+            window.localStorage.setItem("languageId", languageId);
+            setLanguageId(languageId);
+          }}
+        />
         <SingleInputForm
-          label="Login Code"
+          label={localizedStrings.strings["LoginCode"]}
           type="text"
-          submitLabel="Login"
+          submitLabel={localizedStrings.strings["Login"]}
           onSubmit={setPosClientIdFromLoginCode}
         />
       </div>
@@ -66,27 +93,36 @@ function App() {
 
   return (
     <div className="appContainer">
-      <div className="header">
-        <img src={logo}></img>
-      </div>
+      <Header
+        selectedLanguage={languageId}
+        onSelectLanguage={(languageId) => {
+          console.log(languageId);
+          window.localStorage.setItem("languageId", languageId);
+          setLanguageId(languageId);
+        }}
+      />
       <div className="app">
-        <PosClientIdContext.Provider value={{ posClientId, setPosClientId }}>
-          <TransactionContext.Provider
-            value={{ activeTransactionId, setActiveTransactionId }}
-          >
-            <TransactionList
-              transactions={transactions}
-              refreshTransactions={() => {
-                getActiveTransactions(posClientId);
-              }}
-            />
-            <Pos
-              refreshTransactions={() => {
-                getActiveTransactions(posClientId);
-              }}
-            />
-          </TransactionContext.Provider>
-        </PosClientIdContext.Provider>
+        <LocalizedStringsContext.Provider
+          value={{ localizedStrings, setLocalizedStrings }}
+        >
+          <PosClientIdContext.Provider value={{ posClientId, setPosClientId }}>
+            <TransactionContext.Provider
+              value={{ activeTransactionId, setActiveTransactionId }}
+            >
+              <TransactionList
+                transactions={transactions}
+                refreshTransactions={() => {
+                  getActiveTransactions(posClientId);
+                }}
+              />
+              <Pos
+                refreshTransactions={() => {
+                  getActiveTransactions(posClientId);
+                }}
+              />
+            </TransactionContext.Provider>
+          </PosClientIdContext.Provider>
+        </LocalizedStringsContext.Provider>
       </div>
     </div>
   );

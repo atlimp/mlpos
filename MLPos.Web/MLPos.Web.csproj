@@ -84,6 +84,9 @@
       <TypeScriptCompile Include="PosClient\src\components\CustomerSelect\CustomerSelect.tsx">
         <SubType>Code</SubType>
       </TypeScriptCompile>
+      <TypeScriptCompile Include="PosClient\src\components\Header\Header.tsx">
+        <SubType>Code</SubType>
+      </TypeScriptCompile>
       <TypeScriptCompile Include="PosClient\src\components\ProductSelect\ProductSelect.tsx">
         <SubType>Code</SubType>
       </TypeScriptCompile>

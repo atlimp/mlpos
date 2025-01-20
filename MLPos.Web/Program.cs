@@ -56,9 +56,8 @@ public class Program
         {
             var supportedCultures = new[]
             {
-                "en-US",
-                "is-IS",
-                "en-US",
+                "en",
+                "is",
             };
 
             options.SetDefaultCulture(supportedCultures[0])

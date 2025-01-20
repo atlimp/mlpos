@@ -189,6 +189,21 @@
 
     return null;
   }
+
+  async getLocalizedStrings(languageId: string): Promise<LocalizedStrings> {
+    const response = await this.fetchJson(
+      `/api/Localization/all?culture=${languageId}`,
+    );
+
+    if (response) {
+      return {
+        languageId: languageId,
+        strings: response,
+      } as LocalizedStrings;
+    }
+
+    return {} as LocalizedStrings;
+  }
 }
 
 export default Api;
