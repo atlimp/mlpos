@@ -25,7 +25,10 @@ function SingleInputForm({
           type={type}
           placeholder={label}
         ></input>
-        <button className="button singleInputFormButton" type="submit">
+        <button
+          className="button buttonPrimary singleInputFormButton"
+          type="submit"
+        >
           {submitLabel}
         </button>
       </label>
