@@ -1,69 +1,57 @@
 using Npgsql;
+using System.Data.Common;
 
 namespace MLPos.Data.Postgres.Helpers;
 
 public class SqlHelper
 {
-    public static async Task<IEnumerable<T>> ExecuteQuery<T>(string connectionString, string query,
+    public static async Task<IEnumerable<T>> ExecuteQuery<T>(NpgsqlConnection connection, NpgsqlTransaction? transaction, string query,
         Func<NpgsqlDataReader, T> mapper, Dictionary<string, object>? parameters = null)
     {
         List<T> result = new List<T>();
-        
-        using (var con = new NpgsqlConnection(connectionString))
+
+        using (var cmd = new NpgsqlCommand(query, connection, transaction))
         {
-            using (var cmd = con.CreateCommand())
+            if (parameters != null)
             {
-                cmd.CommandText = query;
-                
-                if (parameters != null)
+                foreach (string key in parameters.Keys)
                 {
-                    foreach (string key in parameters.Keys)
+                    if (parameters[key] == null)
                     {
-                        if (parameters[key] == null)
-                        {
-                            cmd.Parameters.AddWithValue(key, DBNull.Value);
-                            continue;
-                        }
-                        
-                        cmd.Parameters.AddWithValue(key, parameters[key]);
+                        cmd.Parameters.AddWithValue(key, DBNull.Value);
+                        continue;
                     }
-                }
-                
-                con.Open();
 
-                var reader = await cmd.ExecuteReaderAsync();
-
-                while (reader.Read())
-                {
-                    result.Add(mapper(reader));
+                    cmd.Parameters.AddWithValue(key, parameters[key]);
                 }
-                
             }
+
+            var reader = await cmd.ExecuteReaderAsync();
+
+            while (reader.Read())
+            {
+                result.Add(mapper(reader));
+            }
+
+            await reader.CloseAsync();
         }
 
         return result;
     }
     
-    public static async Task ExecuteNonQuery(string connectionString, string query, Dictionary<string, object>? parameters = null)
+    public static async Task ExecuteNonQuery(NpgsqlConnection connection, NpgsqlTransaction? transaction, string query, Dictionary<string, object>? parameters = null)
     {
-        using (var con = new NpgsqlConnection(connectionString))
+        using (var cmd = new NpgsqlCommand(query, connection, transaction))
         {
-            using (var cmd = con.CreateCommand())
+            if (parameters != null)
             {
-                cmd.CommandText = query;
-                
-                if (parameters != null)
+                foreach (string key in parameters.Keys)
                 {
-                    foreach (string key in parameters.Keys)
-                    {
-                        cmd.Parameters.AddWithValue(key, parameters[key]);
-                    }
+                    cmd.Parameters.AddWithValue(key, parameters[key]);
                 }
-                
-                con.Open();
-
-                var reader = await cmd.ExecuteNonQueryAsync();
             }
+
+            await cmd.ExecuteNonQueryAsync();
         }
     }
 }

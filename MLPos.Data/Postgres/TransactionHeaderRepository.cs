@@ -4,23 +4,20 @@ using MLPos.Data.Postgres.Helpers;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MLPos.Data.Postgres
 {
-    public class TransactionHeaderRepository : ITransactionHeaderRepository
+    public class TransactionHeaderRepository : RepositoryBase, ITransactionHeaderRepository
     {
-        private readonly string _connectionString;
-        public TransactionHeaderRepository(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+        public TransactionHeaderRepository(string connectionString) : base(connectionString) { }
 
         public async Task<TransactionHeader?> CreateTransactionHeaderAsync(TransactionHeader transactionHeader)
         {
-            IEnumerable<TransactionHeader> transactionHeaders = await SqlHelper.ExecuteQuery(_connectionString,
+            IEnumerable<TransactionHeader> transactionHeaders = await this.ExecuteQuery(
                 "INSERT INTO TRANSACTIONHEADER(customer_id, posclient_id) VALUES (@customer_id, @posclient_id) RETURNING id, posclient_id, customer_id, date_inserted, date_updated",
                 MapToTransactionHeader,
                 new Dictionary<string, object>() { ["@posclient_id"] = transactionHeader.PosClientId, ["@customer_id"] = transactionHeader.Customer.Id }
@@ -36,12 +33,12 @@ namespace MLPos.Data.Postgres
 
         public async Task DeleteTransactionHeaderAsync(long id, long posClientId)
         {
-            await SqlHelper.ExecuteNonQuery(_connectionString, "DELETE FROM TRANSACTIONHEADER WHERE id=@id AND posclient_id = @posclient_id", new Dictionary<string, object>() { ["@id"] = id, ["@posclient_id"] = posClientId });
+            await this.ExecuteNonQuery("DELETE FROM TRANSACTIONHEADER WHERE id=@id AND posclient_id = @posclient_id", new Dictionary<string, object>() { ["@id"] = id, ["@posclient_id"] = posClientId });
         }
 
         public async Task<TransactionHeader?> GetTransactionHeaderAsync(long id, long posClientId)
         {
-            IEnumerable<TransactionHeader> transactionHeaders = await SqlHelper.ExecuteQuery(_connectionString,
+            IEnumerable<TransactionHeader> transactionHeaders = await this.ExecuteQuery(
                 "SELECT id, posclient_id, customer_id, date_inserted, date_updated FROM TRANSACTIONHEADER WHERE id = @id AND posclient_id = @posclient_id",
                 MapToTransactionHeader,
                 new Dictionary<string, object>() { ["@id"] = id, ["@posclient_id"] = posClientId }
@@ -57,43 +54,16 @@ namespace MLPos.Data.Postgres
 
         public async Task<IEnumerable<TransactionHeader>> GetAllTransactionHeaderAsync(long posClientId)
         {
-            return await SqlHelper.ExecuteQuery(_connectionString,
+            return await this.ExecuteQuery(
                 "SELECT id, posclient_id, customer_id, date_inserted, date_updated FROM TRANSACTIONHEADER WHERE posclient_id = @posclient_id",
                 MapToTransactionHeader,
                 new Dictionary<string, object> { ["@posclient_id"] = posClientId }
             );
         }
 
-        private TransactionHeader MapToTransactionHeader(NpgsqlDataReader reader)
-        {
-            return new TransactionHeader()
-            {
-                Id = reader.GetInt64(0),
-                PosClientId = reader.GetInt64(1),
-                Customer = new Customer
-                {
-                    Id = reader.GetInt64(2)
-                },
-                DateInserted = reader.GetDateTime(3),
-                DateUpdated = reader.GetDateTime(4),
-            };
-        }
-
-        private TransactionSummary MapToTransactionSummary(NpgsqlDataReader reader)
-        {
-            return new TransactionSummary()
-            {
-                Id = reader.GetInt64(0),
-                PosClientId = reader.GetInt64(1),
-                CustomerName = reader.GetSafeString(2),
-                CustomerImage = reader.GetSafeString(3),
-                TotalAmount = reader.GetDecimal(4),
-            };
-        }
-
         public async Task<TransactionSummary> GetTransactionSummaryAsync(long id, long posClientId)
         {
-            IEnumerable<TransactionSummary> transactionHeaders = await SqlHelper.ExecuteQuery(_connectionString,
+            IEnumerable<TransactionSummary> transactionHeaders = await this.ExecuteQuery(
                             @"SELECT
 	                            t1.id,
 	                            t1.posclient_id,
@@ -122,7 +92,7 @@ namespace MLPos.Data.Postgres
 
         public async Task<IEnumerable<TransactionSummary>> GetAllTransactionSummaryAsync(long posClientId)
         {
-            return await SqlHelper.ExecuteQuery(_connectionString,
+            return await this.ExecuteQuery(
                             @"SELECT
 	                            t1.id,
 	                            t1.posclient_id,
@@ -139,6 +109,32 @@ namespace MLPos.Data.Postgres
                             MapToTransactionSummary,
                             new Dictionary<string, object>() { ["@posclient_id"] = posClientId }
                         );
+        }
+        private TransactionHeader MapToTransactionHeader(NpgsqlDataReader reader)
+        {
+            return new TransactionHeader()
+            {
+                Id = reader.GetInt64(0),
+                PosClientId = reader.GetInt64(1),
+                Customer = new Customer
+                {
+                    Id = reader.GetInt64(2)
+                },
+                DateInserted = reader.GetDateTime(3),
+                DateUpdated = reader.GetDateTime(4),
+            };
+        }
+
+        private TransactionSummary MapToTransactionSummary(NpgsqlDataReader reader)
+        {
+            return new TransactionSummary()
+            {
+                Id = reader.GetInt64(0),
+                PosClientId = reader.GetInt64(1),
+                CustomerName = reader.GetSafeString(2),
+                CustomerImage = reader.GetSafeString(3),
+                TotalAmount = reader.GetDecimal(4),
+            };
         }
     }
 }

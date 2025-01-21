@@ -2,7 +2,7 @@ using MLPos.Core.Model;
 
 namespace MLPos.Core.Interfaces.Repositories;
 
-public interface IPaymentMethodRepository
+public interface IPaymentMethodRepository : IBaseRepository
 {
     public Task<PaymentMethod> GetPaymentMethodAsync(long id);
     public Task<IEnumerable<PaymentMethod>> GetPaymentMethodsAsync();

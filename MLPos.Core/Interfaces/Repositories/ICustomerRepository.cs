@@ -2,7 +2,7 @@ using MLPos.Core.Model;
 
 namespace MLPos.Core.Interfaces.Repositories;
 
-public interface ICustomerRepository
+public interface ICustomerRepository : IBaseRepository
 {
     public Task<Customer> GetCustomerAsync(long id);
     public Task<IEnumerable<Customer>> GetCustomersAsync();

@@ -10,18 +10,15 @@ using System.Threading.Tasks;
 
 namespace MLPos.Data.Postgres
 {
-    public class TransactionLineRepository : ITransactionLineRepository
+    public class TransactionLineRepository : RepositoryBase, ITransactionLineRepository
     {
         private readonly string _connectionString;
 
-        public TransactionLineRepository(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+        public TransactionLineRepository(string connectionString) : base(connectionString) { }
 
         public async Task<TransactionLine?> CreateTransactionLineAsync(long transactionId, long posClientId, TransactionLine line)
         {
-            IEnumerable<TransactionLine> transactionLines = await SqlHelper.ExecuteQuery(_connectionString,
+            IEnumerable<TransactionLine> transactionLines = await this.ExecuteQuery(
             "INSERT INTO TRANSACTIONLINE(transaction_id, posclient_id, product_id, amount, quantity) VALUES (@transaction_id, @posclient_id, @product_id, @amount, @quantity) RETURNING id, product_id, amount, quantity, date_inserted, date_updated",
             MapToTransactionLine,
                 new Dictionary<string, object>() { ["@transaction_id"] = transactionId, ["@posclient_id"] = posClientId, ["@product_id"] = line.Product.Id, ["@amount"] = line.Amount, ["@quantity"] = line.Quantity }
@@ -37,14 +34,14 @@ namespace MLPos.Data.Postgres
 
         public async Task DeleteTransactionLineAsync(long transactionId, long posClientId, long lineId)
         {
-            await SqlHelper.ExecuteNonQuery(_connectionString, "DELETE FROM TRANSACTIONLINE WHERE id=@id AND transaction_id = @transaction_id AND posclient_id = @posclient_id",
+            await this.ExecuteNonQuery("DELETE FROM TRANSACTIONLINE WHERE id=@id AND transaction_id = @transaction_id AND posclient_id = @posclient_id",
                 new Dictionary<string, object>() { ["@id"] = lineId, ["@transaction_id"] = transactionId, ["@posclient_id"] = posClientId }
             );
         }
 
         public async Task<IEnumerable<TransactionLine>> GetAllTransactionLinesAsync(long transactionId, long posClientId)
         {
-            return await SqlHelper.ExecuteQuery(_connectionString,
+            return await this.ExecuteQuery(
                 "SELECT id, product_id, amount, quantity, date_inserted, date_updated FROM TRANSACTIONLINE WHERE transaction_id = @transaction_id AND posclient_id = @posclient_id",
                 MapToTransactionLine,
                 new Dictionary<string, object>() { ["@transaction_id"] = transactionId, ["@posclient_id"] = posClientId }
@@ -53,7 +50,7 @@ namespace MLPos.Data.Postgres
 
         public async Task<TransactionLine?> GetTransactionLineAsync(long transactionId, long posClientId, long lineId)
         {
-            IEnumerable<TransactionLine> transactionLines = await SqlHelper.ExecuteQuery(_connectionString,
+            IEnumerable<TransactionLine> transactionLines = await this.ExecuteQuery(
                 "SELECT id, product_id, amount, quantity, date_inserted, date_updated FROM TRANSACTIONLINE WHERE transaction_id = @transaction_id AND posclient_id = @posclient_id AND id = @id",
                 MapToTransactionLine,
                 new Dictionary<string, object>() { ["@transaction_id"] = transactionId, ["@posclient_id"] = posClientId, ["@id"] = lineId }

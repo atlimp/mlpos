@@ -4,24 +4,20 @@ using MLPos.Data.Postgres.Helpers;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MLPos.Data.Postgres
 {
-    public class PostedTransactionLineRepository : IPostedTransactionLineRepository
+    public class PostedTransactionLineRepository : RepositoryBase, IPostedTransactionLineRepository
     {
-        private readonly string _connectionString;
-
-        public PostedTransactionLineRepository(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+        public PostedTransactionLineRepository(string connectionString) : base(connectionString) { }
 
         public async Task<PostedTransactionLine> CreatePostedTransactionLineAsync(long transactionId, long posClientId, PostedTransactionLine line)
         {
-            IEnumerable<PostedTransactionLine> transactionLines = await SqlHelper.ExecuteQuery(_connectionString,
+            IEnumerable<PostedTransactionLine> transactionLines = await this.ExecuteQuery(
                 @"INSERT INTO POSTEDTRANSACTIONLINE(transaction_id, posclient_id, product_id, amount, quantity)
                     VALUES (@transaction_id, @posclient_id, @product_id, @amount, @quantity)
                     RETURNING id, product_id, amount, quantity, date_inserted, date_updated",

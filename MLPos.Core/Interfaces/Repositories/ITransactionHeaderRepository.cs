@@ -1,13 +1,14 @@
 ﻿using MLPos.Core.Model;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MLPos.Core.Interfaces.Repositories
 {
-    public interface ITransactionHeaderRepository
+    public interface ITransactionHeaderRepository : IBaseRepository
     {
         public Task<TransactionHeader?> GetTransactionHeaderAsync(long id, long posClientId);
         public Task<IEnumerable<TransactionHeader>> GetAllTransactionHeaderAsync(long posClientId);

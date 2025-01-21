@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MLPos.Core.Interfaces.Repositories
 {
-    public interface ITransactionLineRepository
+    public interface ITransactionLineRepository : IBaseRepository
     {
         public Task<TransactionLine?> GetTransactionLineAsync(long transactionId, long posClientId, long lineId);
         public Task<TransactionLine?> CreateTransactionLineAsync(long transactionId, long posClientId, TransactionLine line);
