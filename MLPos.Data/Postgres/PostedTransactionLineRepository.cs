@@ -11,18 +11,13 @@ using System.Threading.Tasks;
 
 namespace MLPos.Data.Postgres
 {
-    public class PostedTransactionLineRepository : IPostedTransactionLineRepository
+    public class PostedTransactionLineRepository : RepositoryBase, IPostedTransactionLineRepository
     {
-        private readonly string _connectionString;
+        public PostedTransactionLineRepository(string connectionString) : base(connectionString) { }
 
-        public PostedTransactionLineRepository(string connectionString)
+        public async Task<PostedTransactionLine> CreatePostedTransactionLineAsync(long transactionId, long posClientId, PostedTransactionLine line)
         {
-            _connectionString = connectionString;
-        }
-
-        public async Task<PostedTransactionLine> CreatePostedTransactionLineAsync(DbTransaction transaction, long transactionId, long posClientId, PostedTransactionLine line)
-        {
-            IEnumerable<PostedTransactionLine> transactionLines = await SqlHelper.ExecuteQuery(transaction as NpgsqlTransaction,
+            IEnumerable<PostedTransactionLine> transactionLines = await this.ExecuteQuery(
                 @"INSERT INTO POSTEDTRANSACTIONLINE(transaction_id, posclient_id, product_id, amount, quantity)
                     VALUES (@transaction_id, @posclient_id, @product_id, @amount, @quantity)
                     RETURNING id, product_id, amount, quantity, date_inserted, date_updated",

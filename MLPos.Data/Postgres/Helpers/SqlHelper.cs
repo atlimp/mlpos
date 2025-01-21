@@ -5,51 +5,13 @@ namespace MLPos.Data.Postgres.Helpers;
 
 public class SqlHelper
 {
-    public static async Task<IEnumerable<T>> ExecuteQuery<T>(string connectionString, string query,
-        Func<NpgsqlDataReader, T> mapper, Dictionary<string, object>? parameters = null)
-    {
-        using (var conn = new NpgsqlConnection(connectionString))
-        {
-            conn.Open();
-            return await ExecuteQuery(conn, null, query, mapper, parameters);
-        }
-    }
-    public static async Task ExecuteNonQuery(string connectionString, string query,
-        Dictionary<string, object>? parameters = null)
-    {
-        using (var conn = new NpgsqlConnection(connectionString))
-        {
-            conn.Open();
-            await ExecuteNonQuery(conn, null, query, parameters);
-        }
-    }
-    public static async Task<IEnumerable<T>> ExecuteQuery<T>(NpgsqlTransaction transaction, string query,
-        Func<NpgsqlDataReader, T> mapper, Dictionary<string, object>? parameters = null)
-    {
-        return await ExecuteQuery(transaction.Connection, transaction, query, mapper, parameters);
-    }
-    public static async Task ExecuteNonQuery(NpgsqlTransaction transaction, string query,
-        Dictionary<string, object>? parameters = null)
-    {
-        await ExecuteNonQuery(transaction.Connection, transaction, query, parameters);
-    }
-
-
-
-    private static async Task<IEnumerable<T>> ExecuteQuery<T>(NpgsqlConnection connection, NpgsqlTransaction? transaction, string query,
+    public static async Task<IEnumerable<T>> ExecuteQuery<T>(NpgsqlConnection connection, NpgsqlTransaction? transaction, string query,
         Func<NpgsqlDataReader, T> mapper, Dictionary<string, object>? parameters = null)
     {
         List<T> result = new List<T>();
-        
-        using (var cmd = connection.CreateCommand())
-        {
-            cmd.CommandText = query;
 
-            if (transaction != null)
-            {
-                cmd.Transaction = transaction;
-            }
-                
+        using (var cmd = new NpgsqlCommand(query, connection, transaction))
+        {
             if (parameters != null)
             {
                 foreach (string key in parameters.Keys)
@@ -59,7 +21,7 @@ public class SqlHelper
                         cmd.Parameters.AddWithValue(key, DBNull.Value);
                         continue;
                     }
-                        
+
                     cmd.Parameters.AddWithValue(key, parameters[key]);
                 }
             }
@@ -70,23 +32,17 @@ public class SqlHelper
             {
                 result.Add(mapper(reader));
             }
-                
+
+            await reader.CloseAsync();
         }
 
         return result;
     }
     
-    private static async Task ExecuteNonQuery(NpgsqlConnection connection, NpgsqlTransaction? transaction, string query, Dictionary<string, object>? parameters = null)
+    public static async Task ExecuteNonQuery(NpgsqlConnection connection, NpgsqlTransaction? transaction, string query, Dictionary<string, object>? parameters = null)
     {
-        using (var cmd = connection.CreateCommand())
+        using (var cmd = new NpgsqlCommand(query, connection, transaction))
         {
-            cmd.CommandText = query;
-
-            if (transaction != null)
-            {
-                cmd.Transaction = transaction;
-            }
-
             if (parameters != null)
             {
                 foreach (string key in parameters.Keys)
@@ -95,7 +51,7 @@ public class SqlHelper
                 }
             }
 
-            var reader = await cmd.ExecuteNonQueryAsync();
+            await cmd.ExecuteNonQueryAsync();
         }
     }
 }

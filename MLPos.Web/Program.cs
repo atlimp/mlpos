@@ -117,15 +117,15 @@ public class Program
 
     private static void InitRepositories(IServiceCollection services, string connectionString = "")
     {
-        services.AddSingleton<IProductRepository, MLPos.Data.Postgres.ProductRepository>(r => new ProductRepository(connectionString));
-        services.AddSingleton<ICustomerRepository, MLPos.Data.Postgres.CustomerRepository>(r => new CustomerRepository(connectionString));
-        services.AddSingleton<IPaymentMethodRepository, MLPos.Data.Postgres.PaymentMethodRepository>(r => new PaymentMethodRepository(connectionString));
-        services.AddSingleton<IPosClientRepository, MLPos.Data.Postgres.PosClientRepository>(r => new PosClientRepository(connectionString));
-        services.AddSingleton<ITransactionHeaderRepository, MLPos.Data.Postgres.TransactionHeaderRepository>(r => new TransactionHeaderRepository(connectionString));
-        services.AddSingleton<ITransactionLineRepository, MLPos.Data.Postgres.TransactionLineRepository>(r => new TransactionLineRepository(connectionString));
-        services.AddSingleton<IPostedTransactionHeaderRepository, MLPos.Data.Postgres.PostedTransactionHeaderRepository>(r => new PostedTransactionHeaderRepository(connectionString));
-        services.AddSingleton<IPostedTransactionLineRepository, MLPos.Data.Postgres.PostedTransactionLineRepository>(r => new PostedTransactionLineRepository(connectionString));
-        services.AddSingleton<IDBAccessor, MLPos.Data.Postgres.DBAccessor>(r => new DBAccessor(connectionString));
+        services.AddScoped<IProductRepository, MLPos.Data.Postgres.ProductRepository>(r => new ProductRepository(connectionString));
+        services.AddScoped<ICustomerRepository, MLPos.Data.Postgres.CustomerRepository>(r => new CustomerRepository(connectionString));
+        services.AddScoped<IPaymentMethodRepository, MLPos.Data.Postgres.PaymentMethodRepository>(r => new PaymentMethodRepository(connectionString));
+        services.AddScoped<IPosClientRepository, MLPos.Data.Postgres.PosClientRepository>(r => new PosClientRepository(connectionString));
+        services.AddScoped<ITransactionHeaderRepository, MLPos.Data.Postgres.TransactionHeaderRepository>(r => new TransactionHeaderRepository(connectionString));
+        services.AddScoped<ITransactionLineRepository, MLPos.Data.Postgres.TransactionLineRepository>(r => new TransactionLineRepository(connectionString));
+        services.AddScoped<IPostedTransactionHeaderRepository, MLPos.Data.Postgres.PostedTransactionHeaderRepository>(r => new PostedTransactionHeaderRepository(connectionString));
+        services.AddScoped<IPostedTransactionLineRepository, MLPos.Data.Postgres.PostedTransactionLineRepository>(r => new PostedTransactionLineRepository(connectionString));
+        services.AddScoped<IDbContext, MLPos.Data.Postgres.DbContext>(r => new DbContext(connectionString));
     }
 
     private static void InitServices(IServiceCollection services)

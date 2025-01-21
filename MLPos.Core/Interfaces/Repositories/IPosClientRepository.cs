@@ -2,7 +2,7 @@ using MLPos.Core.Model;
 
 namespace MLPos.Core.Interfaces.Repositories;
 
-public interface IPosClientRepository
+public interface IPosClientRepository : IBaseRepository
 {
     public Task<PosClient> GetPosClientAsync(long id);
     public Task<IEnumerable<PosClient>> GetPosClientsAsync();

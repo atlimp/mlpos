@@ -12,17 +12,13 @@ using System.Threading.Tasks;
 
 namespace MLPos.Data.Postgres
 {
-    public class PostedTransactionHeaderRepository : IPostedTransactionHeaderRepository
+    public class PostedTransactionHeaderRepository : RepositoryBase, IPostedTransactionHeaderRepository
     {
-        private readonly string _connectionString;
-        public PostedTransactionHeaderRepository(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+        public PostedTransactionHeaderRepository(string connectionString) : base(connectionString) { }
 
-        public async Task<PostedTransactionHeader> CreatePostedTransactionHeaderAsync(DbTransaction transaction, PostedTransactionHeader transactionHeader)
+        public async Task<PostedTransactionHeader> CreatePostedTransactionHeaderAsync(PostedTransactionHeader transactionHeader)
         {
-            IEnumerable<PostedTransactionHeader> transactionHeaders = await SqlHelper.ExecuteQuery(transaction as NpgsqlTransaction,
+            IEnumerable<PostedTransactionHeader> transactionHeaders = await this.ExecuteQuery(
                 "INSERT INTO POSTEDTRANSACTIONHEADER(id, status, posclient_id, customer_id, paymentmethod_id) VALUES (@id, @status, @posclient_id, @customer_id, @paymentmethod_id) RETURNING id, status, posclient_id, customer_id, paymentmethod_id, date_inserted, date_updated",
                 MapToPostedTransactionHeader,
                 new Dictionary<string, object>() {

@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace MLPos.Core.Interfaces.Repositories
 {
-    public interface IPostedTransactionLineRepository
+    public interface IPostedTransactionLineRepository : IBaseRepository
     {
-        public Task<PostedTransactionLine> CreatePostedTransactionLineAsync(DbTransaction transaction, long transactionId, long posClientId, PostedTransactionLine line);
+        public Task<PostedTransactionLine> CreatePostedTransactionLineAsync(long transactionId, long posClientId, PostedTransactionLine line);
     }
 }

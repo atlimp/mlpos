@@ -11,17 +11,13 @@ using System.Threading.Tasks;
 
 namespace MLPos.Data.Postgres
 {
-    public class PosClientRepository : IPosClientRepository
+    public class PosClientRepository : RepositoryBase, IPosClientRepository
     {
-        private readonly string _connectionString;
-        public PosClientRepository(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+        public PosClientRepository(string connectionString) : base(connectionString) { }
 
         public async Task<PosClient> GetPosClientAsync(long id)
         {
-            IEnumerable<PosClient> posClients = await SqlHelper.ExecuteQuery(_connectionString,
+            IEnumerable<PosClient> posClients = await this.ExecuteQuery(
                 "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE id = @id",
                 MapToPosClient,
                 new Dictionary<string, object>() { ["@id"] = id }
@@ -37,14 +33,14 @@ namespace MLPos.Data.Postgres
 
         public async Task<IEnumerable<PosClient>> GetPosClientsAsync()
         {
-            return await SqlHelper.ExecuteQuery(_connectionString,
+            return await this.ExecuteQuery(
                 "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT",
                 MapToPosClient);
         }
 
         public async Task<PosClient> CreatePosClientAsync(PosClient posClient)
         {
-            IEnumerable<PosClient> posClients = await SqlHelper.ExecuteQuery(_connectionString,
+            IEnumerable<PosClient> posClients = await this.ExecuteQuery(
                 @"INSERT INTO POSCLIENT(name, description, logincode)
                     VALUES(@name, @description, @logincode) RETURNING id, name, description, logincode, date_inserted, date_updated",
                 MapToPosClient,
@@ -61,7 +57,7 @@ namespace MLPos.Data.Postgres
 
         public async Task<PosClient> UpdatePosClientAsync(PosClient posClient)
         {
-            IEnumerable<PosClient> posClients = await SqlHelper.ExecuteQuery(_connectionString,
+            IEnumerable<PosClient> posClients = await this.ExecuteQuery(
                 @"UPDATE POSCLIENT SET name = @name, description = @description, logincode = @logincode WHERE id = @id RETURNING id, name, description, logincode, date_inserted, date_updated",
                 MapToPosClient,
                 new Dictionary<string, object>() { ["@id"] = posClient.Id, ["@name"] = posClient.Name, ["@description"] = posClient.Description, ["@logincode"] = posClient.LoginCode }
@@ -77,12 +73,12 @@ namespace MLPos.Data.Postgres
 
         public async Task DeletePosClientAsync(long id)
         {
-            await SqlHelper.ExecuteNonQuery(_connectionString, "DELETE FROM POSCLIENT WHERE id=@id", new Dictionary<string, object>() { ["@id"] = id });
+            await this.ExecuteNonQuery("DELETE FROM POSCLIENT WHERE id=@id", new Dictionary<string, object>() { ["@id"] = id });
         }
 
         public async Task<bool> PosClientExistsAsync(long id)
         {
-            IEnumerable<PosClient> posClients = await SqlHelper.ExecuteQuery(_connectionString,
+            IEnumerable<PosClient> posClients = await this.ExecuteQuery(
                 "select id from POSCLIENT where id = @id",
                 (reader =>
                     new PosClient()
@@ -93,6 +89,22 @@ namespace MLPos.Data.Postgres
             );
 
             return posClients.Any();
+        }
+
+        public async Task<PosClient> GetPosClientByLoginCodeAsync(string loginCode)
+        {
+            IEnumerable<PosClient> posClients = await this.ExecuteQuery(
+                            "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE logincode = @logincode",
+                            MapToPosClient,
+                            new Dictionary<string, object>() { ["@logincode"] = loginCode }
+                        );
+
+            if (posClients.Any())
+            {
+                return posClients.First();
+            }
+
+            throw new EntityNotFoundException(typeof(PosClient), loginCode);
         }
 
         private PosClient MapToPosClient(NpgsqlDataReader reader)
@@ -106,22 +118,6 @@ namespace MLPos.Data.Postgres
                 DateInserted = reader.GetDateTime(4),
                 DateUpdated = reader.GetDateTime(5),
             };
-        }
-
-        public async Task<PosClient> GetPosClientByLoginCodeAsync(string loginCode)
-        {
-            IEnumerable<PosClient> posClients = await SqlHelper.ExecuteQuery(_connectionString,
-                            "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE logincode = @logincode",
-                            MapToPosClient,
-                            new Dictionary<string, object>() { ["@logincode"] = loginCode }
-                        );
-
-            if (posClients.Any())
-            {
-                return posClients.First();
-            }
-
-            throw new EntityNotFoundException(typeof(PosClient), loginCode);
         }
     }
 }

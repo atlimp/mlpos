@@ -23,7 +23,7 @@ namespace MLPos.Services
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
 
-        private readonly IDBAccessor _dbAccessor;
+        private readonly IDbContext _dbContext;
 
         public TransactionService(ITransactionHeaderRepository headerRepository,
             ITransactionLineRepository lineRepository,
@@ -32,7 +32,7 @@ namespace MLPos.Services
             IPosClientRepository posClientRepository,
             ICustomerRepository customerRepository,
             IProductRepository productRepository,
-            IDBAccessor dbAccessor)
+            IDbContext dbContext)
         {
             _headerRepository = headerRepository;
             _lineRepository = lineRepository;
@@ -41,7 +41,7 @@ namespace MLPos.Services
             _posClientRepository = posClientRepository;
             _customerRepository = customerRepository;
             _productRepository = productRepository;
-            _dbAccessor = dbAccessor;
+            _dbContext = dbContext;
         }
 
         public async Task<TransactionHeader?> GetTransactionHeaderAsync(long transactionId, long posClientId)
@@ -103,42 +103,47 @@ namespace MLPos.Services
         public async Task DeleteTransactionAsync(long id, long posClientId)
         {
             TransactionHeader transactionHeader = await _headerRepository.GetTransactionHeaderAsync(id, posClientId);
+            _postedTransactionHeaderRepository.SetDBContext(_dbContext);
+            _headerRepository.SetDBContext(_dbContext);
 
-            DbTransaction dbTransaction = _dbAccessor.CreateDbTransaction();
             try
             {
+                _dbContext.BeginDbTransaction();
 
-                await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(dbTransaction, this.CreateFrom(transactionHeader, null));
-                await _headerRepository.DeleteTransactionHeaderAsync(dbTransaction, id, posClientId);
+                await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, null));
+                await _headerRepository.DeleteTransactionHeaderAsync(id, posClientId);
 
-                _dbAccessor.CommitDbTransaction(dbTransaction);
+                _dbContext.CommitDbTransaction();
             }
             catch (Exception ex)
             {
-                _dbAccessor.RollbackDbTransaction(dbTransaction);
+                _dbContext.RollbackDbTransaction();
                 throw;
             }
         }
 
         public async Task<PostedTransactionHeader> PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
         {
-            
-            DbTransaction dbTransaction = _dbAccessor.CreateDbTransaction();
+            _postedTransactionHeaderRepository.SetDBContext(_dbContext);
+            _postedTransactionLineRepository.SetDBContext(_dbContext);
+            _headerRepository.SetDBContext(_dbContext);
             try
             {
-                PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(dbTransaction, this.CreateFrom(transactionHeader, paymentMethod));
+                _dbContext.BeginDbTransaction();
+
+                PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, paymentMethod));
                 foreach (PostedTransactionLine line in this.CreateFrom(transactionHeader.Lines))
                 {
-                    await _postedTransactionLineRepository.CreatePostedTransactionLineAsync(dbTransaction, transactionHeader.Id, transactionHeader.PosClientId, line);
+                    await _postedTransactionLineRepository.CreatePostedTransactionLineAsync(transactionHeader.Id, transactionHeader.PosClientId, line);
                 }
 
-                await _headerRepository.DeleteTransactionHeaderAsync(dbTransaction, transactionHeader.Id, transactionHeader.PosClientId);
-                _dbAccessor.CommitDbTransaction(dbTransaction);
+                await _headerRepository.DeleteTransactionHeaderAsync(transactionHeader.Id, transactionHeader.PosClientId);
+                _dbContext.CommitDbTransaction();
                 return postedTransactionHeader;
             }
             catch (Exception ex)
             {
-                _dbAccessor.RollbackDbTransaction(dbTransaction);
+                _dbContext.RollbackDbTransaction();
                 throw;
             }
         }
