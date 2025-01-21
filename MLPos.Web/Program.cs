@@ -126,6 +126,7 @@ public class Program
         services.AddSingleton<ITransactionLineRepository, MLPos.Data.Postgres.TransactionLineRepository>(r => new TransactionLineRepository(connectionString));
         services.AddSingleton<IPostedTransactionHeaderRepository, MLPos.Data.Postgres.PostedTransactionHeaderRepository>(r => new PostedTransactionHeaderRepository(connectionString));
         services.AddSingleton<IPostedTransactionLineRepository, MLPos.Data.Postgres.PostedTransactionLineRepository>(r => new PostedTransactionLineRepository(connectionString));
+        services.AddSingleton<IDBAccessor, MLPos.Data.Postgres.DBAccessor>(r => new DBAccessor(connectionString));
     }
 
     private static void InitServices(IServiceCollection services)

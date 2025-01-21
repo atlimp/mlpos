@@ -4,6 +4,7 @@ using MLPos.Data.Postgres.Helpers;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,9 +35,9 @@ namespace MLPos.Data.Postgres
             return null;
         }
 
-        public async Task DeleteTransactionHeaderAsync(long id, long posClientId)
+        public async Task DeleteTransactionHeaderAsync(DbTransaction transaction, long id, long posClientId)
         {
-            await SqlHelper.ExecuteNonQuery(_connectionString, "DELETE FROM TRANSACTIONHEADER WHERE id=@id AND posclient_id = @posclient_id", new Dictionary<string, object>() { ["@id"] = id, ["@posclient_id"] = posClientId });
+            await SqlHelper.ExecuteNonQuery(transaction as NpgsqlTransaction, "DELETE FROM TRANSACTIONHEADER WHERE id=@id AND posclient_id = @posclient_id", new Dictionary<string, object>() { ["@id"] = id, ["@posclient_id"] = posClientId });
         }
 
         public async Task<TransactionHeader?> GetTransactionHeaderAsync(long id, long posClientId)

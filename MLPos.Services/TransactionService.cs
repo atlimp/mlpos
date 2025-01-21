@@ -5,6 +5,7 @@ using MLPos.Core.Model;
 using MLPos.Core.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,13 +23,16 @@ namespace MLPos.Services
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
 
+        private readonly IDBAccessor _dbAccessor;
+
         public TransactionService(ITransactionHeaderRepository headerRepository,
             ITransactionLineRepository lineRepository,
             IPostedTransactionHeaderRepository postedTransactionHeaderRepository,
             IPostedTransactionLineRepository postedTransactionLineRepository,
             IPosClientRepository posClientRepository,
             ICustomerRepository customerRepository,
-            IProductRepository productRepository)
+            IProductRepository productRepository,
+            IDBAccessor dbAccessor)
         {
             _headerRepository = headerRepository;
             _lineRepository = lineRepository;
@@ -37,6 +41,7 @@ namespace MLPos.Services
             _posClientRepository = posClientRepository;
             _customerRepository = customerRepository;
             _productRepository = productRepository;
+            _dbAccessor = dbAccessor;
         }
 
         public async Task<TransactionHeader?> GetTransactionHeaderAsync(long transactionId, long posClientId)
@@ -98,21 +103,44 @@ namespace MLPos.Services
         public async Task DeleteTransactionAsync(long id, long posClientId)
         {
             TransactionHeader transactionHeader = await _headerRepository.GetTransactionHeaderAsync(id, posClientId);
-            await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, null));
-            await _headerRepository.DeleteTransactionHeaderAsync(id, posClientId);
+
+            DbTransaction dbTransaction = _dbAccessor.CreateDbTransaction();
+            try
+            {
+
+                await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(dbTransaction, this.CreateFrom(transactionHeader, null));
+                await _headerRepository.DeleteTransactionHeaderAsync(dbTransaction, id, posClientId);
+
+                _dbAccessor.CommitDbTransaction(dbTransaction);
+            }
+            catch (Exception ex)
+            {
+                _dbAccessor.RollbackDbTransaction(dbTransaction);
+                throw;
+            }
         }
 
         public async Task<PostedTransactionHeader> PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
         {
-            PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, paymentMethod));
-
-            foreach (PostedTransactionLine line in this.CreateFrom(transactionHeader.Lines))
+            
+            DbTransaction dbTransaction = _dbAccessor.CreateDbTransaction();
+            try
             {
-                await _postedTransactionLineRepository.CreatePostedTransactionLineAsync(transactionHeader.Id, transactionHeader.PosClientId, line);
-            }
+                PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(dbTransaction, this.CreateFrom(transactionHeader, paymentMethod));
+                foreach (PostedTransactionLine line in this.CreateFrom(transactionHeader.Lines))
+                {
+                    await _postedTransactionLineRepository.CreatePostedTransactionLineAsync(dbTransaction, transactionHeader.Id, transactionHeader.PosClientId, line);
+                }
 
-            await _headerRepository.DeleteTransactionHeaderAsync(transactionHeader.Id, transactionHeader.PosClientId);
-            return postedTransactionHeader;
+                await _headerRepository.DeleteTransactionHeaderAsync(dbTransaction, transactionHeader.Id, transactionHeader.PosClientId);
+                _dbAccessor.CommitDbTransaction(dbTransaction);
+                return postedTransactionHeader;
+            }
+            catch (Exception ex)
+            {
+                _dbAccessor.RollbackDbTransaction(dbTransaction);
+                throw;
+            }
         }
 
         public async Task<TransactionHeader?> RemoveItemAsync(long transactionId, long posClientId, long lineId)

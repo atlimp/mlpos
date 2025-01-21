@@ -5,6 +5,7 @@ using MLPos.Data.Postgres.Helpers;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +20,9 @@ namespace MLPos.Data.Postgres
             _connectionString = connectionString;
         }
 
-        public async Task<PostedTransactionHeader> CreatePostedTransactionHeaderAsync(PostedTransactionHeader transactionHeader)
+        public async Task<PostedTransactionHeader> CreatePostedTransactionHeaderAsync(DbTransaction transaction, PostedTransactionHeader transactionHeader)
         {
-            IEnumerable<PostedTransactionHeader> transactionHeaders = await SqlHelper.ExecuteQuery(_connectionString,
+            IEnumerable<PostedTransactionHeader> transactionHeaders = await SqlHelper.ExecuteQuery(transaction as NpgsqlTransaction,
                 "INSERT INTO POSTEDTRANSACTIONHEADER(id, status, posclient_id, customer_id, paymentmethod_id) VALUES (@id, @status, @posclient_id, @customer_id, @paymentmethod_id) RETURNING id, status, posclient_id, customer_id, paymentmethod_id, date_inserted, date_updated",
                 MapToPostedTransactionHeader,
                 new Dictionary<string, object>() {
