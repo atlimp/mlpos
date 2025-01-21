@@ -66,6 +66,10 @@ interface ApiParams {
 interface PosProps {
   refreshTransactions: () => void;
 }
+interface HeaderProps {
+  onSelectLanguage: (languageId: string) => void;
+  selectedLanguage: string;
+}
 
 interface TransactionListProps {
   transactions: TransactionSummary[];
@@ -106,4 +110,9 @@ interface ConfirmDialogProps {
   message: string;
   onConfirm: () => void;
   onCancel: () => void;
+}
+
+interface LocalizedStrings {
+  languageId: string;
+  strings: { [key: string]: string };
 }

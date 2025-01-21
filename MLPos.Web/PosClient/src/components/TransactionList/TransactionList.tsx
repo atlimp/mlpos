@@ -2,7 +2,7 @@
 import TransactionSummary from "../TransactionSummary/TransactionSummary";
 import plusIcon from "../../assets/icons/plus.png";
 import { useState, useContext } from "react";
-import { PosClientIdContext } from "../../context";
+import { PosClientIdContext, LocalizedStringsContext } from "../../context";
 import Api from "../../api/api";
 import CustomerSelect from "../CustomerSelect/CustomerSelect";
 
@@ -11,6 +11,7 @@ function TransactionList({
   refreshTransactions,
 }: TransactionListProps) {
   const { posClientId } = useContext(PosClientIdContext);
+  const { localizedStrings } = useContext(LocalizedStringsContext);
   const [customerSelect, setCustomerSelect] = useState<boolean>(false);
 
   const onCustomerSelected = async (customerId: number) => {
@@ -38,7 +39,9 @@ function TransactionList({
         </div>
 
         <div className="transactionSummaryDetails">
-          <div className="transactionName">Add transaction</div>
+          <div className="transactionName">
+            {localizedStrings.strings["AddTransaction"]}
+          </div>
           <div className="transactionTotal"></div>
         </div>
       </div>
