@@ -21,3 +21,5 @@ INSERT INTO PAYMENTMETHOD(name, description, image) VALUES('Millifært', 'Vinsaml
 INSERT INTO PAYMENTMETHOD(name, description, image) VALUES('Aur', 'Vinsamlega borgaðu {amount} kr. með Aur með símanúmer 58-12345', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKszQVt1ulGzdMZ9EzaWWI0j2BBFMbKzmQFg&s');
 
 INSERT INTO POSCLIENT(name, description) VALUES('Aðal client', '');
+
+INSERT INTO mluser(username, hashed_password) values('admin', 'AQAAAAIAAYagAAAAEA8zdhBEDyKqPmKQyal7ioUlBWldfOYVGT7b1eIbexJE6H+yJFgtqdXTHr4KhAw+yg==');

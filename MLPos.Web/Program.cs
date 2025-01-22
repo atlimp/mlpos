@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
 using MLPos.Core.Interfaces.Repositories;
 using MLPos.Core.Interfaces.Services;
+using MLPos.Core.Model;
 using MLPos.Data.Postgres;
 using MLPos.Services;
 using MLPos.Web.Middleware;
@@ -47,6 +49,7 @@ public class Program
         builder.Services.AddHttpContextAccessor();
 
         builder.Logging.AddLog4Net();
+
 
         builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
         builder.Services.AddMvc()
@@ -125,17 +128,19 @@ public class Program
         services.AddScoped<ITransactionLineRepository, MLPos.Data.Postgres.TransactionLineRepository>(r => new TransactionLineRepository(connectionString));
         services.AddScoped<IPostedTransactionHeaderRepository, MLPos.Data.Postgres.PostedTransactionHeaderRepository>(r => new PostedTransactionHeaderRepository(connectionString));
         services.AddScoped<IPostedTransactionLineRepository, MLPos.Data.Postgres.PostedTransactionLineRepository>(r => new PostedTransactionLineRepository(connectionString));
+        services.AddScoped<IUserRepository, MLPos.Data.Postgres.UserRepository>(r => new UserRepository(connectionString));
         services.AddScoped<IDbContext, MLPos.Data.Postgres.DbContext>(r => new DbContext(connectionString));
     }
 
     private static void InitServices(IServiceCollection services)
     {
+        services.AddTransient<IPasswordHasher<User>, PasswordHasher<User>>();
         services.AddTransient<IProductService, ProductService>();
         services.AddTransient<ICustomerService, CustomerService>();
         services.AddTransient<IPaymentMethodService, PaymentMethodService>();
         services.AddTransient<IPosClientService, PosClientService>();
         services.AddTransient<IImageService, ImageService>();
         services.AddTransient<ITransactionService, TransactionService>();
-        services.AddTransient<ILoginService, SimpleLoginService>();
+        services.AddTransient<ILoginService, LoginService>();
     }
 }
