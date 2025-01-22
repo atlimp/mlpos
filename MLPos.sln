@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\validate_build.yml = .github\workflows\validate_build.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MLPos.Utilities", "MLPos.Utilities\MLPos.Utilities.csproj", "{D36DC8A5-5B47-45F0-BB2D-41D9F2576A4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{0B95218D-8F54-4422-9EC3-FFBA259F3B42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B95218D-8F54-4422-9EC3-FFBA259F3B42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B95218D-8F54-4422-9EC3-FFBA259F3B42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D36DC8A5-5B47-45F0-BB2D-41D9F2576A4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D36DC8A5-5B47-45F0-BB2D-41D9F2576A4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D36DC8A5-5B47-45F0-BB2D-41D9F2576A4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D36DC8A5-5B47-45F0-BB2D-41D9F2576A4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
