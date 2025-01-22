@@ -15,7 +15,7 @@ public class PaymentMethodRepository : RepositoryBase, IPaymentMethodRepository
     public async Task<PaymentMethod> GetPaymentMethodAsync(long id)
     {
         IEnumerable<PaymentMethod> paymentMethods = await this.ExecuteQuery(
-            "SELECT id, name, description, image, date_inserted, date_updated FROM PAYMENTMETHOD WHERE id = @id",
+            "SELECT id, name, description, image, date_inserted, date_updated FROM PAYMENTMETHOD WHERE id = @id AND date_deleted IS NULL",
             MapToPaymentMethod,
             new Dictionary<string, object>(){ ["@id"] = id }
         );
@@ -31,7 +31,7 @@ public class PaymentMethodRepository : RepositoryBase, IPaymentMethodRepository
     public async Task<IEnumerable<PaymentMethod>> GetPaymentMethodsAsync()
     {
         return await this.ExecuteQuery(
-            "SELECT id, name, description, image, date_inserted, date_updated FROM PAYMENTMETHOD",
+            "SELECT id, name, description, image, date_inserted, date_updated FROM PAYMENTMETHOD WHERE date_deleted IS NULL ORDER BY name",
             MapToPaymentMethod);
     }
 
@@ -55,7 +55,7 @@ public class PaymentMethodRepository : RepositoryBase, IPaymentMethodRepository
     public async Task<PaymentMethod> UpdatePaymentMethodAsync(PaymentMethod paymentMethod)
     {
         IEnumerable<PaymentMethod> paymentMethods = await this.ExecuteQuery(
-            @"UPDATE PAYMENTMETHOD SET name = @name, description = @description, image = @image WHERE id = @id RETURNING id, name, description, image, date_inserted, date_updated",
+            @"UPDATE PAYMENTMETHOD SET name = @name, description = @description, image = @image WHERE id = @id AND date_deleted IS NULL RETURNING id, name, description, image, date_inserted, date_updated",
             MapToPaymentMethod,
             new Dictionary<string, object>(){ ["@id"] = paymentMethod.Id, ["@name"] = paymentMethod.Name, ["@description"] = paymentMethod.Description, ["@image"] = paymentMethod.Image }
         );
@@ -70,13 +70,13 @@ public class PaymentMethodRepository : RepositoryBase, IPaymentMethodRepository
 
     public async Task DeletePaymentMethodAsync(long id)
     {
-        await this.ExecuteNonQuery("DELETE FROM PAYMENTMETHOD WHERE id=@id", new Dictionary<string, object>(){ ["@id"] = id });
+        await this.ExecuteNonQuery("UPDATE PAYMENTMETHOD SET date_deleted=CURRENT_TIMESTAMP WHERE id=@id", new Dictionary<string, object>(){ ["@id"] = id });
     }
 
     public async Task<bool> PaymentMethodExistsAsync(long id)
     {
         IEnumerable<PaymentMethod> paymentMethods = await this.ExecuteQuery(
-            "select id from PAYMENTMETHOD where id = @id",
+            "SELECT id FROM PAYMENTMETHOD WHERE id = @id AND date_deleted IS NULL",
             (reader =>
                 new PaymentMethod()
                 {

@@ -18,7 +18,7 @@ namespace MLPos.Data.Postgres
         public async Task<PosClient> GetPosClientAsync(long id)
         {
             IEnumerable<PosClient> posClients = await this.ExecuteQuery(
-                "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE id = @id",
+                "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE id = @id AND date_deleted IS NULL",
                 MapToPosClient,
                 new Dictionary<string, object>() { ["@id"] = id }
             );
@@ -34,7 +34,7 @@ namespace MLPos.Data.Postgres
         public async Task<IEnumerable<PosClient>> GetPosClientsAsync()
         {
             return await this.ExecuteQuery(
-                "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT",
+                "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE date_deleted IS NULL ORDER BY NAME",
                 MapToPosClient);
         }
 
@@ -58,7 +58,7 @@ namespace MLPos.Data.Postgres
         public async Task<PosClient> UpdatePosClientAsync(PosClient posClient)
         {
             IEnumerable<PosClient> posClients = await this.ExecuteQuery(
-                @"UPDATE POSCLIENT SET name = @name, description = @description, logincode = @logincode WHERE id = @id RETURNING id, name, description, logincode, date_inserted, date_updated",
+                @"UPDATE POSCLIENT SET name = @name, description = @description, logincode = @logincode WHERE id = @id AND date_deleted IS NULL RETURNING id, name, description, logincode, date_inserted, date_updated",
                 MapToPosClient,
                 new Dictionary<string, object>() { ["@id"] = posClient.Id, ["@name"] = posClient.Name, ["@description"] = posClient.Description, ["@logincode"] = posClient.LoginCode }
             );
@@ -73,13 +73,13 @@ namespace MLPos.Data.Postgres
 
         public async Task DeletePosClientAsync(long id)
         {
-            await this.ExecuteNonQuery("DELETE FROM POSCLIENT WHERE id=@id", new Dictionary<string, object>() { ["@id"] = id });
+            await this.ExecuteNonQuery("UPDATE POSCLIENT SET date_deleted=CURRENT_TIMESTAMP WHERE id=@id", new Dictionary<string, object>() { ["@id"] = id });
         }
 
         public async Task<bool> PosClientExistsAsync(long id)
         {
             IEnumerable<PosClient> posClients = await this.ExecuteQuery(
-                "select id from POSCLIENT where id = @id",
+                "SELECT id FROM POSCLIENT WHERE id = @id AND date_deleted IS NULL",
                 (reader =>
                     new PosClient()
                     {
