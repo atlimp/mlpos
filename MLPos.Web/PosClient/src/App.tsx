@@ -43,7 +43,6 @@ function App() {
   const getLocalizedStrings = async (languageId: string) => {
     const api = new Api({ posClientId: -1 });
     const strings = await api.getLocalizedStrings(languageId);
-    console.log(strings);
     setLocalizedStrings(strings);
   };
 
