@@ -26,14 +26,13 @@ public class SqlHelper
                 }
             }
 
-            var reader = await cmd.ExecuteReaderAsync();
-
-            while (reader.Read())
+            using (var reader = await cmd.ExecuteReaderAsync())
             {
-                result.Add(mapper(reader));
+                while (reader.Read())
+                {
+                    result.Add(mapper(reader));
+                }
             }
-
-            await reader.CloseAsync();
         }
 
         return result;

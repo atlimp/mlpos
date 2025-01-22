@@ -41,5 +41,13 @@ namespace MLPos.Data.Postgres
 
             await SqlHelper.ExecuteNonQuery(_dbContext.Connection as NpgsqlConnection, _dbContext.Transaction as NpgsqlTransaction, query, parameters);
         }
+
+        public void Dispose()
+        {
+            if (_dbContext != null)
+            {
+                _dbContext.Dispose();
+            }
+        }
     }
 }

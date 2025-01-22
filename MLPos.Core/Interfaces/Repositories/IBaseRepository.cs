@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MLPos.Core.Interfaces.Repositories
 {
-    public interface IBaseRepository
+    public interface IBaseRepository : IDisposable
     {
         public void SetDBContext(IDbContext dbContext);
     }
