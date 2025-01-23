@@ -252,6 +252,9 @@
   <data name="TotalAmount" xml:space="preserve">
     <value>Total amount</value>
   </data>
+  <data name="PosVisible" xml:space="preserve">
+    <value>Visible on POS</value>
+  </data>
   <data name="Id" xml:space="preserve">
     <value>Id</value>
   </data>

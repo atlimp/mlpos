@@ -15,7 +15,7 @@ namespace MLPos.Data.Postgres
         public async Task<Product> GetProductAsync(long id)
         {
             IEnumerable<Product> products = await this.ExecuteQuery(
-                "SELECT id, name, description, type, image, price, date_inserted, date_updated FROM PRODUCT WHERE id = @id AND date_deleted IS NULL",
+                "SELECT id, name, description, type, image, price, date_inserted, date_updated, date_deleted, visible_on_pos FROM PRODUCT WHERE id = @id",
                 MapToProduct,
                     new Dictionary<string, object>(){ ["@id"] = id }
                 );
@@ -31,17 +31,17 @@ namespace MLPos.Data.Postgres
         public async Task<IEnumerable<Product>> GetProductsAsync()
         {
             return await this.ExecuteQuery(
-                "SELECT id, name, description, type, image, price, date_inserted, date_updated FROM PRODUCT WHERE date_deleted IS NULL ORDER BY NAME",
+                "SELECT id, name, description, type, image, price, date_inserted, date_updated, date_deleted, visible_on_pos FROM PRODUCT WHERE date_deleted IS NULL ORDER BY NAME",
                 MapToProduct);
         }
 
         public async Task<Product> CreateProductAsync(Product product)
         {
             IEnumerable<Product> products = await this.ExecuteQuery(
-                @"INSERT INTO PRODUCT(name, description, type, image, price)
-                        VALUES(@name, @description, @type, @image, @price) RETURNING id, name, description, type, image, price, date_inserted, date_updated",
+                @"INSERT INTO PRODUCT(name, description, type, image, price, visible_on_pos)
+                        VALUES(@name, @description, @type, @image, @price, @visible_on_pos) RETURNING id, name, description, type, image, price, date_inserted, date_updated, date_deleted, visible_on_pos",
                 MapToProduct,
-                new Dictionary<string, object>(){ ["@name"] = product.Name, ["@description"] = product.Description, ["@type"] = (int)product.Type, ["@image"] = product.Image, ["@price"] = product.Price }
+                new Dictionary<string, object>(){ ["@name"] = product.Name, ["@description"] = product.Description, ["@type"] = (int)product.Type, ["@image"] = product.Image, ["@price"] = product.Price, ["@visible_on_pos"] = product.VisibleOnPos }
             );
         
             if (products.Any())
@@ -55,9 +55,9 @@ namespace MLPos.Data.Postgres
         public async Task<Product> UpdateProductAsync(Product product)
         {
             IEnumerable<Product> products = await this.ExecuteQuery(
-                @"UPDATE PRODUCT set name=@name, description = @description, type = @type, image = @image, price = @price WHERE id = @id AND date_deleted IS NULL RETURNING id, name, description, type, image, price, date_inserted, date_updated",
+                @"UPDATE PRODUCT set name=@name, description = @description, type = @type, image = @image, price = @price, visible_on_pos = @visible_on_pos WHERE id = @id AND date_deleted IS NULL RETURNING id, name, description, type, image, price, date_inserted, date_updated, date_deleted, visible_on_pos",
                 MapToProduct,
-                new Dictionary<string, object>(){ ["@id"] = product.Id, ["@name"] = product.Name, ["@description"] = product.Description, ["@type"] = (int)product.Type, ["@image"] = product.Image, ["@price"] = product.Price }
+                new Dictionary<string, object>(){ ["@id"] = product.Id, ["@name"] = product.Name, ["@description"] = product.Description, ["@type"] = (int)product.Type, ["@image"] = product.Image, ["@price"] = product.Price, ["@visible_on_pos"] = product.VisibleOnPos }
             );
         
             if (products.Any())
@@ -100,6 +100,8 @@ namespace MLPos.Data.Postgres
                 Price = (decimal)reader.GetDecimal(5),
                 DateInserted = reader.GetDateTime(6),
                 DateUpdated = reader.GetDateTime(7),
+                ReadOnly = !reader.SafeIsDBNull(8),
+                VisibleOnPos = reader.GetSafeBoolean(9),
             };
         }
     }

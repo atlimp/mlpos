@@ -28,5 +28,25 @@ namespace MLPos.Data.Postgres.Helpers
 
             return reader.GetString(columnIndex);
         }
+        public static bool GetSafeBoolean(this NpgsqlDataReader reader, int columnIndex)
+        {
+            if (reader.IsDBNull(columnIndex))
+            {
+                return false;
+            }
+
+            return reader.GetBoolean(columnIndex);
+        }
+        public static bool SafeIsDBNull(this NpgsqlDataReader reader, int columnIndex)
+        {
+            try
+            {
+                return reader.IsDBNull(columnIndex);
+            }
+            catch (Exception e)
+            {
+                return true;
+            }
+        }
     }
 }

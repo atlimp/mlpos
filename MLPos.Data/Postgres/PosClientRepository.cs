@@ -18,7 +18,7 @@ namespace MLPos.Data.Postgres
         public async Task<PosClient> GetPosClientAsync(long id)
         {
             IEnumerable<PosClient> posClients = await this.ExecuteQuery(
-                "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE id = @id AND date_deleted IS NULL",
+                "SELECT id, name, description, logincode, date_inserted, date_updated, date_deleted, visible_on_pos FROM POSCLIENT WHERE id = @id",
                 MapToPosClient,
                 new Dictionary<string, object>() { ["@id"] = id }
             );
@@ -34,17 +34,17 @@ namespace MLPos.Data.Postgres
         public async Task<IEnumerable<PosClient>> GetPosClientsAsync()
         {
             return await this.ExecuteQuery(
-                "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE date_deleted IS NULL ORDER BY NAME",
+                "SELECT id, name, description, logincode, date_inserted, date_updated, date_deleted, visible_on_pos FROM POSCLIENT WHERE date_deleted IS NULL ORDER BY NAME",
                 MapToPosClient);
         }
 
         public async Task<PosClient> CreatePosClientAsync(PosClient posClient)
         {
             IEnumerable<PosClient> posClients = await this.ExecuteQuery(
-                @"INSERT INTO POSCLIENT(name, description, logincode)
-                    VALUES(@name, @description, @logincode) RETURNING id, name, description, logincode, date_inserted, date_updated",
+                @"INSERT INTO POSCLIENT(name, description, logincode, visible_on_pos)
+                    VALUES(@name, @description, @logincode, @visible_on_pos) RETURNING id, name, description, logincode, date_inserted, date_updated, date_deleted, visible_on_pos",
                 MapToPosClient,
-                new Dictionary<string, object>() { ["@name"] = posClient.Name, ["@description"] = posClient.Description, ["@logincode"] = posClient.LoginCode }
+                new Dictionary<string, object>() { ["@name"] = posClient.Name, ["@description"] = posClient.Description, ["@logincode"] = posClient.LoginCode, ["@visible_on_pos"] = posClient.VisibleOnPos }
             );
 
             if (posClients.Any())
@@ -58,9 +58,9 @@ namespace MLPos.Data.Postgres
         public async Task<PosClient> UpdatePosClientAsync(PosClient posClient)
         {
             IEnumerable<PosClient> posClients = await this.ExecuteQuery(
-                @"UPDATE POSCLIENT SET name = @name, description = @description, logincode = @logincode WHERE id = @id AND date_deleted IS NULL RETURNING id, name, description, logincode, date_inserted, date_updated",
+                @"UPDATE POSCLIENT SET name = @name, description = @description, logincode = @logincode, visible_on_pos = @visible_on_pos WHERE id = @id AND date_deleted IS NULL RETURNING id, name, description, logincode, date_inserted, date_updated, date_deleted, visible_on_pos",
                 MapToPosClient,
-                new Dictionary<string, object>() { ["@id"] = posClient.Id, ["@name"] = posClient.Name, ["@description"] = posClient.Description, ["@logincode"] = posClient.LoginCode }
+                new Dictionary<string, object>() { ["@id"] = posClient.Id, ["@name"] = posClient.Name, ["@description"] = posClient.Description, ["@logincode"] = posClient.LoginCode, ["@visible_on_pos"] = posClient.VisibleOnPos }
             );
 
             if (posClients.Any())
@@ -94,7 +94,7 @@ namespace MLPos.Data.Postgres
         public async Task<PosClient> GetPosClientByLoginCodeAsync(string loginCode)
         {
             IEnumerable<PosClient> posClients = await this.ExecuteQuery(
-                            "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE logincode = @logincode",
+                            "SELECT id, name, description, logincode, date_inserted, date_updated, date_deleted, visible_on_pos FROM POSCLIENT WHERE logincode = @logincode",
                             MapToPosClient,
                             new Dictionary<string, object>() { ["@logincode"] = loginCode }
                         );
@@ -117,6 +117,8 @@ namespace MLPos.Data.Postgres
                 LoginCode = reader.GetSafeString(3),
                 DateInserted = reader.GetDateTime(4),
                 DateUpdated = reader.GetDateTime(5),
+                ReadOnly = !reader.SafeIsDBNull(6),
+                VisibleOnPos = !reader.SafeIsDBNull(7)
             };
         }
     }

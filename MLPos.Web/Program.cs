@@ -8,6 +8,7 @@ using MLPos.Data.Postgres;
 using MLPos.Services;
 using MLPos.Web.Middleware;
 using System.Globalization;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace MLPos.Web;
@@ -20,6 +21,11 @@ public class Program
 
         builder.Configuration
             .AddEnvironmentVariables("MLPOS_");
+
+        if (builder.Environment.IsDevelopment())
+        {
+            builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
+        }
 
         string connectionString = builder.Configuration.GetConnectionString("Postgres") ?? "";
         string DBUser = builder.Configuration["DBUser"] ?? "";

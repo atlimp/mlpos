@@ -50,7 +50,14 @@ public class PaymentMethodService : IPaymentMethodService
             validationErrors.Add(new ValidationError{ Error = $"Payment method with Id {paymentMethod.Id} does not exist!" });
             ret = false;
         }
-        
+
+        var fromDB = await _paymentMethodRepository.GetPaymentMethodAsync(paymentMethod.Id);
+        if (fromDB.ReadOnly)
+        {
+            validationErrors.Add(new ValidationError { Error = "Payment method is read only!" });
+            ret = false;
+        }
+
         return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
     }
 

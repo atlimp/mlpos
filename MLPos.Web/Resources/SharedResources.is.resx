@@ -270,4 +270,7 @@
   <data name="NextPage" xml:space="preserve">
     <value>Næsta síða</value>
   </data>
+  <data name="PosVisible" xml:space="preserve">
+    <value>Sýnilegt á útstöð</value>
+  </data>
 </root>

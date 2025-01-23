@@ -57,6 +57,13 @@ public class ProductService : IProductService
             ret = false;
         }
 
+        var fromDB = await _productRepository.GetProductAsync(product.Id);
+        if (fromDB.ReadOnly)
+        {
+            validationErrors.Add(new ValidationError { Error = "Product is read only!" });
+            ret = false;
+        }
+
         return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
     }
 

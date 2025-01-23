@@ -270,4 +270,7 @@
   <data name="NextPage" xml:space="preserve">
     <value>Next</value>
   </data>
+  <data name="PosVisible" xml:space="preserve">
+    <value>Visible on POS</value>
+  </data>
 </root>
