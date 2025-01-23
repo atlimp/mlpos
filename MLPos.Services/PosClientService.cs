@@ -63,6 +63,13 @@ namespace MLPos.Services
                 ret = false;
             }
 
+            fromDB = await _posClientRepository.GetPosClientByLoginCodeAsync(posClient.LoginCode);
+            if (fromDB != null)
+            {
+                validationErrors.Add(new ValidationError { Error = $"Pos client {fromDB.Id} already has login code {fromDB.LoginCode}!" });
+                ret = false;
+            }
+
             return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
         }
 
@@ -77,6 +84,20 @@ namespace MLPos.Services
             {
                 validationErrors.Add(new ValidationError { Error = $"Pos client with Id {posClient.Id} already exists!" });
                 ret = false;
+            }
+
+            try
+            {
+                var fromDB = await _posClientRepository.GetPosClientByLoginCodeAsync(posClient.LoginCode);
+                if (fromDB != null)
+                {
+                    validationErrors.Add(new ValidationError { Error = $"Pos client {fromDB.Id} already has login code {fromDB.LoginCode}!" });
+                    ret = false;
+                }
+            }
+            catch
+            {
+
             }
 
             return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
