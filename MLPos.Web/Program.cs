@@ -135,6 +135,7 @@ public class Program
         services.AddScoped<IPostedTransactionHeaderRepository, MLPos.Data.Postgres.PostedTransactionHeaderRepository>(r => new PostedTransactionHeaderRepository(connectionString));
         services.AddScoped<IPostedTransactionLineRepository, MLPos.Data.Postgres.PostedTransactionLineRepository>(r => new PostedTransactionLineRepository(connectionString));
         services.AddScoped<IUserRepository, MLPos.Data.Postgres.UserRepository>(r => new UserRepository(connectionString));
+        services.AddScoped<IInventoryRepository, MLPos.Data.Postgres.InventoryRepository>(r => new InventoryRepository(connectionString));
         services.AddScoped<IDbContext, MLPos.Data.Postgres.DbContext>(r => new DbContext(connectionString));
     }
 
@@ -148,5 +149,6 @@ public class Program
         services.AddTransient<IImageService, ImageService>();
         services.AddTransient<ITransactionService, TransactionService>();
         services.AddTransient<ILoginService, LoginService>();
+        services.AddTransient<ITransactionPostingService, TransactionPostingService>();
     }
 }
