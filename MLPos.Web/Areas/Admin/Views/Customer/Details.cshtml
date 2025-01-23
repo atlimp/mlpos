@@ -48,6 +48,10 @@
                         @SharedLocalizer["Email"]:
                         @Html.TextBoxFor(m => m.Customer.Email, new { id = "email", type = "email", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
                     </label>
+                    <label class="inputLabel" for="posVisible">
+                        @SharedLocalizer["PosVisible"]:
+                        @Html.CheckBoxFor(m => m.Customer.VisibleOnPos, new { id = "posVisible", @class = "formInput checkbox" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
 
                     @if (Model.Customer != null && Model.Customer.DateInserted != DateTime.MinValue)
                     {

@@ -15,7 +15,7 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
     public async Task<Customer> GetCustomerAsync(long id)
     {
         IEnumerable<Customer> customers = await this.ExecuteQuery(
-            "SELECT id, name, email, image, date_inserted, date_updated, date_deleted FROM CUSTOMER WHERE id = @id",
+            "SELECT id, name, email, image, date_inserted, date_updated, date_deleted, visible_on_pos FROM CUSTOMER WHERE id = @id",
             MapToCustomer,
                 new Dictionary<string, object>(){ ["@id"] = id }
             );
@@ -31,17 +31,17 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
     public async Task<IEnumerable<Customer>> GetCustomersAsync()
     {
         return await this.ExecuteQuery(
-            "SELECT id, name, email, image, date_inserted, date_updated FROM CUSTOMER WHERE date_deleted IS NULL ORDER BY name",
+            "SELECT id, name, email, image, date_inserted, date_updated, date_deleted, visible_on_pos FROM CUSTOMER WHERE date_deleted IS NULL ORDER BY name",
             MapToCustomer);
     }
 
     public async Task<Customer> CreateCustomerAsync(Customer customer)
     {
         IEnumerable<Customer> customers = await this.ExecuteQuery(
-            @"INSERT INTO CUSTOMER(name, email, image)
-                    VALUES(@name, @email, @image) RETURNING id, name, email, image, date_inserted, date_updated",
+            @"INSERT INTO CUSTOMER(name, email, image, visible_on_pos)
+                    VALUES(@name, @email, @image, @visible_on_pos) RETURNING id, name, email, image, date_inserted, date_updated, date_deleted, visible_on_pos",
             MapToCustomer,
-            new Dictionary<string, object>(){ ["@name"] = customer.Name, ["@email"] = customer.Email, ["@image"] = customer.Image }
+            new Dictionary<string, object>(){ ["@name"] = customer.Name, ["@email"] = customer.Email, ["@image"] = customer.Image, ["@visible_on_pos"] = customer.VisibleOnPos }
         );
         
         if (customers.Any())
@@ -55,9 +55,9 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
     public async Task<Customer> UpdateCustomerAsync(Customer customer)
     {
         IEnumerable<Customer> customers = await this.ExecuteQuery(
-            @"UPDATE CUSTOMER SET name = @name, email = @email, image = @image WHERE id = @id AND date_deleted IS NULL RETURNING id, name, email, image, date_inserted, date_updated",
+            @"UPDATE CUSTOMER SET name = @name, email = @email, image = @image, visible_on_pos = @visible_on_pos WHERE id = @id AND date_deleted IS NULL RETURNING id, name, email, image, date_inserted, date_updated, date_deleted, visible_on_pos",
             MapToCustomer,
-            new Dictionary<string, object>(){ ["@id"] = customer.Id, ["@name"] = customer.Name, ["@email"] = customer.Email, ["@image"] = customer.Image }
+            new Dictionary<string, object>(){ ["@id"] = customer.Id, ["@name"] = customer.Name, ["@email"] = customer.Email, ["@image"] = customer.Image, ["@visible_on_pos"] = customer.VisibleOnPos }
         );
         
         if (customers.Any())
@@ -98,7 +98,8 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
             Image = reader.GetSafeString(3),
             DateInserted = reader.GetDateTime(4),
             DateUpdated = reader.GetDateTime(5),
-            ReadOnly = !reader.SafeIsDBNull(6)
+            ReadOnly = !reader.SafeIsDBNull(6),
+            VisibleOnPos = reader.GetSafeBoolean(7)
         };
     }
 }

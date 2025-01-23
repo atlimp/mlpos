@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MLPos.Core.Interfaces.Repositories;
 using MLPos.Core.Interfaces.Services;
+using MLPos.Core.Model;
 
 namespace MLPos.Web.Controllers
 {
@@ -19,7 +20,14 @@ namespace MLPos.Web.Controllers
         [HttpGet("{loginCode}")]
         public async Task<IActionResult> GetPosClientByLoginCode(string loginCode)
         {
-            return Ok(await _posClientService.GetPosClientByLoginCodeAsync(loginCode));
+            PosClient client = await _posClientService.GetPosClientByLoginCodeAsync(loginCode);
+
+            if (!client.VisibleOnPos)
+            {
+                return NotFound();
+            }
+
+            return Ok(client);
         }
     }
 }

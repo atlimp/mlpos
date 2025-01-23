@@ -49,6 +49,10 @@
                         @SharedLocalizer["Description"]:
                         @Html.TextAreaFor(m => m.PaymentMethod.Description, new { id = "description", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
                     </label>
+                    <label class="inputLabel" for="posVisible">
+                        @SharedLocalizer["PosVisible"]:
+                        @Html.CheckBoxFor(m => m.PaymentMethod.VisibleOnPos, new { id = "posVisible", @class = "formInput checkbox" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
 
                     @if (Model.PaymentMethod != null && Model.PaymentMethod.DateInserted != DateTime.MinValue)
                     {

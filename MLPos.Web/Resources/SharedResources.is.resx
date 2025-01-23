@@ -252,4 +252,7 @@
   <data name="TotalAmount" xml:space="preserve">
     <value>Upphæð alls</value>
   </data>
+  <data name="PosVisible" xml:space="preserve">
+    <value>Sýnilegt á útstöð</value>
+  </data>
 </root>
