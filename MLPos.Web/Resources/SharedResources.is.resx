@@ -228,4 +228,28 @@
   <data name="LoginCode" xml:space="preserve">
     <value>Innskráningarkóði</value>
   </data>
+  <data name="SalesTransactions" xml:space="preserve">
+    <value>Færsluskrá sölu</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Viðskiptamaður</value>
+  </data>
+  <data name="Posted" xml:space="preserve">
+    <value>Bókað</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Hætt við</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Dags.</value>
+  </data>
+  <data name="PaymentMethod" xml:space="preserve">
+    <value>Greiðslutegund</value>
+  </data>
+  <data name="TransactionStatus" xml:space="preserve">
+    <value>Bókunarstaða</value>
+  </data>
+  <data name="TotalAmount" xml:space="preserve">
+    <value>Upphæð alls</value>
+  </data>
 </root>

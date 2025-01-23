@@ -1,0 +1,61 @@
+@using MLPos.Web.Models
+@using MLPos.Core.Model
+@using MLPos.Web.Utils
+@using Microsoft.Extensions.Localization
+@using MLPos.Web
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model SalesTransactionListViewModel
+@{
+    Layout = "_Admin_Layout";
+    ViewData["Title"] = SharedLocalizer["SalesTransactions"];
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/SalesTransactions.css">
+}
+
+@section Scripts {
+}
+
+
+<div class="container pageContainer">
+    <div class="container titleContainer">
+        <div>
+            <h1>@SharedLocalizer["SalesTransactions"]</h1>
+        </div>
+    </div>
+    <div class="container tableContainer">
+        <table class="transactionTable salesTransactionTable">
+            <thead class="tableHeader">
+                <tr>
+                    <th><div class="tableCol salesId">@SharedLocalizer["Id"]</div></th>
+                    <th><div class="tableCol salesStatus">@SharedLocalizer["TransactionStatus"]</div></th>
+                    <th><div class="tableCol salesDate">@SharedLocalizer["Date"]</div></th>
+                    <th><div class="tableCol salesCustomer">@SharedLocalizer["Customer"]</div></th>
+                    <th><div class="tableCol salesPaymentMethod">@SharedLocalizer["PaymentMethod"]</div></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var transactionHeader in Model.Transactions)
+                {
+                        <tr>
+                            <td><a class="tableCol salesId" href="@Url.Action("Details", "Sales", new { transactionId = transactionHeader.Id, posClientId = transactionHeader.PosClientId })">@transactionHeader.Id</a></td>
+                            <td><div class="tableCol salesStatus">@SharedLocalizer[transactionHeader.Status.ToString()]</div></td>
+                            <td><div class="tableCol salesDate">@transactionHeader.DateInserted.ToShortDateString()</div></td>
+                            <td><div class="tableCol salesCustomer">@transactionHeader.Customer.Name</div></td>
+                            <td><div class="tableCol salesPaymentMethod">@transactionHeader.PaymentMethod.Name</div></td>
+                        </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="pageNav">
+        @if (Model.PageNum > 1) {
+            <a class="pageNavLink pagePrev" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum - 1 })">Previous</a>
+        }
+        <div class="pageNavTitle currPage">@Model.PageNum</div>
+        @if (Model.HasMorePages) {
+            <a class="pageNavLink pageNext" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum + 1 })">Next</a>
+        }
+    </div>
+</div>
