@@ -40,6 +40,19 @@ namespace MLPos.Data.Postgres
             return null;
         }
 
+        public async Task<IEnumerable<PostedTransactionLine>> GetPostedTransactionLinesAsync(long transactionId, long posClientId)
+        {
+            return await this.ExecuteQuery(
+                @"SELECT id, product_id, amount, quantity, date_inserted, date_updated FROM POSTEDTRANSACTIONLINE WHERE transaction_id = @transaction_id AND posclient_id = @posclient_id",
+                MapToPostedTransactionLine,
+                new Dictionary<string, object>()
+                {
+                    ["@transaction_id"] = transactionId,
+                    ["@posclient_id"] = posClientId,
+                }
+            );
+        }
+
         private PostedTransactionLine MapToPostedTransactionLine(NpgsqlDataReader reader)
         {
             return new PostedTransactionLine()

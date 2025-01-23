@@ -19,5 +19,7 @@ namespace MLPos.Core.Interfaces.Services
         public Task<PostedTransactionHeader> PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod);
         public Task<TransactionSummary> GetTransactionSummaryAsync(long transactionId, long posClientId);
         public Task<IEnumerable<TransactionSummary>> GetAllTransactionSummaryAsync(long posClientId);
+        public Task<IEnumerable<PostedTransactionHeader>> GetPostedTransactionHeadersAsync(int limit, int offset);
+        public Task<PostedTransactionHeader> GetPostedTransactionHeaderAsync(long transactionId, long posClientId);
     }
 }

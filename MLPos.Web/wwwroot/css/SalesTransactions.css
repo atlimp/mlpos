@@ -1,0 +1,136 @@
+.tableContainer {
+    padding-right: 2em;
+}
+
+.salesTransactionTable {
+    border: 1px solid var(--platinum);
+    width: 100%;
+    height: fit-content;
+}
+
+.salesTransactionTable td, .salesTransactionTable tr {
+    height: 2em;
+    line-height: 2em;
+}
+
+.salesTransactionTable tr:nth-child(2n) {
+    background: var(--platinum);
+}
+
+.salesId {
+    width: 2.5em;
+    text-align: left;
+}
+
+.salesStatus {
+    width: 3.5em;
+    text-align: left;
+}
+
+.salesDate {
+    width: 6em;
+    text-align: left;
+}
+
+.salesCustomer {
+    width: 10em;
+    text-align: left;
+}
+
+.salesPaymentMethod {
+    width: 6em;
+    text-align: left;
+}
+
+.transactionDetailsContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding-right: 2em;
+    margin-bottom: 2em;
+}
+
+.transactionImageContainer {
+    width: 15em;
+    height: 15em;
+    background-color: var(--white);
+    border: 1px dotted var(--platinum);
+    border-radius: 50%;
+    overflow: hidden;
+    margin: auto;
+}
+
+.transactionImage {
+    max-width: 15em;
+    max-height: 15em;
+    width: auto;
+    height: auto;
+}
+
+.transactionDetails {
+    max-width: 32em;
+}
+
+.transactionDetail {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.transactionDetailTitle {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-right: 2em;
+}
+
+.transactionDetailValue {
+    display: flex;
+    text-align: right;
+}
+
+.transactionDetailValue > div, .transactionDetailValue > a {
+    margin: auto;
+    text-align: right;
+}
+
+
+
+@media(min-width: 600px) {
+    .salesId {
+        width: 2.5em;
+        text-align: left;
+    }
+
+    .salesStatus {
+        width: 5em;
+        text-align: left;
+    }
+
+    .salesDate {
+        width: 6em;
+        text-align: left;
+    }
+
+    .salesCustomer {
+        width: 100%;
+        text-align: left;
+    }
+
+    .salesPaymentMethod {
+        width: 100%;
+        text-align: left;
+    }
+
+    .transactionDetailsContainer {
+        flex-direction: row;
+    }
+
+    .transactionDetails {
+        margin: auto;
+    }
+
+    .transactionImageContainer {
+        margin: auto auto auto 4em;
+    }
+

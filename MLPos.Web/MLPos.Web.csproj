@@ -15,6 +15,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Remove="Areas\Admin\Views\Sales\Details.cshtml" />
+      <Content Remove="Areas\Admin\Views\Sales\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Remove="PosClient\src\api\api.ts" />
       <None Remove="PosClient\src\assets\logo.png" />
       <None Remove="PosClient\src\components\Pos\Pos.tsx" />
@@ -46,6 +51,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <AdditionalFiles Include="Areas\Admin\Views\Sales\Details.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Sales\Index.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Customer\Details.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Customer\Index.cshtml" />
       <AdditionalFiles Include="Views\Login\Index.cshtml" />

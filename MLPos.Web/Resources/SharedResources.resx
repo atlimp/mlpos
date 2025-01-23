@@ -228,4 +228,28 @@
   <data name="LoginCode" xml:space="preserve">
     <value>Login code</value>
   </data>
+  <data name="SalesTransactions" xml:space="preserve">
+    <value>Sales transactions</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="Posted" xml:space="preserve">
+    <value>Posted</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="PaymentMethod" xml:space="preserve">
+    <value>Payment method</value>
+  </data>
+  <data name="TransactionStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="TotalAmount" xml:space="preserve">
+    <value>Total amount</value>
+  </data>
 </root>

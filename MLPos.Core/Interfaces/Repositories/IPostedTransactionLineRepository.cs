@@ -11,5 +11,6 @@ namespace MLPos.Core.Interfaces.Repositories
     public interface IPostedTransactionLineRepository : IBaseRepository
     {
         public Task<PostedTransactionLine> CreatePostedTransactionLineAsync(long transactionId, long posClientId, PostedTransactionLine line);
+        public Task<IEnumerable<PostedTransactionLine>> GetPostedTransactionLinesAsync(long transactionId, long posClientId);
     }
 }

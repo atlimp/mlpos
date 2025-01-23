@@ -203,7 +203,48 @@
 .deleteButton {
     width: 100%;
     background-color: red;
+    height: 4em;
+}
+
+.pageNav {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.pageNavLink {
+    width: 4em;
+}
+
+.pageNavTitle {
+    width: 4em;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, tr, th, td {
+    border: none;
+    height: auto;
+}
+
+.tableCol {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-left: 0.25em;
     height: 2em;
+    line-height: 2em;
+}
+
+.tableContainer {
+    overflow: auto;
+}
+
+.tableHeader {
+    font-weight: bold;
+    background: var(--platinum);
 }
 
 @media(min-width: 600px) {

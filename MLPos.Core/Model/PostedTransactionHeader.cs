@@ -14,5 +14,6 @@ namespace MLPos.Core.Model
         public Customer Customer { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public IEnumerable<PostedTransactionLine> Lines { get; set; } = Enumerable.Empty<PostedTransactionLine>();
+        public decimal TotalAmount => Lines.Sum(x => x.Amount);
     }
 }

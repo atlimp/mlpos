@@ -22,6 +22,7 @@ namespace MLPos.Services
         private readonly IPosClientRepository _posClientRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IPaymentMethodRepository _paymentMethodRepository;
 
         private readonly IDbContext _dbContext;
 
@@ -32,6 +33,7 @@ namespace MLPos.Services
             IPosClientRepository posClientRepository,
             ICustomerRepository customerRepository,
             IProductRepository productRepository,
+            IPaymentMethodRepository paymentMethodRepository,
             IDbContext dbContext)
         {
             _headerRepository = headerRepository;
@@ -41,6 +43,7 @@ namespace MLPos.Services
             _posClientRepository = posClientRepository;
             _customerRepository = customerRepository;
             _productRepository = productRepository;
+            _paymentMethodRepository = paymentMethodRepository;
             _dbContext = dbContext;
         }
 
@@ -103,49 +106,14 @@ namespace MLPos.Services
         public async Task DeleteTransactionAsync(long id, long posClientId)
         {
             TransactionHeader transactionHeader = await _headerRepository.GetTransactionHeaderAsync(id, posClientId);
-            _postedTransactionHeaderRepository.SetDBContext(_dbContext);
-            _headerRepository.SetDBContext(_dbContext);
-
-            try
-            {
-                _dbContext.BeginDbTransaction();
-
-                await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, null));
-                await _headerRepository.DeleteTransactionHeaderAsync(id, posClientId);
-
-                _dbContext.CommitDbTransaction();
-            }
-            catch (Exception ex)
-            {
-                _dbContext.RollbackDbTransaction();
-                throw;
-            }
+            await PostTransaction(transactionHeader, null);
         }
 
         public async Task<PostedTransactionHeader> PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
         {
-            _postedTransactionHeaderRepository.SetDBContext(_dbContext);
-            _postedTransactionLineRepository.SetDBContext(_dbContext);
-            _headerRepository.SetDBContext(_dbContext);
-            try
-            {
-                _dbContext.BeginDbTransaction();
+            PostedTransactionHeader postedTransaction = await PostTransaction(transactionHeader, paymentMethod);
 
-                PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, paymentMethod));
-                foreach (PostedTransactionLine line in this.CreateFrom(transactionHeader.Lines))
-                {
-                    await _postedTransactionLineRepository.CreatePostedTransactionLineAsync(transactionHeader.Id, transactionHeader.PosClientId, line);
-                }
-
-                await _headerRepository.DeleteTransactionHeaderAsync(transactionHeader.Id, transactionHeader.PosClientId);
-                _dbContext.CommitDbTransaction();
-                return postedTransactionHeader;
-            }
-            catch (Exception ex)
-            {
-                _dbContext.RollbackDbTransaction();
-                throw;
-            }
+            return postedTransaction;
         }
 
         public async Task<TransactionHeader?> RemoveItemAsync(long transactionId, long posClientId, long lineId)
@@ -175,6 +143,68 @@ namespace MLPos.Services
         public async Task<IEnumerable<TransactionSummary>> GetAllTransactionSummaryAsync(long posClientId)
         {
             return await _headerRepository.GetAllTransactionSummaryAsync(posClientId);
+        }
+
+        public async Task<IEnumerable<PostedTransactionHeader>> GetPostedTransactionHeadersAsync(int limit, int offset)
+        {
+            IEnumerable<PostedTransactionHeader> transactionHeaders = await _postedTransactionHeaderRepository.GetPostedTransactionHeadersAsync(limit, offset);
+
+            foreach (PostedTransactionHeader transactionHeader in transactionHeaders)
+            {
+                transactionHeader.Customer = await _customerRepository.GetCustomerAsync(transactionHeader.Customer.Id);
+
+                if (transactionHeader.PaymentMethod.Id != -1)
+                {
+                    transactionHeader.PaymentMethod = await _paymentMethodRepository.GetPaymentMethodAsync(transactionHeader.PaymentMethod.Id);
+                }
+            }
+
+            return transactionHeaders;
+        }
+
+        public async Task<PostedTransactionHeader> GetPostedTransactionHeaderAsync(long transactionId, long posClientId)
+        {
+            PostedTransactionHeader postedTransaction = await _postedTransactionHeaderRepository.GetPostedTransactionHeaderAsync(transactionId, posClientId);
+            postedTransaction.Customer = await _customerRepository.GetCustomerAsync(postedTransaction.Customer.Id);
+
+            if (postedTransaction.PaymentMethod.Id != -1)
+            {
+                postedTransaction.PaymentMethod = await _paymentMethodRepository.GetPaymentMethodAsync(postedTransaction.PaymentMethod.Id);
+            }
+            postedTransaction.Lines = await _postedTransactionLineRepository.GetPostedTransactionLinesAsync(postedTransaction.Id, postedTransaction.PosClientId);
+
+            foreach (var line in postedTransaction.Lines)
+            {
+                line.Product = await _productRepository.GetProductAsync(line.Product.Id);
+            }
+
+            return postedTransaction;
+        }
+
+        private async Task<PostedTransactionHeader> PostTransaction(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
+        {
+            _postedTransactionHeaderRepository.SetDBContext(_dbContext);
+            _postedTransactionLineRepository.SetDBContext(_dbContext);
+            _headerRepository.SetDBContext(_dbContext);
+            try
+            {
+                _dbContext.BeginDbTransaction();
+
+                PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, paymentMethod));
+                foreach (PostedTransactionLine line in this.CreateFrom(transactionHeader.Lines))
+                {
+                    await _postedTransactionLineRepository.CreatePostedTransactionLineAsync(transactionHeader.Id, transactionHeader.PosClientId, line);
+                }
+
+                await _headerRepository.DeleteTransactionHeaderAsync(transactionHeader.Id, transactionHeader.PosClientId);
+                _dbContext.CommitDbTransaction();
+                return postedTransactionHeader;
+            }
+            catch (Exception ex)
+            {
+                _dbContext.RollbackDbTransaction();
+                throw;
+            }
         }
 
         private PostedTransactionHeader CreateFrom(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
