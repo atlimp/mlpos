@@ -29,3 +29,14 @@ ALTER TABLE CUSTOMER ADD IF NOT EXISTS visible_on_pos boolean DEFAULT TRUE;
 ALTER TABLE PAYMENTMETHOD ADD IF NOT EXISTS visible_on_pos boolean DEFAULT TRUE;
 ALTER TABLE POSCLIENT ADD IF NOT EXISTS visible_on_pos boolean DEFAULT TRUE;
 ALTER TABLE MLUSER ADD IF NOT EXISTS visible_on_pos boolean DEFAULT TRUE;
+
+CREATE TABLE IF NOT EXISTS INVENTORYTRANSACTION(
+    type int DEFAULT 0,
+    transaction_id bigint,
+    posclient_id bigint,
+    line_id bigint,
+    product_id bigint REFERENCES PRODUCT(id),
+    quantity decimal,
+    date_inserted timestamp DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(transaction_id, posclient_id, line_id) REFERENCES POSTEDTRANSACTIONLINE(transaction_id, posclient_id, id)
+);
