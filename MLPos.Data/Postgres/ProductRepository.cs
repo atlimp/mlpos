@@ -15,7 +15,7 @@ namespace MLPos.Data.Postgres
         public async Task<Product> GetProductAsync(long id)
         {
             IEnumerable<Product> products = await this.ExecuteQuery(
-                "SELECT id, name, description, type, image, price, date_inserted, date_updated FROM PRODUCT WHERE id = @id",
+                "SELECT id, name, description, type, image, price, date_inserted, date_updated FROM PRODUCT WHERE id = @id AND date_deleted IS NULL",
                 MapToProduct,
                     new Dictionary<string, object>(){ ["@id"] = id }
                 );
@@ -31,7 +31,7 @@ namespace MLPos.Data.Postgres
         public async Task<IEnumerable<Product>> GetProductsAsync()
         {
             return await this.ExecuteQuery(
-                "SELECT id, name, description, type, image, price, date_inserted, date_updated FROM PRODUCT",
+                "SELECT id, name, description, type, image, price, date_inserted, date_updated FROM PRODUCT WHERE date_deleted IS NULL ORDER BY NAME",
                 MapToProduct);
         }
 
@@ -55,7 +55,7 @@ namespace MLPos.Data.Postgres
         public async Task<Product> UpdateProductAsync(Product product)
         {
             IEnumerable<Product> products = await this.ExecuteQuery(
-                @"UPDATE PRODUCT set name=@name, description = @description, type = @type, image = @image, price = @price WHERE id = @id RETURNING id, name, description, type, image, price, date_inserted, date_updated",
+                @"UPDATE PRODUCT set name=@name, description = @description, type = @type, image = @image, price = @price WHERE id = @id AND date_deleted IS NULL RETURNING id, name, description, type, image, price, date_inserted, date_updated",
                 MapToProduct,
                 new Dictionary<string, object>(){ ["@id"] = product.Id, ["@name"] = product.Name, ["@description"] = product.Description, ["@type"] = (int)product.Type, ["@image"] = product.Image, ["@price"] = product.Price }
             );
@@ -70,13 +70,13 @@ namespace MLPos.Data.Postgres
 
         public async Task DeleteProductAsync(long id)
         {
-            await this.ExecuteNonQuery("DELETE FROM PRODUCT WHERE id=@id", new Dictionary<string, object>(){ ["@id"] = id });
+            await this.ExecuteNonQuery("UPDATE PRODUCT SET date_deleted = CURRENT_TIMESTAMP WHERE id = @id", new Dictionary<string, object>(){ ["@id"] = id });
         }
 
         public async Task<bool> ProductExistsAsync(long id)
         {
             IEnumerable<Product> products = await this.ExecuteQuery(
-                "SELECT id FROM PRODUCT WHERE id = @id",
+                "SELECT id FROM PRODUCT WHERE id = @id AND date_deleted IS NULL",
                 (reader =>
                     new Product()
                     {

@@ -15,7 +15,7 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
     public async Task<Customer> GetCustomerAsync(long id)
     {
         IEnumerable<Customer> customers = await this.ExecuteQuery(
-            "SELECT id, name, email, image, date_inserted, date_updated FROM CUSTOMER WHERE id = @id",
+            "SELECT id, name, email, image, date_inserted, date_updated FROM CUSTOMER WHERE id = @id AND date_deleted IS NULL",
             MapToCustomer,
                 new Dictionary<string, object>(){ ["@id"] = id }
             );
@@ -31,7 +31,7 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
     public async Task<IEnumerable<Customer>> GetCustomersAsync()
     {
         return await this.ExecuteQuery(
-            "SELECT id, name, email, image, date_inserted, date_updated FROM CUSTOMER",
+            "SELECT id, name, email, image, date_inserted, date_updated FROM CUSTOMER WHERE date_deleted IS NULL ORDER BY name",
             MapToCustomer);
     }
 
@@ -55,7 +55,7 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
     public async Task<Customer> UpdateCustomerAsync(Customer customer)
     {
         IEnumerable<Customer> customers = await this.ExecuteQuery(
-            @"UPDATE CUSTOMER SET name = @name, email = @email, image = @image WHERE id = @id RETURNING id, name, email, image, date_inserted, date_updated",
+            @"UPDATE CUSTOMER SET name = @name, email = @email, image = @image WHERE id = @id AND date_deleted IS NULL RETURNING id, name, email, image, date_inserted, date_updated",
             MapToCustomer,
             new Dictionary<string, object>(){ ["@id"] = customer.Id, ["@name"] = customer.Name, ["@email"] = customer.Email, ["@image"] = customer.Image }
         );
@@ -70,13 +70,13 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
 
     public async Task DeleteCustomerAsync(long id)
     {
-        await this.ExecuteNonQuery("DELETE FROM CUSTOMER WHERE id=@id", new Dictionary<string, object>(){ ["@id"] = id });
+        await this.ExecuteNonQuery("UPDATE CUSTOMER SET date_deleted=CURRENT_TIMESTAMP WHERE id=@id", new Dictionary<string, object>(){ ["@id"] = id });
     }
 
     public async Task<bool> CustomerExistsAsync(long id)
     {
         IEnumerable<Customer> customers = await this.ExecuteQuery(
-            "select id from customer where id = @id",
+            "SELECT id FROM CUSTOMER WHERE id = @id AND date_deleted IS NULL",
             (reader =>
                 new Customer()
                 {

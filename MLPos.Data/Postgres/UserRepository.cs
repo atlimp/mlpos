@@ -35,13 +35,13 @@ namespace MLPos.Data.Postgres
 
         public async Task DeleteUserAsync(long id)
         {
-            await this.ExecuteNonQuery("DELETE FROM MLUSER WHERE id=@id", new Dictionary<string, object>() { ["@id"] = id });
+            await this.ExecuteNonQuery("UPDATE MLUSER SET hashed_password='', date_deleted=CURRENT_TIMESTAMP WHERE id=@id", new Dictionary<string, object>() { ["@id"] = id });
         }
 
         public async Task<User> GetUserByIdAsync(long id)
         {
             IEnumerable<User> users = await this.ExecuteQuery(
-                            "SELECT id, username, hashed_password, email, image, date_inserted, date_updated FROM MLUSER WHERE id = @id",
+                            "SELECT id, username, hashed_password, email, image, date_inserted, date_updated FROM MLUSER WHERE id = @id AND date_deleted IS NULL",
                             MapToUser,
                                 new Dictionary<string, object>() { ["@id"] = id }
                             );
@@ -57,7 +57,7 @@ namespace MLPos.Data.Postgres
         public async Task<User> GetUserByUsernameAsync(string username)
         {
             IEnumerable<User> users = await this.ExecuteQuery(
-                            "SELECT id, username, hashed_password, email, image, date_inserted, date_updated FROM MLUSER WHERE username = @username",
+                            "SELECT id, username, hashed_password, email, image, date_inserted, date_updated FROM MLUSER WHERE username = @username AND date_deleted IS NULL",
                             MapToUser,
                                 new Dictionary<string, object>() { ["@username"] = username }
                             );
@@ -74,7 +74,7 @@ namespace MLPos.Data.Postgres
         {
             IEnumerable<User> users = await this.ExecuteQuery(
                             @"UPDATE MLUSER set username = @username, hashed_password = @hashed_password, email = @email, image = @image
-                                WHERE id = @id RETURNING id, username, hashed_password, email, image, date_inserted, date_updated",
+                                WHERE id = @id AND date_deleted IS NULL RETURNING id, username, hashed_password, email, image, date_inserted, date_updated",
                             MapToUser,
                             new Dictionary<string, object>() { ["@id"] = user.Id, ["@username"] = user.Username, ["@hashed_password"] = user.HashedPassword, ["@email"] = user.Email, ["@image"] = user.Image }
                         );
