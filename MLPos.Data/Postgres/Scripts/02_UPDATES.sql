@@ -40,3 +40,35 @@ CREATE TABLE IF NOT EXISTS INVENTORYTRANSACTION(
     date_inserted timestamp DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(transaction_id, posclient_id, line_id) REFERENCES POSTEDTRANSACTIONLINE(transaction_id, posclient_id, id)
 );
+
+CREATE OR REPLACE VIEW INVENTORYBALANCES AS (
+    WITH LastKnownBalance AS (
+    SELECT t1.quantity last_balance, t1.product_id, t1.date_inserted last_balance_date FROM inventorytransaction t1 JOIN (
+	    SELECT t2.product_id, max(t2.date_inserted) timestamp
+		    FROM inventorytransaction t2
+		    WHERE type = 1 GROUP BY t2.product_id) max
+	    ON t1.product_id = max.product_id AND t1.date_inserted = max.timestamp
+	    WHERE type = 1
+    ),
+    TransactionsAfterReset AS (
+        SELECT
+            t.product_id,
+            SUM(t.quantity) AS transaction_sum
+        FROM 
+            INVENTORYTRANSACTION t
+        JOIN 
+            LastKnownBalance lkb
+            ON t.product_id = lkb.product_id
+            AND t.date_inserted > lkb.last_balance_date
+        GROUP BY
+            t.product_id
+    )
+    SELECT
+        lkb.product_id,
+        (lkb.last_balance - COALESCE(ta.transaction_sum, 0)) AS current_balance
+    FROM 
+        LastKnownBalance lkb
+    LEFT JOIN 
+        TransactionsAfterReset ta
+        ON lkb.product_id = ta.product_id
+);
