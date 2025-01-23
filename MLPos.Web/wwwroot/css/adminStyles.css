@@ -191,6 +191,56 @@
 .formInput {
 }
 
+input[type=checkbox]:disabled {
+    background-color: var(--platinum);
+}
+
+.checkbox {
+    height: 2em;
+    appearance: none;
+    background-color: var(--platinum);
+    border-radius: 1em;
+    border-style: none;
+    flex-shrink: 0;
+    margin: 0;
+    position: relative;
+    width: 4em;
+}
+
+.checkbox:checked {
+    background-color: var(--green);
+}
+
+.checkbox:checked::after {
+    background-color: var(--white);
+    left: 2em;
+}
+
+.checkbox::before {
+    bottom: -6px;
+    content: "";
+    left: -6px;
+    position: absolute;
+    right: -6px;
+    top: -6px;
+}
+
+.checkbox,
+.checkbox::after {
+    transition: all 250ms ease-out;
+}
+
+.checkbox::after {
+    background-color: #fff;
+    border-radius: 50%;
+    content: "";
+    height: 1.75em;
+    left: 2px;
+    position: absolute;
+    top: 2px;
+    width: 1.75em;
+}
+
 .hideCard {
     display: none;
 }

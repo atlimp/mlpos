@@ -21,8 +21,9 @@ namespace MLPos.Web.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllCustomers()
         {
-            return Ok(await _customerService.GetCustomersAsync());
+            IEnumerable<Customer> customers = await _customerService.GetCustomersAsync();
 
+            return Ok(customers.Where(x => x.VisibleOnPos));
         }
 
         [HttpGet("{id}")]
@@ -30,7 +31,7 @@ namespace MLPos.Web.Controllers
         {
             Customer customer = await _customerService.GetCustomerAsync(id);
             
-            if (customer == null)
+            if (customer == null || !customer.VisibleOnPos)
             {
                 return NotFound();
             }
