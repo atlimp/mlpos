@@ -56,6 +56,13 @@ namespace MLPos.Services
                 ret = false;
             }
 
+            var fromDB = await _posClientRepository.GetPosClientAsync(posClient.Id);
+            if (fromDB.ReadOnly)
+            {
+                validationErrors.Add(new ValidationError { Error = "Pos client is read only!" });
+                ret = false;
+            }
+
             return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
         }
 

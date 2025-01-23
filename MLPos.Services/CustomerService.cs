@@ -57,6 +57,13 @@ public class CustomerService : ICustomerService
             ret = false;
         }
 
+        var fromDB = await _customerRepository.GetCustomerAsync(customer.Id);
+        if (fromDB.ReadOnly)
+        {
+            validationErrors.Add(new ValidationError{ Error = "Customer is read only!" });
+            ret = false;
+        }
+
         return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
     }
 
