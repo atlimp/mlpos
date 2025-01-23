@@ -81,7 +81,7 @@
             <div class="formButtons">
                 <a class="button buttonSecondary formButton" href="@Url.Action("Index")">@SharedLocalizer["Back"]</a>
         
-                @if (!Model.Product.ReadOnly)
+                @if (Model.Product == null || !Model.Product.ReadOnly)
                 {
                     @if (!Model.Editing)
                     {

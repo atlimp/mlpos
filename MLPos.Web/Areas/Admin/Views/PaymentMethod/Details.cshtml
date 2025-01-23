@@ -64,7 +64,7 @@
             <div class="formButtons">
                 <a class="button buttonSecondary formButton" href="@Url.Action("Index")">@SharedLocalizer["Back"]</a>
                 
-                @if (!Model.PaymentMethod.ReadOnly)
+                @if (Model.PaymentMethod == null || !Model.PaymentMethod.ReadOnly)
                 {
                     @if (!Model.Editing)
                     {
