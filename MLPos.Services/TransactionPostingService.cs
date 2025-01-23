@@ -16,23 +16,30 @@ namespace MLPos.Services
         private readonly ITransactionHeaderRepository _headerRepository;
         private readonly IPostedTransactionHeaderRepository _postedTransactionHeaderRepository;
         private readonly IPostedTransactionLineRepository _postedTransactionLineRepository;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IProductRepository _productRepository;
 
         private readonly IDbContext _dbContext;
 
         public TransactionPostingService(ITransactionHeaderRepository headerRepository,
             IPostedTransactionHeaderRepository postedTransactionHeaderRepository,
             IPostedTransactionLineRepository postedTransactionLineRepository,
+            IInventoryRepository inventoryRepository,
+            IProductRepository productRepository,
             IDbContext dbContext)
         {
             _headerRepository = headerRepository;
             _postedTransactionHeaderRepository = postedTransactionHeaderRepository;
             _postedTransactionLineRepository = postedTransactionLineRepository;
+            _inventoryRepository = inventoryRepository;
+            _productRepository = productRepository;
             _dbContext = dbContext;
         }
 
         public async Task<PostedTransactionHeader> PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
         {
             PostedTransactionHeader postedTransaction = await PostTransaction(transactionHeader, paymentMethod);
+            await CreateInventoryTransactions(postedTransaction);
 
             return postedTransaction;
         }
@@ -48,10 +55,14 @@ namespace MLPos.Services
                 _dbContext.BeginDbTransaction();
 
                 PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, paymentMethod));
+
+                List<PostedTransactionLine> postedTransactionLines = new List<PostedTransactionLine>();
                 foreach (PostedTransactionLine line in this.CreateFrom(transactionHeader.Lines))
                 {
-                    await _postedTransactionLineRepository.CreatePostedTransactionLineAsync(transactionHeader.Id, transactionHeader.PosClientId, line);
+                    postedTransactionLines.Add(await _postedTransactionLineRepository.CreatePostedTransactionLineAsync(transactionHeader.Id, transactionHeader.PosClientId, line));
                 }
+
+                postedTransactionHeader.Lines = postedTransactionLines;
 
                 await _headerRepository.DeleteTransactionHeaderAsync(transactionHeader.Id, transactionHeader.PosClientId);
                 _dbContext.CommitDbTransaction();
@@ -61,6 +72,27 @@ namespace MLPos.Services
             {
                 _dbContext.RollbackDbTransaction();
                 throw;
+            }
+        }
+
+        private async Task CreateInventoryTransactions(PostedTransactionHeader transactionHeader)
+        {
+            foreach (var line in transactionHeader.Lines)
+            {
+                Product product = await _productRepository.GetProductAsync(line.Product.Id);
+
+                if (product.Type == ProductType.Item)
+                {
+                    InventoryTransaction inventoryTransaction = new InventoryTransaction();
+                    inventoryTransaction.Type = InventoryTransactionType.Sale;
+                    inventoryTransaction.TransactionId = transactionHeader.Id;
+                    inventoryTransaction.PosClientId = transactionHeader.PosClientId;
+                    inventoryTransaction.TransactionLineId = line.Id;
+                    inventoryTransaction.ProductId = product.Id;
+                    inventoryTransaction.Quantity = line.Quantity;
+
+                    await _inventoryRepository.CreateInventoryTransactionAsync(inventoryTransaction);
+                }
             }
         }
 
