@@ -72,6 +72,7 @@ public class CustomerController : AdminControllerBase
         {
             model.NewCustomer = false;
             model.Customer = customer;
+            model.Editing = model.Editing && !model.Customer.ReadOnly;
         }
             
         

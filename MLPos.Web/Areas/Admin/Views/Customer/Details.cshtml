@@ -62,14 +62,17 @@
 
             <div class="formButtons">
                 <a class="button buttonSecondary formButton" href="@Url.Action("Index")">@SharedLocalizer["Back"]</a>
-        
-                @if (!Model.Editing)
+                
+                @if (!Model.Customer.ReadOnly)
                 {
-                    <a class="button buttonPrimary formButton" href="@formAction">@SharedLocalizer["Edit"]</a>
-                }
-                else
-                {
-                    <button class="button buttonPrimary formButton" type="submit">@submitBtnText</button>
+                    @if (!Model.Editing)
+                    {
+                        <a class="button buttonPrimary formButton" href="@formAction">@SharedLocalizer["Edit"]</a>
+                    }
+                    else
+                    {
+                        <button class="button buttonPrimary formButton" type="submit">@submitBtnText</button>
+                    }
                 }
             </div>
             @Html.CheckBoxFor(m => m.NewCustomer, new { hidden = "hidden", @checked = Model.NewCustomer })
