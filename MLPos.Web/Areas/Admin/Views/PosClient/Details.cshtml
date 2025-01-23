@@ -43,6 +43,10 @@
                         @SharedLocalizer["LoginCode"]:
                         @Html.TextBoxFor(m => m.PosClient.LoginCode, new { id = "logincode", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
                     </label>
+                    <label class="inputLabel" for="posVisible">
+                        @SharedLocalizer["PosVisible"]:
+                        @Html.CheckBoxFor(m => m.PosClient.VisibleOnPos, new { id = "posVisible", @class = "formInput checkbox" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
 
                     @if (Model.PosClient != null && Model.PosClient.DateInserted != DateTime.MinValue)
                     {

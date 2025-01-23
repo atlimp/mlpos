@@ -66,6 +66,10 @@
                         @SharedLocalizer["Price"]:
                         @Html.TextBoxFor(m => m.Product.Price, new { id = "price", type = "number", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
                     </label>
+                    <label class="inputLabel" for="posVisible">
+                        @SharedLocalizer["PosVisible"]:
+                        @Html.CheckBoxFor(m => m.Product.VisibleOnPos, new { id = "posVisible", @class = "formInput checkbox" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
 
                     @if (Model.Product != null && Model.Product.DateInserted != DateTime.MinValue)
                     {

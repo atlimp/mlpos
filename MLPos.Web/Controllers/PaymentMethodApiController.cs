@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MLPos.Core.Interfaces.Services;
 using MLPos.Core.Model;
+using MLPos.Services;
 
 namespace MLPos.Web.Controllers
 {
@@ -19,7 +20,9 @@ namespace MLPos.Web.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllPaymentMethods()
         {
-            return Ok(await _paymentMethodService.GetPaymentMethodsAsync());
+            IEnumerable<PaymentMethod> customers = await _paymentMethodService.GetPaymentMethodsAsync();
+
+            return Ok(customers.Where(x => x.VisibleOnPos));
         }
 
         [HttpGet("{id}")]
@@ -27,7 +30,7 @@ namespace MLPos.Web.Controllers
         {
             PaymentMethod paymentMethod = await _paymentMethodService.GetPaymentMethodAsync(id);
 
-            if (paymentMethod == null)
+            if (paymentMethod == null || !paymentMethod.VisibleOnPos)
             {
                 return NotFound();
             }

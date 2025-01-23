@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MLPos.Core.Interfaces.Services;
 using MLPos.Core.Model;
+using MLPos.Services;
 
 namespace MLPos.Web.Controllers
 {
@@ -19,7 +20,9 @@ namespace MLPos.Web.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllProducts()
         {
-            return Ok(await _productService.GetProductsAsync());
+            IEnumerable<Product> products = await _productService.GetProductsAsync();
+
+            return Ok(products.Where(x => x.VisibleOnPos));
         }
 
         [HttpGet("{id}")]
@@ -27,7 +30,7 @@ namespace MLPos.Web.Controllers
         {
             Product product = await _productService.GetProductAsync(id);
 
-            if (product == null)
+            if (product == null || !product.VisibleOnPos)
             {
                 return NotFound();
             }
