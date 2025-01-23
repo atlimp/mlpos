@@ -15,7 +15,7 @@ public class PaymentMethodRepository : RepositoryBase, IPaymentMethodRepository
     public async Task<PaymentMethod> GetPaymentMethodAsync(long id)
     {
         IEnumerable<PaymentMethod> paymentMethods = await this.ExecuteQuery(
-            "SELECT id, name, description, image, date_inserted, date_updated FROM PAYMENTMETHOD WHERE id = @id AND date_deleted IS NULL",
+            "SELECT id, name, description, image, date_inserted, date_updated, date_deleted FROM PAYMENTMETHOD WHERE id = @id",
             MapToPaymentMethod,
             new Dictionary<string, object>(){ ["@id"] = id }
         );
@@ -97,6 +97,7 @@ public class PaymentMethodRepository : RepositoryBase, IPaymentMethodRepository
             Image = reader.GetSafeString(3),
             DateInserted = reader.GetDateTime(4),
             DateUpdated = reader.GetDateTime(5),
+            ReadOnly = !reader.SafeIsDBNull(6)
         };
     }
 }

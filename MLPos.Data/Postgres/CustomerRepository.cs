@@ -15,7 +15,7 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
     public async Task<Customer> GetCustomerAsync(long id)
     {
         IEnumerable<Customer> customers = await this.ExecuteQuery(
-            "SELECT id, name, email, image, date_inserted, date_updated FROM CUSTOMER WHERE id = @id AND date_deleted IS NULL",
+            "SELECT id, name, email, image, date_inserted, date_updated, date_deleted FROM CUSTOMER WHERE id = @id",
             MapToCustomer,
                 new Dictionary<string, object>(){ ["@id"] = id }
             );
@@ -98,6 +98,7 @@ public class CustomerRepository : RepositoryBase, ICustomerRepository
             Image = reader.GetSafeString(3),
             DateInserted = reader.GetDateTime(4),
             DateUpdated = reader.GetDateTime(5),
+            ReadOnly = !reader.SafeIsDBNull(6)
         };
     }
 }

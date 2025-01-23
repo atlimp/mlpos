@@ -41,7 +41,7 @@ namespace MLPos.Data.Postgres
         public async Task<User> GetUserByIdAsync(long id)
         {
             IEnumerable<User> users = await this.ExecuteQuery(
-                            "SELECT id, username, hashed_password, email, image, date_inserted, date_updated FROM MLUSER WHERE id = @id AND date_deleted IS NULL",
+                            "SELECT id, username, hashed_password, email, image, date_inserted, date_updated, date_deleted FROM MLUSER WHERE id = @id",
                             MapToUser,
                                 new Dictionary<string, object>() { ["@id"] = id }
                             );
@@ -98,6 +98,7 @@ namespace MLPos.Data.Postgres
                 Image = reader.GetSafeString(4),
                 DateInserted = reader.GetDateTime(5),
                 DateUpdated = reader.GetDateTime(6),
+                ReadOnly = !reader.SafeIsDBNull(6)
             };
         }
     }

@@ -15,7 +15,7 @@ namespace MLPos.Data.Postgres
         public async Task<Product> GetProductAsync(long id)
         {
             IEnumerable<Product> products = await this.ExecuteQuery(
-                "SELECT id, name, description, type, image, price, date_inserted, date_updated FROM PRODUCT WHERE id = @id AND date_deleted IS NULL",
+                "SELECT id, name, description, type, image, price, date_inserted, date_updated, date_deleted FROM PRODUCT WHERE id = @id",
                 MapToProduct,
                     new Dictionary<string, object>(){ ["@id"] = id }
                 );
@@ -100,6 +100,7 @@ namespace MLPos.Data.Postgres
                 Price = (decimal)reader.GetDecimal(5),
                 DateInserted = reader.GetDateTime(6),
                 DateUpdated = reader.GetDateTime(7),
+                ReadOnly = !reader.SafeIsDBNull(8)
             };
         }
     }
