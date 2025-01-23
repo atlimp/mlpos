@@ -51,11 +51,11 @@
     </div>
     <div class="pageNav">
         @if (Model.PageNum > 1) {
-            <a class="pageNavLink pagePrev" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum - 1 })">Previous</a>
+            <a class="pageNavLink pagePrev" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum - 1 })">@SharedLocalizer["PreviousPage"]</a>
         }
         <div class="pageNavTitle currPage">@Model.PageNum</div>
         @if (Model.HasMorePages) {
-            <a class="pageNavLink pageNext" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum + 1 })">Next</a>
+            <a class="pageNavLink pageNext" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum + 1 })">@SharedLocalizer["NextPage"]</a>
         }
     </div>
 </div>
