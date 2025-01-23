@@ -264,4 +264,10 @@
   <data name="Amount" xml:space="preserve">
     <value>Upphæð</value>
   </data>
+  <data name="PreviousPage" xml:space="preserve">
+    <value>Fyrri síða</value>
+  </data>
+  <data name="NextPage" xml:space="preserve">
+    <value>Næsta síða</value>
+  </data>
 </root>
