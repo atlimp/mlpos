@@ -71,9 +71,10 @@ public class ProductController : AdminControllerBase
         {
             model.NewProduct = false;
             model.Product = product;
+            model.Editing = model.Editing && !model.Product.ReadOnly;
         }
-            
-        
+
+
         return View("Details", model);
     }
 

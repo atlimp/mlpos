@@ -72,9 +72,10 @@ public class PaymentMethodController : AdminControllerBase
         {
             model.NewPaymentMethod = false;
             model.PaymentMethod = paymentMethod;
+            model.Editing = model.Editing && !model.PaymentMethod.ReadOnly;
         }
-            
-        
+
+
         return View("Details", model);
     }
     

@@ -18,7 +18,7 @@ namespace MLPos.Data.Postgres
         public async Task<PosClient> GetPosClientAsync(long id)
         {
             IEnumerable<PosClient> posClients = await this.ExecuteQuery(
-                "SELECT id, name, description, logincode, date_inserted, date_updated FROM POSCLIENT WHERE id = @id AND date_deleted IS NULL",
+                "SELECT id, name, description, logincode, date_inserted, date_updated, date_deleted FROM POSCLIENT WHERE id = @id",
                 MapToPosClient,
                 new Dictionary<string, object>() { ["@id"] = id }
             );
@@ -117,6 +117,7 @@ namespace MLPos.Data.Postgres
                 LoginCode = reader.GetSafeString(3),
                 DateInserted = reader.GetDateTime(4),
                 DateUpdated = reader.GetDateTime(5),
+                ReadOnly = !reader.SafeIsDBNull(6)
             };
         }
     }

@@ -68,6 +68,7 @@ namespace MLPos.Web.Areas.Admin.Controllers
             {
                 model.NewPosClient = false;
                 model.PosClient = posClient;
+                model.Editing = model.Editing && !model.PosClient.ReadOnly;
             }
 
 
