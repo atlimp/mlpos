@@ -10,7 +10,6 @@ function ControlPanel({
   onFinishTransaction,
 }: ControlPanelProps) {
   const totals = transaction.lines.reduce((u, k) => u + k.amount, 0);
-
   return (
     <div className="controlPanel">
       <div className="transactionInfo">
@@ -23,7 +22,7 @@ function ControlPanel({
           onClick={onDeleteTransaction}
           className={
             "button buttonSecondary commandButton " +
-            (transaction.id == -1 && "disabled")
+            (transaction.id == -1 ? "disabled" : "")
           }
           id="deleteTransaction"
         >
@@ -35,7 +34,7 @@ function ControlPanel({
           onClick={onAddProduct}
           className={
             "button buttonPrimary commandButton " +
-            (transaction.id == -1 && "disabled")
+            (transaction.id == -1 ? "disabled" : "")
           }
           id="addItem"
         >
@@ -43,11 +42,13 @@ function ControlPanel({
         </button>
 
         <button
-          disabled={transaction.id == -1}
+          disabled={transaction.id == -1 || transaction.lines.length <= 0}
           onClick={onFinishTransaction}
           className={
             "button buttonPrimary commandButton " +
-            (transaction.id == -1 && "disabled")
+            (transaction.id == -1 || transaction.lines.length <= 0
+              ? "disabled"
+              : "")
           }
           id="finishTransaction"
         >

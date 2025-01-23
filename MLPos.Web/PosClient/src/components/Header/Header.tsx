@@ -18,16 +18,14 @@ function Header({ onSelectLanguage, selectedLanguage }: HeaderProps) {
     <div className="header">
       <img src={logo}></img>
       <select
+        value={selectedLanguage}
         className="languageSelect"
         onChange={(e: SyntheticEvent) =>
           onSelectLanguage((e.target as HTMLSelectElement).value)
         }
       >
         {supportedLanguages.map((language) => (
-          <option
-            value={language.code}
-            selected={language.code === selectedLanguage}
-          >
+          <option key={language.code} value={language.code}>
             {language.name}
           </option>
         ))}
