@@ -81,7 +81,7 @@
     max-width: 50em;
     flex-direction: column;
     width: 90%;
-    margin: auto;
+    margin: 2em auto;
     height: fit-content;
 }
 
@@ -99,7 +99,12 @@
     justify-content: flex-start;
     max-width: 1920px;
     height: auto;
+}
+
+.pageContentContainer {
     overflow-y: scroll;
+    flex-direction: column;
+    height: auto;
 }
 
 .pageTitle {
@@ -299,7 +304,7 @@ table, tr, th, td {
 }
 
 .sidebox {
-    margin-top: 5em;
+    margin-top: 3em;
     border: 1px solid var(--yellow);
     background: var(--platinum);
     border-radius: 10px;
@@ -355,11 +360,13 @@ table, tr, th, td {
     }
 
     .formContainer {
+        margin-top: 0;
         margin-left: 2em;
         margin-right: auto;
     }
 
-    .pageContainer {
+    .pageContentContainer {
         flex-direction: row;
+        margin: 0 auto;
     }
 }

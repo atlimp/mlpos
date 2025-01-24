@@ -18,71 +18,73 @@
 }
 
 <div class="container pageContainer">
-    <div class="container formContainer">
-        <ul class="validationErrors">
-            @if (Model.ValidationErrors != null && Model.ValidationErrors.Any())
-            {
-                @foreach (var error in Model.ValidationErrors)
+    <div class="container pageContentContainer">
+        <div class="container formContainer">
+            <ul class="validationErrors">
+                @if (Model.ValidationErrors != null && Model.ValidationErrors.Any())
                 {
-                    <li>@error.Error</li>
-                }
-            }
-        </ul>
-        <form class="editForm" method="POST" action="@formAction" enctype="multipart/form-data">
-            <div class="container detailsContainer">
-                <div>
-                    <label class="inputLabel" for="name">
-                        @SharedLocalizer["Name"]:
-                        @Html.TextBoxFor(m => m.PosClient.Name, new { id = "name", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
-                    </label>
-                    <label class="inputLabel" for="description">
-                        @SharedLocalizer["Description"]:
-                        @Html.TextAreaFor(m => m.PosClient.Description, new { id = "description", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
-                    </label>
-                    <label class="inputLabel" for="logincode">
-                        @SharedLocalizer["LoginCode"]:
-                        @Html.TextBoxFor(m => m.PosClient.LoginCode, new { id = "logincode", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
-                    </label>
-                    <label class="inputLabel" for="posVisible">
-                        @SharedLocalizer["PosVisible"]:
-                        @Html.CheckBoxFor(m => m.PosClient.VisibleOnPos, new { id = "posVisible", @class = "formInput checkbox" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
-                    </label>
-
-                    @if (Model.PosClient != null && Model.PosClient.DateInserted != DateTime.MinValue)
+                    @foreach (var error in Model.ValidationErrors)
                     {
-                        <p>@SharedLocalizer["PosClientCreatedAt", Model.PosClient.DateInserted]</p>
+                        <li>@error.Error</li>
                     }
-                    @if (Model.PosClient != null && Model.PosClient.DateUpdated != DateTime.MinValue && Model.PosClient.DateInserted != Model.PosClient?.DateUpdated)
+                }
+            </ul>
+            <form class="editForm" method="POST" action="@formAction" enctype="multipart/form-data">
+                <div class="container detailsContainer">
+                    <div>
+                        <label class="inputLabel" for="name">
+                            @SharedLocalizer["Name"]:
+                            @Html.TextBoxFor(m => m.PosClient.Name, new { id = "name", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                        </label>
+                        <label class="inputLabel" for="description">
+                            @SharedLocalizer["Description"]:
+                            @Html.TextAreaFor(m => m.PosClient.Description, new { id = "description", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                        </label>
+                        <label class="inputLabel" for="logincode">
+                            @SharedLocalizer["LoginCode"]:
+                            @Html.TextBoxFor(m => m.PosClient.LoginCode, new { id = "logincode", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                        </label>
+                        <label class="inputLabel" for="posVisible">
+                            @SharedLocalizer["PosVisible"]:
+                            @Html.CheckBoxFor(m => m.PosClient.VisibleOnPos, new { id = "posVisible", @class = "formInput checkbox" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                        </label>
+
+                        @if (Model.PosClient != null && Model.PosClient.DateInserted != DateTime.MinValue)
+                        {
+                            <p>@SharedLocalizer["PosClientCreatedAt", Model.PosClient.DateInserted]</p>
+                        }
+                        @if (Model.PosClient != null && Model.PosClient.DateUpdated != DateTime.MinValue && Model.PosClient.DateInserted != Model.PosClient?.DateUpdated)
+                        {
+                            <p>@SharedLocalizer["PosClientUpdatedAt", Model.PosClient.DateUpdated]</p>
+                        }
+                    </div>
+                </div>
+
+                <div class="formButtons">
+                    <a class="button buttonSecondary formButton" href="@Url.Action("Index")">@SharedLocalizer["Back"]</a>
+
+                    @if (Model.PosClient == null || !Model.PosClient.ReadOnly)
                     {
-                        <p>@SharedLocalizer["PosClientUpdatedAt", Model.PosClient.DateUpdated]</p>
+                        @if (!Model.Editing)
+                        {
+                            <a class="button buttonPrimary formButton" href="@formAction">@SharedLocalizer["Edit"]</a>
+                        }
+                        else
+                        {
+                            <button class="button buttonPrimary formButton" type="submit">@submitBtnText</button>
+                        }
                     }
                 </div>
-            </div>
+                @Html.CheckBoxFor(m => m.NewPosClient, new { hidden = "hidden", @checked = Model.NewPosClient })
+                @Html.TextBoxFor(m => m.PosClient.Id, new { hidden = "hidden" })
 
-            <div class="formButtons">
-                <a class="button buttonSecondary formButton" href="@Url.Action("Index")">@SharedLocalizer["Back"]</a>
-
-                @if (Model.PosClient == null || !Model.PosClient.ReadOnly)
-                {
-                    @if (!Model.Editing)
-                    {
-                        <a class="button buttonPrimary formButton" href="@formAction">@SharedLocalizer["Edit"]</a>
-                    }
-                    else
-                    {
-                        <button class="button buttonPrimary formButton" type="submit">@submitBtnText</button>
-                    }
-                }
-            </div>
-            @Html.CheckBoxFor(m => m.NewPosClient, new { hidden = "hidden", @checked = Model.NewPosClient })
-            @Html.TextBoxFor(m => m.PosClient.Id, new { hidden = "hidden" })
-
-        </form>
-        @if (Model.Editing && !Model.NewPosClient)
-        {
-            <form method="post" class="deleteForm" action="@Url.Action("Delete", "PosClient", new { id = Model.PosClient.Id })">
-                <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
             </form>
-        }
+            @if (Model.Editing && !Model.NewPosClient)
+            {
+                <form method="post" class="deleteForm" action="@Url.Action("Delete", "PosClient", new { id = Model.PosClient.Id })">
+                    <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
+                </form>
+            }
+        </div>
     </div>
 </div>
