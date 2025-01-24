@@ -1,6 +1,7 @@
 .adminContainer {
     flex-direction: column;
     justify-content: flex-start;
+    background-color: var(--white);
 }
 
 .headerContainer {
@@ -81,7 +82,7 @@
     max-width: 50em;
     flex-direction: column;
     width: 90%;
-    margin: auto;
+    margin: 2em auto;
     height: fit-content;
 }
 
@@ -99,7 +100,12 @@
     justify-content: flex-start;
     max-width: 1920px;
     height: auto;
+}
+
+.pageContentContainer {
     overflow-y: scroll;
+    flex-direction: column;
+    height: auto;
 }
 
 .pageTitle {
@@ -145,11 +151,15 @@
 
 .cardImageContainer {
     border-radius: 10px;
+    border: 1px solid var(--platinum);
     overflow: hidden;
     display: flex;
-    background-color: var(--platinum);
+    background-color: var(--white);
     height: 9em;
+    width: 12em;
+    margin: 0 auto;
     margin-bottom: 2em;
+
 }
 
 .cardImage {
@@ -299,7 +309,7 @@ table, tr, th, td {
 }
 
 .sidebox {
-    margin-top: 5em;
+    margin-top: 3em;
     border: 1px solid var(--yellow);
     background: var(--platinum);
     border-radius: 10px;
@@ -315,6 +325,7 @@ table, tr, th, td {
 
     .cardImageContainer {
         height: 12em;
+        width: 16em;
     }
 }
 @media(min-width: 850px) {
@@ -325,6 +336,7 @@ table, tr, th, td {
 
     .cardImageContainer {
         height: 13.5em;
+        width: 18em;
     }
 
     .adminContainer {
@@ -355,11 +367,13 @@ table, tr, th, td {
     }
 
     .formContainer {
+        margin-top: 0;
         margin-left: 2em;
         margin-right: auto;
     }
 
-    .pageContainer {
+    .pageContentContainer {
         flex-direction: row;
+        margin: 0 auto;
     }
 }
