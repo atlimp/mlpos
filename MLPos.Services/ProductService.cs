@@ -7,10 +7,12 @@ namespace MLPos.Services;
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
+    private readonly IInventoryRepository _inventoryRepository;
     
-    public ProductService(IProductRepository productRepository)
+    public ProductService(IProductRepository productRepository, IInventoryRepository inventoryRepository)
     {
-        _productRepository = productRepository;    
+        _productRepository = productRepository;
+        _inventoryRepository = inventoryRepository;
     }
     
     public async Task<Product> GetProductAsync(long id)
@@ -87,5 +89,15 @@ public class ProductService : IProductService
         }
         
         return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
+    }
+
+    public Task<int> GetProductInventoryAsync(long id)
+    {
+        return _inventoryRepository.GetProductInventoryStatusAsync(id);
+    }
+
+    public Task<IEnumerable<Tuple<long, int>>> GetProductInventoryAsync()
+    {
+        return _inventoryRepository.GetProductInventoryStatusAsync();
     }
 }

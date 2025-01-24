@@ -10,6 +10,7 @@ namespace MLPos.Core.Interfaces.Repositories
     public interface IInventoryRepository : IBaseRepository
     {
         public Task CreateInventoryTransactionAsync(InventoryTransaction transaction);
-        public Task<int> GetProductInventoryStatus(long productId);
+        public Task<int> GetProductInventoryStatusAsync(long productId);
+        public Task<IEnumerable<Tuple<long, int>>> GetProductInventoryStatusAsync();
     }
 }
