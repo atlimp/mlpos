@@ -1,0 +1,9 @@
+.inventoryDetail {
+    display: flex;
+    flex-direction: column;
+}
+
+.inventoryDetail a {
+    margin: auto;
+    margin-left: 0;
+}

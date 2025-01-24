@@ -216,7 +216,7 @@
   <data name="Update" xml:space="preserve">
     <value>Update</value>
   </data>
-  <data name="UpdatedCreatedAt" xml:space="preserve">
+  <data name="ProductUpdatedAt" xml:space="preserve">
     <value>Product updated at {0}</value>
   </data>
   <data name="Username" xml:space="preserve">
@@ -252,6 +252,9 @@
   <data name="TotalAmount" xml:space="preserve">
     <value>Total amount</value>
   </data>
+  <data name="PosVisible" xml:space="preserve">
+    <value>Visible on POS</value>
+  </data>
   <data name="Id" xml:space="preserve">
     <value>Id</value>
   </data>
@@ -270,7 +273,19 @@
   <data name="NextPage" xml:space="preserve">
     <value>Next</value>
   </data>
-  <data name="PosVisible" xml:space="preserve">
-    <value>Visible on POS</value>
+  <data name="EstimatedQuantity" xml:space="preserve">
+    <value>Estimated quantity</value>
+  </data>
+  <data name="UpdateInventory" xml:space="preserve">
+    <value>Update inventory</value>
+  </data>
+  <data name="Inventory" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+  <data name="InventoryStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="CountedQuantity" xml:space="preserve">
+    <value>Counted quantity</value>
   </data>
 </root>

@@ -111,6 +111,12 @@
       <Content Update="Areas\Admin\Views\Customer\Index.cshtml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Content Update="Areas\Admin\Views\Inventory\Edit.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Areas\Admin\Views\Inventory\Index.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Update="Areas\Admin\Views\PaymentMethod\Details.cshtml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>

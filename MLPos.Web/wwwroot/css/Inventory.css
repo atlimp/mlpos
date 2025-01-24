@@ -1,0 +1,29 @@
+.tableContainer {
+    padding-right: 2em;
+}
+
+.inventoryTable {
+    border: 1px solid var(--platinum);
+    width: 100%;
+    height: fit-content;
+}
+
+.inventoryTable td, .inventoryTable tr {
+    height: 2em;
+    line-height: 2em;
+}
+
+.inventoryTable tr:nth-child(2n) {
+    background: var(--platinum);
+}
+
+.productName {
+    width: 4em;
+    text-align: left;
+}
+
+.inventoryStatus {
+    width: 3.5em;
+    text-align: left;
+}
+

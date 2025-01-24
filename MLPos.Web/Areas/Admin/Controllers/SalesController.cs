@@ -4,7 +4,7 @@ using MLPos.Web.Controllers;
 using MLPos.Web.Models;
 using MLPos.Web.Utils;
 
-namespace MLPos.Web.Areas.Admin.Controllers
+namespace MLPos.Web.Controllers
 {
     [Area("Admin")]
     public class SalesController : AdminControllerBase

@@ -216,7 +216,7 @@
   <data name="Update" xml:space="preserve">
     <value>Uppfæra</value>
   </data>
-  <data name="UpdatedCreatedAt" xml:space="preserve">
+  <data name="ProductUpdatedAt" xml:space="preserve">
     <value>Vara uppfærð {0}</value>
   </data>
   <data name="Username" xml:space="preserve">
@@ -252,6 +252,9 @@
   <data name="TotalAmount" xml:space="preserve">
     <value>Upphæð alls</value>
   </data>
+  <data name="PosVisible" xml:space="preserve">
+    <value>Sýnilegt á útstöð</value>
+  </data>
   <data name="Id" xml:space="preserve">
     <value>Kenni</value>
   </data>
@@ -270,7 +273,19 @@
   <data name="NextPage" xml:space="preserve">
     <value>Næsta síða</value>
   </data>
-  <data name="PosVisible" xml:space="preserve">
-    <value>Sýnilegt á útstöð</value>
+  <data name="EstimatedQuantity" xml:space="preserve">
+    <value>Áætlað magn</value>
+  </data>
+  <data name="UpdateInventory" xml:space="preserve">
+    <value>Uppfæra birgðir</value>
+  </data>
+  <data name="Inventory" xml:space="preserve">
+    <value>Birgðir</value>
+  </data>
+  <data name="InventoryStatus" xml:space="preserve">
+    <value>Staða</value>
+  </data>
+  <data name="CountedQuantity" xml:space="preserve">
+    <value>Talið magn</value>
   </data>
 </root>

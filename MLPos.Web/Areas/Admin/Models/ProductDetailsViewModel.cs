@@ -7,5 +7,6 @@ public class ProductDetailsViewModel
     public bool Editing { get; set; }
     public bool NewProduct { get; set; }
     public Product Product { get; set; }
+    public ProductInventory Inventory { get; set; }
     public IEnumerable<ValidationError> ValidationErrors { get; set; }
 }

@@ -7,10 +7,12 @@ namespace MLPos.Services;
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
+    private readonly IInventoryRepository _inventoryRepository;
     
-    public ProductService(IProductRepository productRepository)
+    public ProductService(IProductRepository productRepository, IInventoryRepository inventoryRepository)
     {
-        _productRepository = productRepository;    
+        _productRepository = productRepository;
+        _inventoryRepository = inventoryRepository;
     }
     
     public async Task<Product> GetProductAsync(long id)
@@ -87,5 +89,33 @@ public class ProductService : IProductService
         }
         
         return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
+    }
+
+    public async Task<ProductInventory> GetProductInventoryAsync(long id)
+    {
+        Product product = await _productRepository.GetProductAsync(id);
+        int inventoryStatus = await _inventoryRepository.GetProductInventoryStatusAsync(id);
+        return new ProductInventory
+        {
+            Product = product,
+            Quantity = inventoryStatus
+        };
+    }
+
+    public async Task<IEnumerable<ProductInventory>> GetProductInventoryAsync()
+    {
+        var inventory = await _inventoryRepository.GetProductInventoryStatusAsync();
+
+        foreach (var inventoryItem in inventory)
+        {
+            inventoryItem.Product = await _productRepository.GetProductAsync(inventoryItem.Product.Id);
+        }
+
+        return inventory;
+    }
+
+    public async Task CreateInventoryTransactionAsync(InventoryTransaction transaction)
+    {
+        await _inventoryRepository.CreateInventoryTransactionAsync(transaction);
     }
 }

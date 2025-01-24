@@ -18,6 +18,7 @@ namespace MLPos.Services
         private readonly ITransactionLineRepository _lineRepository;
         private readonly IPostedTransactionHeaderRepository _postedTransactionHeaderRepository;
         private readonly IPostedTransactionLineRepository _postedTransactionLineRepository;
+        private readonly ITransactionPostingService _postingService;
 
         private readonly IPosClientRepository _posClientRepository;
         private readonly ICustomerRepository _customerRepository;
@@ -34,6 +35,7 @@ namespace MLPos.Services
             ICustomerRepository customerRepository,
             IProductRepository productRepository,
             IPaymentMethodRepository paymentMethodRepository,
+            ITransactionPostingService postingService,
             IDbContext dbContext)
         {
             _headerRepository = headerRepository;
@@ -44,6 +46,7 @@ namespace MLPos.Services
             _customerRepository = customerRepository;
             _productRepository = productRepository;
             _paymentMethodRepository = paymentMethodRepository;
+            _postingService = postingService;
             _dbContext = dbContext;
         }
 
@@ -106,12 +109,12 @@ namespace MLPos.Services
         public async Task DeleteTransactionAsync(long id, long posClientId)
         {
             TransactionHeader transactionHeader = await _headerRepository.GetTransactionHeaderAsync(id, posClientId);
-            await PostTransaction(transactionHeader, null);
+            await _postingService.PostTransactionAsync(transactionHeader, null);
         }
 
         public async Task<PostedTransactionHeader> PostTransactionAsync(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
         {
-            PostedTransactionHeader postedTransaction = await PostTransaction(transactionHeader, paymentMethod);
+            PostedTransactionHeader postedTransaction = await _postingService.PostTransactionAsync(transactionHeader, paymentMethod);
 
             return postedTransaction;
         }
@@ -179,77 +182,6 @@ namespace MLPos.Services
             }
 
             return postedTransaction;
-        }
-
-        private async Task<PostedTransactionHeader> PostTransaction(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
-        {
-            _postedTransactionHeaderRepository.SetDBContext(_dbContext);
-            _postedTransactionLineRepository.SetDBContext(_dbContext);
-            _headerRepository.SetDBContext(_dbContext);
-            try
-            {
-                _dbContext.BeginDbTransaction();
-
-                PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, paymentMethod));
-                foreach (PostedTransactionLine line in this.CreateFrom(transactionHeader.Lines))
-                {
-                    await _postedTransactionLineRepository.CreatePostedTransactionLineAsync(transactionHeader.Id, transactionHeader.PosClientId, line);
-                }
-
-                await _headerRepository.DeleteTransactionHeaderAsync(transactionHeader.Id, transactionHeader.PosClientId);
-                _dbContext.CommitDbTransaction();
-                return postedTransactionHeader;
-            }
-            catch (Exception ex)
-            {
-                _dbContext.RollbackDbTransaction();
-                throw;
-            }
-        }
-
-        private PostedTransactionHeader CreateFrom(TransactionHeader transactionHeader, PaymentMethod paymentMethod)
-        {
-            return new PostedTransactionHeader()
-            {
-                Id = transactionHeader.Id,
-                PosClientId = transactionHeader.PosClientId,
-                Status = paymentMethod == null ? TransactionStatus.Canceled : TransactionStatus.Posted,
-                Customer = transactionHeader.Customer,
-                PaymentMethod = paymentMethod,
-
-            };
-        }
-
-        private IEnumerable<PostedTransactionLine> CreateFrom(IEnumerable<TransactionLine> lines)
-        {
-            List<PostedTransactionLine> postedTransactionLines = new List<PostedTransactionLine>();
-
-            foreach (var line in lines)
-            {
-                PostedTransactionLine found = postedTransactionLines.FirstOrDefault(x => x.Product.Id == line.Product.Id);
-
-                if (found != null)
-                {
-                    found.Amount += line.Amount;
-                    found.Quantity += line.Quantity;
-                }
-                else
-                {
-                    postedTransactionLines.Add(CreateFrom(line));
-                }
-            }
-
-            return postedTransactionLines;
-        }
-
-        private PostedTransactionLine CreateFrom(TransactionLine line)
-        {
-            return new PostedTransactionLine()
-            {
-                Product = line.Product,
-                Amount = line.Amount,
-                Quantity = line.Quantity,
-            };
         }
     }
 }

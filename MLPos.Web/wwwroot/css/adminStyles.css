@@ -82,7 +82,7 @@
     flex-direction: column;
     width: 90%;
     margin: auto;
-    overflow-y: scroll;
+    height: fit-content;
 }
 
 .detailsContainer {
@@ -99,6 +99,7 @@
     justify-content: flex-start;
     max-width: 1920px;
     height: auto;
+    overflow-y: scroll;
 }
 
 .pageTitle {
@@ -297,6 +298,15 @@ table, tr, th, td {
     background: var(--platinum);
 }
 
+.sidebox {
+    margin-top: 5em;
+    border: 1px solid var(--yellow);
+    background: var(--platinum);
+    border-radius: 10px;
+    padding: 3em;
+    height: fit-content;
+}
+
 @media(min-width: 600px) {
     .cardImage {
         max-width: 16em;
@@ -347,5 +357,9 @@ table, tr, th, td {
     .formContainer {
         margin-left: 2em;
         margin-right: auto;
+    }
+
+    .pageContainer {
+        flex-direction: row;
     }
 }
