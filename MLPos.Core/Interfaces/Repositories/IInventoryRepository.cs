@@ -11,6 +11,6 @@ namespace MLPos.Core.Interfaces.Repositories
     {
         public Task CreateInventoryTransactionAsync(InventoryTransaction transaction);
         public Task<int> GetProductInventoryStatusAsync(long productId);
-        public Task<IEnumerable<Tuple<long, int>>> GetProductInventoryStatusAsync();
+        public Task<IEnumerable<ProductInventory>> GetProductInventoryStatusAsync();
     }
 }

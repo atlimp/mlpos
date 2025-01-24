@@ -46,11 +46,21 @@ namespace MLPos.Data.Postgres
             return 0;
         }
 
-        public async Task<IEnumerable<Tuple<long, int>>> GetProductInventoryStatusAsync()
+        public async Task<IEnumerable<ProductInventory>> GetProductInventoryStatusAsync()
         {
             return await this.ExecuteQuery(
                 "SELECT product_id, current_balance FROM INVENTORYBALANCES",
-                (NpgsqlDataReader r) => { return new Tuple<long, int>(r.GetSafeInt64(0), r.GetInt32(1)); }
+                (NpgsqlDataReader r) =>
+                {
+                    return new ProductInventory
+                    {
+                        Product = new Product
+                        {
+                            Id = r.GetSafeInt64(0)
+                        },
+                        Inventory = r.GetInt32(1)
+                    };
+                }
             );
         }
     }

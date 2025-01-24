@@ -96,7 +96,7 @@ public class ProductService : IProductService
         return _inventoryRepository.GetProductInventoryStatusAsync(id);
     }
 
-    public Task<IEnumerable<Tuple<long, int>>> GetProductInventoryAsync()
+    public Task<IEnumerable<ProductInventory>> GetProductInventoryAsync()
     {
         return _inventoryRepository.GetProductInventoryStatusAsync();
     }
