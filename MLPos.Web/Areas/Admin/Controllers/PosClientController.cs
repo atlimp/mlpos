@@ -7,7 +7,7 @@ using MLPos.Services;
 using MLPos.Web.Controllers;
 using MLPos.Web.Models;
 
-namespace MLPos.Web.Areas.Admin.Controllers
+namespace MLPos.Web.Controllers
 {
     [Area("Admin")]
     public class PosClientController : Controller
