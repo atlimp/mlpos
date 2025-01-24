@@ -46,6 +46,12 @@ public class SqlHelper
             {
                 foreach (string key in parameters.Keys)
                 {
+                    if (parameters[key] == null)
+                    {
+                        cmd.Parameters.AddWithValue(key, DBNull.Value);
+                        continue;
+                    }
+
                     cmd.Parameters.AddWithValue(key, parameters[key]);
                 }
             }

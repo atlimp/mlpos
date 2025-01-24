@@ -32,9 +32,9 @@ ALTER TABLE MLUSER ADD IF NOT EXISTS visible_on_pos boolean DEFAULT TRUE;
 
 CREATE TABLE IF NOT EXISTS INVENTORYTRANSACTION(
     type int DEFAULT 0,
-    transaction_id bigint,
-    posclient_id bigint,
-    line_id bigint,
+    transaction_id bigint NULL,
+    posclient_id bigint NULL,
+    line_id bigint NULL,
     product_id bigint REFERENCES PRODUCT(id),
     quantity decimal,
     date_inserted timestamp DEFAULT CURRENT_TIMESTAMP,

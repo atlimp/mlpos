@@ -9,6 +9,6 @@ namespace MLPos.Core.Model
     public class ProductInventory
     {
         public Product Product { get; set; }
-        public int Inventory { get; set; }
+        public int Quantity { get; set; }
     }
 }

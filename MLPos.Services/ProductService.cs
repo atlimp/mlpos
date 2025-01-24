@@ -91,9 +91,15 @@ public class ProductService : IProductService
         return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
     }
 
-    public async Task<int> GetProductInventoryAsync(long id)
+    public async Task<ProductInventory> GetProductInventoryAsync(long id)
     {
-        return await _inventoryRepository.GetProductInventoryStatusAsync(id);
+        Product product = await _productRepository.GetProductAsync(id);
+        int inventoryStatus = await _inventoryRepository.GetProductInventoryStatusAsync(id);
+        return new ProductInventory
+        {
+            Product = product,
+            Quantity = inventoryStatus
+        };
     }
 
     public async Task<IEnumerable<ProductInventory>> GetProductInventoryAsync()
@@ -106,5 +112,10 @@ public class ProductService : IProductService
         }
 
         return inventory;
+    }
+
+    public async Task CreateInventoryTransactionAsync(InventoryTransaction transaction)
+    {
+        await _inventoryRepository.CreateInventoryTransactionAsync(transaction);
     }
 }

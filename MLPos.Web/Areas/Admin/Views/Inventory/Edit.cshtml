@@ -1,0 +1,46 @@
+@using MLPos.Core.Enums
+@using MLPos.Core.Model
+@using MLPos.Web.Models
+@using MLPos.Web.Utils
+@using Microsoft.Extensions.Localization
+@using MLPos.Web
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model InventoryViewModel
+@{
+    Layout = "_Admin_Layout";
+    ViewData["Title"] = Model.Inventory.Product.Name;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Inventory.css">
+}
+
+<div class="container pageContainer">
+    <div class="container formContainer">
+        <form class="editForm" method="POST" action="@Url.Action("Edit", "Inventory", new { Id = Model.Inventory.Product.Id })">
+            <div class="container detailsContainer">
+                <div class="cardImageContainer">
+                    @Html.ImageOrDefault(Model.Inventory.Product?.Image, "cardImage")
+                </div>
+                <div>
+                    <label class="inputLabel" for="EstimatedQuantity">
+                        @SharedLocalizer["EstimatedQuantity"]:
+                        @Html.TextBoxFor(m => m.Inventory.Quantity, new { id = "EstimatedQuantity", @class = "formInput", disabled = "disabled" })
+                    </label>
+                    <label class="inputLabel" for="CountedQuantity">
+                        @SharedLocalizer["CountedQuantity"]:
+                        @Html.TextBoxFor(m => m.CountedQuantity, new { id = "CountedQuantity", type="number", @class = "formInput" })
+                    </label>
+                </div>
+            </div>
+
+            <div class="formButtons">
+                <a class="button buttonSecondary formButton" href="@Url.Action("Index")">@SharedLocalizer["Back"]</a>
+        
+                <button class="button buttonPrimary formButton" type="submit">@SharedLocalizer["Update"]</button>
+            </div>
+            @Html.TextBoxFor(m => m.Inventory.Product.Id, new { hidden = "hidden" })
+
+        </form>
+    </div>
+</div>

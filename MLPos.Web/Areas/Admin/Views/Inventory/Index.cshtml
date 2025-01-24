@@ -36,8 +36,8 @@
                 @foreach (var inventoryItem in Model.Inventory)
                 {
                     <tr>
-                        <td><a class="tableCol productName" href="">@inventoryItem.Product.Name</a></td>
-                        <td><div class="tableCol inventoryStatus">@inventoryItem.Inventory</div></td>
+                        <td><a class="tableCol productName" href="@Url.Action("Edit", "Inventory", new { id = inventoryItem.Product.Id })">@inventoryItem.Product.Name</a></td>
+                        <td><div class="tableCol inventoryStatus">@inventoryItem.Quantity</div></td>
                     </tr>
                 }
             </tbody>

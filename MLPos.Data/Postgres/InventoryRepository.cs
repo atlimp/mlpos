@@ -58,7 +58,7 @@ namespace MLPos.Data.Postgres
                         {
                             Id = r.GetSafeInt64(0)
                         },
-                        Inventory = r.GetInt32(1)
+                        Quantity = r.GetInt32(1)
                     };
                 }
             );
