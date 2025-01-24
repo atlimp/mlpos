@@ -1,0 +1,46 @@
+﻿@using MLPos.Web.Models
+@using MLPos.Core.Model
+@using MLPos.Web.Utils
+@using Microsoft.Extensions.Localization
+@using MLPos.Web
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model InventoryListViewModel
+@{
+    Layout = "_Admin_Layout";
+    ViewData["Title"] = SharedLocalizer["Inventory"];
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Inventory.css">
+}
+
+@section Scripts {
+}
+
+
+<div class="container pageContainer">
+    <div class="container titleContainer">
+        <div>
+            <h1>@SharedLocalizer["Inventory"]</h1>
+        </div>
+    </div>
+    <div class="container tableContainer">
+        <table class="transactionTable inventoryTable">
+            <thead class="tableHeader">
+                <tr>
+                    <th><div class="tableCol productName">@SharedLocalizer["Product"]</div></th>
+                    <th><div class="tableCol inventoryStatus">@SharedLocalizer["TransactionStatus"]</div></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var inventoryItem in Model.Inventory)
+                {
+                    <tr>
+                        <td><a class="tableCol productName" href="">@inventoryItem.Product.Name</a></td>
+                        <td><div class="tableCol inventoryStatus">@inventoryItem.Inventory</div></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

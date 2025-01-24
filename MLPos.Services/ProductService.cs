@@ -91,13 +91,20 @@ public class ProductService : IProductService
         return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
     }
 
-    public Task<int> GetProductInventoryAsync(long id)
+    public async Task<int> GetProductInventoryAsync(long id)
     {
-        return _inventoryRepository.GetProductInventoryStatusAsync(id);
+        return await _inventoryRepository.GetProductInventoryStatusAsync(id);
     }
 
-    public Task<IEnumerable<ProductInventory>> GetProductInventoryAsync()
+    public async Task<IEnumerable<ProductInventory>> GetProductInventoryAsync()
     {
-        return _inventoryRepository.GetProductInventoryStatusAsync();
+        var inventory = await _inventoryRepository.GetProductInventoryStatusAsync();
+
+        foreach (var inventoryItem in inventory)
+        {
+            inventoryItem.Product = await _productRepository.GetProductAsync(inventoryItem.Product.Id);
+        }
+
+        return inventory;
     }
 }
