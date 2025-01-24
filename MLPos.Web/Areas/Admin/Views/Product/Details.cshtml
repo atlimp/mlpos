@@ -71,6 +71,7 @@
                         @Html.CheckBoxFor(m => m.Product.VisibleOnPos, new { id = "posVisible", @class = "formInput checkbox" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
                     </label>
 
+
                     @if (Model.Product != null && Model.Product.DateInserted != DateTime.MinValue)
                     {
                         <p>@SharedLocalizer["ProductCreatedAt", Model.Product.DateInserted]</p>
@@ -108,5 +109,14 @@
                 <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
             </form>
         }
+    </div>
+    <div class="sidebox productsidebox">
+        <div class="inventoryDetail">
+            <label class="inputLabel" for="EstimatedQuantity">
+                @SharedLocalizer["EstimatedQuantity"]:
+                @Html.TextBoxFor(m => m.Inventory.Quantity, new { id = "EstimatedQuantity", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+            </label>
+            <a class="button buttonPrimary formButton" href="@Url.Action("Edit", "Inventory", new { id = Model.Product.Id })">@SharedLocalizer["UpdateInventory"]</a>
+        </div>
     </div>
 </div>

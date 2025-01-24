@@ -40,6 +40,7 @@ public class ProductController : AdminControllerBase
     {
         ProductDetailsViewModel model = new ProductDetailsViewModel();
         Product product = await _productService.GetProductAsync(id);
+        ProductInventory productInventory = await _productService.GetProductInventoryAsync(id);
 
         if (product == null)
         {
@@ -47,6 +48,7 @@ public class ProductController : AdminControllerBase
         }
         
         model.Product = product;
+        model.Inventory = productInventory;
         
         return View(model);
     }
