@@ -72,3 +72,18 @@ CREATE OR REPLACE VIEW INVENTORYBALANCES AS (
         TransactionsAfterReset ta
         ON lkb.product_id = ta.product_id
 );
+
+INSERT INTO INVENTORYTRANSACTION(type, product_id, quantity)
+    SELECT 1 type, id product_id, 0 quantity FROM product WHERE type = 0 AND id NOT IN (SELECT DISTINCT product_Id FROM INVENTORYTRANSACTION);
+
+CREATE OR REPLACE FUNCTION fn_create_inventorytransaction()
+    RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.type = 0 THEN
+        INSERT INTO INVENTORYTRANSACTION(type, product_id, quantity) VALUES(1, NEW.id, 0);
+    END IF;
+RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE OR REPLACE TRIGGER t_PRODUCT_INVENTORY_TRANSACTION_INSERT AFTER INSERT ON PRODUCT FOR EACH ROW EXECUTE PROCEDURE fn_create_inventorytransaction();
