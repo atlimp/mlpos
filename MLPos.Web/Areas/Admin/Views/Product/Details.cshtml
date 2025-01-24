@@ -8,7 +8,7 @@
 @model ProductDetailsViewModel
 @{
     Layout = "_Admin_Layout";
-    ViewData["Title"] = Model.Product?.Description ?? SharedLocalizer["NewProduct"];
+    ViewData["Title"] = Model.Product?.Name ?? SharedLocalizer["NewProduct"];
     
     Dictionary<int, string> productTypes = new Dictionary<int, string>();
 
