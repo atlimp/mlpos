@@ -23,6 +23,10 @@
                     @Html.ImageOrDefault(Model.Inventory.Product?.Image, "cardImage")
                 </div>
                 <div>
+                    <label class="inputLabel" for="name">
+                        @SharedLocalizer["Name"]:
+                        @Html.TextBoxFor(m => m.Inventory.Product.Name, new { id = "name", @class = "formInput", disabled = "disabled" })
+                    </label>
                     <label class="inputLabel" for="EstimatedQuantity">
                         @SharedLocalizer["EstimatedQuantity"]:
                         @Html.TextBoxFor(m => m.Inventory.Quantity, new { id = "EstimatedQuantity", @class = "formInput", disabled = "disabled" })
