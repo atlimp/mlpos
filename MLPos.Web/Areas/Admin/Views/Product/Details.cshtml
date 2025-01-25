@@ -112,7 +112,7 @@
             }
         </div>
         <div class="sidebox productsidebox">
-            @if (Model.Product.Type == ProductType.Item)
+            @if (Model.Product?.Type == ProductType.Item)
             {
                 <div class="inventoryDetail">
                     <label class="inputLabel" for="EstimatedQuantity">
