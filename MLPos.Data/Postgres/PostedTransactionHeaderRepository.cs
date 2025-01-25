@@ -74,6 +74,35 @@ namespace MLPos.Data.Postgres
             );
         }
 
+        public async Task<IEnumerable<PostedTransactionHeader>> GetPostedTransactionHeadersAsync(PostedTransactionQueryFilter filter)
+        {
+            string query = "SELECT id, status, posclient_id, customer_id, paymentmethod_id, invoice_id, date_inserted, date_updated FROM POSTEDTRANSACTIONHEADER WHERE ";
+            Tuple<string, Dictionary<string, object>> parsed = ParseQueryFilter(filter);
+            query = query + parsed.Item1;
+            return await this.ExecuteQuery(
+                            query,
+                            MapToPostedTransactionHeader,
+                            parsed.Item2
+                        );
+        }
+
+        public async Task<IEnumerable<PostedTransactionHeader>> GetPostedTransactionHeadersAsync(PostedTransactionQueryFilter filter, int limit, int offset)
+        {
+            string query = "SELECT id, status, posclient_id, customer_id, paymentmethod_id, invoice_id, date_inserted, date_updated FROM POSTEDTRANSACTIONHEADER WHERE ";
+            Tuple<string, Dictionary<string, object>> parsed = ParseQueryFilter(filter);
+            query = query + parsed.Item1;
+            query = query + "ORDER BY date_inserted DESC LIMIT @limit OFFSET @offset";
+
+            parsed.Item2["@limit"] = limit;
+            parsed.Item2["@offset"] = offset;
+
+            return await this.ExecuteQuery(
+                            query,
+                            MapToPostedTransactionHeader,
+                            parsed.Item2
+                        );
+        }
+
         public async Task<IEnumerable<PostedTransactionHeader>> GetPostedTransactionHeadersForInvoiceAsync(long invoiceId)
         {
             return await this.ExecuteQuery(
@@ -127,6 +156,44 @@ namespace MLPos.Data.Postgres
                 DateInserted = reader.GetDateTime(6),
                 DateUpdated = reader.GetDateTime(7),
             };
+        }
+
+        private Tuple<string, Dictionary<string, object>> ParseQueryFilter(PostedTransactionQueryFilter queryFilter)
+        {
+            StringBuilder sb = new StringBuilder();
+            Dictionary<string, object> filters = new Dictionary<string, object>();
+            sb.Append("1=1 ");
+
+            if (queryFilter != null)
+            {
+                if (queryFilter.Period != null)
+                {
+                    sb.Append("AND date_inserted >= @period_from ");
+                    filters["@period_from"] = queryFilter.Period.DateFrom;
+                    sb.Append("AND date_inserted <= @period_to ");
+                    filters["@period_to"] = queryFilter.Period.DateTo;
+                }
+
+                if (queryFilter.Status != null)
+                {
+                    sb.Append("AND status = @status ");
+                    filters["@status"] = (int)queryFilter.Status;
+                }
+
+                if (queryFilter.CustomerId != null)
+                {
+                    sb.Append("AND customer_id = @customer_id ");
+                    filters["@customer_id"] = queryFilter.CustomerId;
+                }
+
+                if (queryFilter.PaymentMethodId != null)
+                {
+                    sb.Append("AND paymentmethod_id = @paymentmethod_id ");
+                    filters["@paymentmethod_id"] = queryFilter.PaymentMethodId;
+                }
+            }
+
+            return new Tuple<string, Dictionary<string, object>>(sb.ToString(), filters);
         }
     }
 }

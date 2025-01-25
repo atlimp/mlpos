@@ -15,6 +15,7 @@ namespace MLPos.Services
         private readonly IInvoiceHeaderRepository _invoiceHeaderRepository;
         private readonly IInvoiceLineRepository _invoiceLineRepository;
         private readonly IPostedTransactionHeaderRepository _postedTransactionHeaderRepository;
+        private readonly IPostedTransactionLineRepository _postedTransactionLineRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IPaymentMethodRepository _paymentMethodRepository;
         private readonly IProductRepository _productRepository;
@@ -25,6 +26,7 @@ namespace MLPos.Services
             IInvoiceHeaderRepository invoiceHeaderRepository,
             IInvoiceLineRepository invoiceLineRepository,
             IPostedTransactionHeaderRepository postedTransactionHeaderRepository,
+            IPostedTransactionLineRepository postedTransactionLineRepository,
             ICustomerRepository customerRepository,
             IPaymentMethodRepository paymentMethodRepository,
             IProductRepository productRepository,
@@ -33,6 +35,7 @@ namespace MLPos.Services
             _invoiceHeaderRepository = invoiceHeaderRepository;
             _invoiceLineRepository = invoiceLineRepository;
             _postedTransactionHeaderRepository = postedTransactionHeaderRepository;
+            _postedTransactionLineRepository = postedTransactionLineRepository;
             _customerRepository = customerRepository;
             _paymentMethodRepository = paymentMethodRepository;
             _productRepository = productRepository;
@@ -41,43 +44,73 @@ namespace MLPos.Services
     
         public async Task<InvoiceHeader> GenerateInvoice(PostedTransactionHeader transactionHeader)
         {
+            Period period = new Period
+            {
+                DateFrom = transactionHeader.DateInserted.Date,
+                DateTo = transactionHeader.DateInserted.Date,
+            };
+
+            return await GenerateInvoice(transactionHeader.Customer, transactionHeader.PaymentMethod, period, new List<PostedTransactionHeader> { transactionHeader });
+        }
+
+        public async Task<InvoiceHeader> GenerateInvoice(Customer customer, PaymentMethod paymentMethod, Period period)
+        {
+            PostedTransactionQueryFilter filter = new PostedTransactionQueryFilter
+            {
+                CustomerId = customer.Id,
+                PaymentMethodId = paymentMethod.Id,
+                Period = period,
+                Status = TransactionStatus.Posted
+            };
+
+            IEnumerable<PostedTransactionHeader> transactions = await _postedTransactionHeaderRepository.GetPostedTransactionHeadersAsync(filter);
+            foreach (PostedTransactionHeader transaction in transactions)
+            {
+                transaction.Customer = await _customerRepository.GetCustomerAsync(transaction.Customer.Id);
+                transaction.PaymentMethod = await _paymentMethodRepository.GetPaymentMethodAsync(transaction.PaymentMethod.Id);
+                transaction.Lines = await _postedTransactionLineRepository.GetPostedTransactionLinesAsync(transaction.Id, transaction.PosClientId);
+            }
+
+            return await GenerateInvoice(customer, paymentMethod, period, transactions);
+        }
+
+        private async Task<InvoiceHeader> GenerateInvoice(Customer customer, PaymentMethod paymentMethod, Period period, IEnumerable<PostedTransactionHeader> transactions)
+        {
             _invoiceHeaderRepository.SetDBContext(_dbContext);
             _invoiceLineRepository.SetDBContext(_dbContext);
             _postedTransactionHeaderRepository.SetDBContext(_dbContext);
 
+            InvoiceHeader invoiceHeader = new InvoiceHeader
+            {
+                Status = InvoiceStatus.Invoiced,
+                Customer = customer,
+                PaymentMethod = paymentMethod,
+                Period = period,
+            };
+
+            IEnumerable<InvoiceLine> readyInvoiceLines = AggregateLines(transactions);
             try
             {
                 _dbContext.BeginDbTransaction();
-                InvoiceHeader invoiceHeader = await _invoiceHeaderRepository.CreateInvoiceHeaderAsync(new InvoiceHeader
-                {
-                    Status = InvoiceStatus.Invoiced,
-                    Customer = transactionHeader.Customer,
-                    PaymentMethod = transactionHeader.PaymentMethod,
-                    Period = new Period
-                    {
-                        DateFrom = transactionHeader.DateInserted.Date,
-                        DateTo = transactionHeader.DateInserted.Date,
-                    }
-                });
+
+                invoiceHeader = await _invoiceHeaderRepository.CreateInvoiceHeaderAsync(invoiceHeader);
 
                 List<InvoiceLine> invoiceLines = new List<InvoiceLine>();
-                foreach (PostedTransactionLine line in transactionHeader.Lines)
+                foreach (InvoiceLine line in readyInvoiceLines)
                 {
-                    InvoiceLine invoiceLine = await _invoiceLineRepository.CreateInvoiceLineAsync(invoiceHeader.Id, new InvoiceLine
-                    {
-                        Product = line.Product,
-                        Quantity = line.Quantity,
-                        Amount = line.Amount,
-                    });
+                    InvoiceLine invoiceLine = await _invoiceLineRepository.CreateInvoiceLineAsync(invoiceHeader.Id, line);
 
                     invoiceLines.Add(invoiceLine);
                 }
 
                 invoiceHeader.Lines = invoiceLines;
 
-                transactionHeader.Status = TransactionStatus.Invoiced;
-                transactionHeader.InvoiceId = invoiceHeader.Id;
-                await _postedTransactionHeaderRepository.UpdatePostedTransactionHeaderAsync(transactionHeader);
+                foreach (PostedTransactionHeader transactionHeader in transactions)
+                {
+                    transactionHeader.Status = TransactionStatus.Invoiced;
+                    transactionHeader.InvoiceId = invoiceHeader.Id;
+                    await _postedTransactionHeaderRepository.UpdatePostedTransactionHeaderAsync(transactionHeader);
+                }
 
                 _dbContext.CommitDbTransaction();
 
@@ -90,9 +123,34 @@ namespace MLPos.Services
             }
         }
 
-        public Task<InvoiceHeader> GenerateInvoice(Customer customer, PaymentMethod paymentMethod, Period period)
+        private IEnumerable<InvoiceLine> AggregateLines(IEnumerable<PostedTransactionHeader> transactions)
         {
-            throw new NotImplementedException();
+            List<InvoiceLine> lines = new List<InvoiceLine>();
+
+            foreach (PostedTransactionHeader transaction in transactions)
+            {
+                foreach (PostedTransactionLine line in transaction.Lines)
+                {
+                    InvoiceLine? invoiceLine = lines.Find((x) => x.Product.Id == line.Product.Id);
+
+                    if (invoiceLine == null)
+                    {
+                        invoiceLine = new InvoiceLine
+                        {
+                            Product = line.Product,
+                            Quantity = 0,
+                            Amount = 0
+                        };
+
+                        lines.Add(invoiceLine);
+                    }
+
+                    invoiceLine.Quantity += line.Quantity;
+                    invoiceLine.Amount += line.Amount;
+                }
+            }
+
+            return lines;
         }
 
         public async Task<InvoiceHeader> GetInvoiceAsync(long invoiceId)
