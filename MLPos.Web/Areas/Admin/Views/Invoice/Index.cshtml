@@ -1,0 +1,61 @@
+@using MLPos.Web.Models
+@using MLPos.Core.Model
+@using MLPos.Web.Utils
+@using Microsoft.Extensions.Localization
+@using MLPos.Web
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model InvoiceListViewModel
+@{
+    Layout = "_Admin_Layout";
+    ViewData["Title"] = SharedLocalizer["Invoices"];
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Invoices.css">
+}
+
+@section Scripts {
+}
+
+
+<div class="container pageContainer">
+    <div class="container titleContainer">
+        <div>
+            <h1>@SharedLocalizer["Invoices"]</h1>
+        </div>
+    </div>
+    <div class="container tableContainer">
+        <table class="transactionTable invoiceTable">
+            <thead class="tableHeader">
+                <tr>
+                    <th><div class="tableCol invoiceId">@SharedLocalizer["Id"]</div></th>
+                    <th><div class="tableCol invoiceStatus">@SharedLocalizer["InvoiceStatus"]</div></th>
+                    <th><div class="tableCol invoiceDate">@SharedLocalizer["Date"]</div></th>
+                    <th><div class="tableCol invoiceCustomer">@SharedLocalizer["Customer"]</div></th>
+                    <th><div class="tableCol invoicePaymentMethod">@SharedLocalizer["PaymentMethod"]</div></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var invoiceHeader in Model.Invoices)
+                {
+                        <tr>
+                            <td><a class="tableCol invoiceId" href="@Url.Action("Details", "Invoice", new { id = invoiceHeader.Id })">@invoiceHeader.Id</a></td>
+                            <td><div class="tableCol invoiceStatus">@SharedLocalizer[invoiceHeader.Status.ToString()]</div></td>
+                            <td><div class="tableCol invoiceDate">@invoiceHeader.Period.DateFrom.ToShortDateString() - @invoiceHeader.Period.DateFrom.ToShortDateString()</div></td>
+                            <td><div class="tableCol invoiceCustomer">@invoiceHeader.Customer.Name</div></td>
+                            <td><div class="tableCol invoicePaymentMethod">@invoiceHeader.PaymentMethod.Name</div></td>
+                        </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="pageNav">
+        @if (Model.PageNum > 1) {
+            <a class="pageNavLink pagePrev" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum - 1 })">@SharedLocalizer["PreviousPage"]</a>
+        }
+        <div class="pageNavTitle currPage">@Model.PageNum</div>
+        @if (Model.HasMorePages) {
+            <a class="pageNavLink pageNext" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum + 1 })">@SharedLocalizer["NextPage"]</a>
+        }
+    </div>
+</div>

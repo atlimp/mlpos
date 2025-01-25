@@ -64,6 +64,10 @@
                             @SharedLocalizer["PosVisible"]:
                             @Html.CheckBoxFor(m => m.PaymentMethod.VisibleOnPos, new { id = "posVisible", @class = "formInput checkbox" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
                         </label>
+                        <label class="inputLabel" for="invoiceOnPost">
+                            @SharedLocalizer["InvoiceOnPost"]:
+                            @Html.CheckBoxFor(m => m.PaymentMethod.InvoiceOnPost, new { id = "invoiceOnPost", @class = "formInput checkbox" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                        </label>
 
                         @if (Model.PaymentMethod != null && Model.PaymentMethod.DateInserted != DateTime.MinValue)
                         {
@@ -101,6 +105,14 @@
                 <form method="post" class="deleteForm" action="@Url.Action("Delete", "PaymentMethod", new { id = Model.PaymentMethod.Id })">
                     <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
                 </form>
+            }
+        </div>
+        <div class="sidebox customersidebox">
+            @if (Model.PaymentMethod != null)
+            {
+                <div class="invoiceDetail">
+                    <a class="button buttonPrimary formButton" href="@Url.Action("GenerateInvoice", "Invoice", new { paymentMethodId = Model.PaymentMethod?.Id })">@SharedLocalizer["GenerateInvoice"]</a>
+                </div>
             }
         </div>
     </div>

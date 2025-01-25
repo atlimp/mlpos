@@ -148,9 +148,9 @@ namespace MLPos.Services
             return await _headerRepository.GetAllTransactionSummaryAsync(posClientId);
         }
 
-        public async Task<IEnumerable<PostedTransactionHeader>> GetPostedTransactionHeadersAsync(int limit, int offset)
+        public async Task<IEnumerable<PostedTransactionHeader>> GetPostedTransactionHeadersAsync(PostedTransactionQueryFilter queryFilter, int limit, int offset)
         {
-            IEnumerable<PostedTransactionHeader> transactionHeaders = await _postedTransactionHeaderRepository.GetPostedTransactionHeadersAsync(limit, offset);
+            IEnumerable<PostedTransactionHeader> transactionHeaders = await _postedTransactionHeaderRepository.GetPostedTransactionHeadersAsync(queryFilter, limit, offset);
 
             foreach (PostedTransactionHeader transactionHeader in transactionHeaders)
             {

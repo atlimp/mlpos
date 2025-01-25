@@ -19,7 +19,7 @@
 
 
 <div class="container pageContainer">
-    <div class="container pageContentContainer">
+    <div class="container pageContentContainer transactionContainer">
         <div class="container transactionDetailsContainer">
                 <div class="transactionImageContainer">
                     <img class="transactionImage" src="@Model.Transaction.Customer.Image" />
@@ -41,6 +41,25 @@
                         <a href="@Url.Action("Details", "PaymentMethod", new { id = Model.Transaction.PaymentMethod.Id })">@Model.Transaction.PaymentMethod.Name</a>
                     </div>
                 </div>
+                <div class="transactionDetail">
+                    <div class="transactionDetailTitle">
+                        @SharedLocalizer["TransactionStatus"]:
+                    </div>
+                    <div class="transactionDetailValue">
+                        <div>@SharedLocalizer[Model.Transaction.Status.ToString()]</div>
+                    </div>
+                </div>
+                @if (Model.Transaction.InvoiceId != -1)
+                {
+                    <div class="transactionDetail">
+                        <div class="transactionDetailTitle">
+                            @SharedLocalizer["InvoiceNumber"]:
+                        </div>
+                        <div class="transactionDetailValue">
+                            <a href="@Url.Action("Details", "Invoice", new { id = Model.Transaction.InvoiceId })">@Model.Transaction.InvoiceNumber</a>
+                        </div>
+                    </div>
+                }
                 <div class="transactionDetail">
                     <div class="transactionDetailTitle">
                         @SharedLocalizer["TotalAmount"]:

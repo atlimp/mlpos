@@ -87,3 +87,27 @@ END;
 $$ language 'plpgsql';
 
 CREATE OR REPLACE TRIGGER t_PRODUCT_INVENTORY_TRANSACTION_INSERT AFTER INSERT ON PRODUCT FOR EACH ROW EXECUTE PROCEDURE fn_create_inventorytransaction();
+
+CREATE TABLE IF NOT EXISTS INVOICEHEADER(
+    id SERIAL PRIMARY KEY,
+    status int DEFAULT 0,
+    customer_id bigint REFERENCES CUSTOMER(id),
+    paymentmethod_id bigint REFERENCES PAYMENTMETHOD(id),
+    period_from timestamp,
+    period_to timestamp,
+    date_inserted timestamp DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS INVOICELINE(
+    id SERIAL,
+    invoice_id bigint REFERENCES INVOICEHEADER(id),
+    product_id bigint REFERENCES PRODUCT(id),
+    quantity decimal DEFAULT 0,
+    amount decimal DEFAULT 0,
+    date_inserted timestamp DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (invoice_id, id)
+);
+
+ALTER TABLE POSTEDTRANSACTIONHEADER ADD IF NOT EXISTS invoice_id bigint NULL REFERENCES INVOICE(id);
+
+ALTER TABLE PAYMENTMETHOD ADD IF NOT EXISTS invoice_on_post boolean DEFAULT FALSE;

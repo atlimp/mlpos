@@ -2,47 +2,52 @@
     padding-right: 2em;
 }
 
-.salesTransactionTable {
+.invoiceTable {
     border: 1px solid var(--platinum);
     width: 100%;
     height: fit-content;
 }
 
-.salesTransactionTable td, .salesTransactionTable tr {
+.invoiceTable td, .invoiceTable tr {
     height: 2em;
     line-height: 2em;
 }
 
-.salesTransactionTable tr:nth-child(2n) {
+.invoiceTable tr:nth-child(2n) {
     background: var(--platinum);
 }
 
-.salesId {
+.invoiceId {
     width: 2.5em;
     text-align: left;
 }
 
-.salesStatus {
+.invoiceStatus {
     width: 3.5em;
     text-align: left;
 }
 
-.salesDate {
+.invoiceProduct {
+    width: 3.5em;
+    text-align: left;
+}
+
+.invoiceDate {
     width: 6em;
     text-align: left;
 }
 
-.salesCustomer {
+.invoiceCustomer {
     width: 10em;
     text-align: left;
 }
 
-.salesPaymentMethod {
+.invoicePaymentMethod {
     width: 6em;
     text-align: left;
 }
 
-.transactionDetailsContainer {
+.invoiceDetailsContainer {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -51,7 +56,7 @@
     margin-bottom: 2em;
 }
 
-.transactionImageContainer {
+.invoiceImageContainer {
     width: 15em;
     height: 15em;
     background-color: var(--white);
@@ -61,81 +66,81 @@
     margin: auto;
 }
 
-.transactionImage {
+.invoiceImage {
     max-width: 15em;
     max-height: 15em;
     width: auto;
     height: auto;
 }
 
-.transactionDetails {
+.invoiceDetails {
     max-width: 32em;
 }
 
-.transactionDetail {
+.invoiceDetail {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.transactionDetailTitle {
+.invoiceDetailTitle {
     font-size: 1.25em;
     font-weight: bold;
     margin-right: 2em;
 }
 
-.transactionDetailValue {
+.invoiceDetailValue {
     display: flex;
     text-align: right;
 }
 
-.transactionDetailValue > div, .transactionDetailValue > a {
-    margin: auto;
-    text-align: right;
-}
+    .invoiceDetailValue > div, .invoiceDetailValue > a {
+        margin: auto;
+        text-align: right;
+    }
 
 
 
 @media(min-width: 600px) {
-    .salesId {
+    .invoiceId {
         width: 2.5em;
         text-align: left;
     }
 
-    .salesStatus {
+    .invoiceStatus {
         width: 6em;
         text-align: left;
     }
 
-    .salesDate {
-        width: 6em;
+    .invoiceDate {
+        width: 1em;
         text-align: left;
     }
 
-    .salesCustomer {
+    .invoiceCustomer {
         width: 100%;
         text-align: left;
     }
 
-    .salesPaymentMethod {
+    .invoicePaymentMethod {
         width: 100%;
         text-align: left;
     }
 
-    .transactionDetailsContainer {
+    .invoiceDetailsContainer {
         flex-direction: row;
     }
 
-    .transactionDetails {
+    .invoiceDetails {
         margin: auto;
     }
 
-    .transactionImageContainer {
+    .invoiceImageContainer {
         margin: auto auto auto 4em;
     }
 }
 @media(min-width: 850px) {
-    .transactionContainer {
+    .invoiceContainer {
         flex-direction: column;
     }
 }

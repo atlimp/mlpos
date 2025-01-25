@@ -15,7 +15,7 @@ public class PaymentMethodRepository : RepositoryBase, IPaymentMethodRepository
     public async Task<PaymentMethod> GetPaymentMethodAsync(long id)
     {
         IEnumerable<PaymentMethod> paymentMethods = await this.ExecuteQuery(
-            "SELECT id, name, description, image, date_inserted, date_updated, date_deleted, visible_on_pos FROM PAYMENTMETHOD WHERE id = @id",
+            "SELECT id, name, description, image, date_inserted, date_updated, date_deleted, visible_on_pos, invoice_on_post FROM PAYMENTMETHOD WHERE id = @id",
             MapToPaymentMethod,
             new Dictionary<string, object>(){ ["@id"] = id }
         );
@@ -31,17 +31,23 @@ public class PaymentMethodRepository : RepositoryBase, IPaymentMethodRepository
     public async Task<IEnumerable<PaymentMethod>> GetPaymentMethodsAsync()
     {
         return await this.ExecuteQuery(
-            "SELECT id, name, description, image, date_inserted, date_updated, date_deleted, visible_on_pos FROM PAYMENTMETHOD WHERE date_deleted IS NULL ORDER BY name",
+            "SELECT id, name, description, image, date_inserted, date_updated, date_deleted, visible_on_pos, invoice_on_post FROM PAYMENTMETHOD WHERE date_deleted IS NULL ORDER BY name",
             MapToPaymentMethod);
     }
 
     public async Task<PaymentMethod> CreatePaymentMethodAsync(PaymentMethod paymentMethod)
     {
         IEnumerable<PaymentMethod> paymentMethods = await this.ExecuteQuery(
-            @"INSERT INTO PAYMENTMETHOD(name, description, image, visible_on_pos)
-                    VALUES(@name, @description, @image, @visible_on_pos) RETURNING id, name, description, image, date_inserted, date_updated, date_deleted, visible_on_pos",
+            @"INSERT INTO PAYMENTMETHOD(name, description, image, visible_on_pos, invoice_on_post)
+                    VALUES(@name, @description, @image, @visible_on_pos, @invoice_on_post) RETURNING id, name, description, image, date_inserted, date_updated, date_deleted, visible_on_pos, invoice_on_post",
             MapToPaymentMethod,
-            new Dictionary<string, object>(){ ["@name"] = paymentMethod.Name, ["@description"] = paymentMethod.Description, ["@image"] = paymentMethod.Image, ["@visible_on_pos"] = paymentMethod.VisibleOnPos }
+            new Dictionary<string, object>(){
+                ["@name"] = paymentMethod.Name,
+                ["@description"] = paymentMethod.Description,
+                ["@image"] = paymentMethod.Image,
+                ["@visible_on_pos"] = paymentMethod.VisibleOnPos,
+                ["@invoice_on_post"] = paymentMethod.InvoiceOnPost
+            }
         );
         
         if (paymentMethods.Any())
@@ -55,9 +61,18 @@ public class PaymentMethodRepository : RepositoryBase, IPaymentMethodRepository
     public async Task<PaymentMethod> UpdatePaymentMethodAsync(PaymentMethod paymentMethod)
     {
         IEnumerable<PaymentMethod> paymentMethods = await this.ExecuteQuery(
-            @"UPDATE PAYMENTMETHOD SET name = @name, description = @description, image = @image, visible_on_pos = @visible_on_pos WHERE id = @id AND date_deleted IS NULL RETURNING id, name, description, image, date_inserted, date_updated, date_deleted, visible_on_pos",
+            @"UPDATE PAYMENTMETHOD SET name = @name, description = @description, image = @image, visible_on_pos = @visible_on_pos, invoice_on_post = @invoice_on_post
+                WHERE id = @id AND date_deleted IS NULL
+                RETURNING id, name, description, image, date_inserted, date_updated, date_deleted, visible_on_pos, invoice_on_post = @invoice_on_post",
             MapToPaymentMethod,
-            new Dictionary<string, object>(){ ["@id"] = paymentMethod.Id, ["@name"] = paymentMethod.Name, ["@description"] = paymentMethod.Description, ["@image"] = paymentMethod.Image, ["@visible_on_pos"] = paymentMethod.VisibleOnPos }
+            new Dictionary<string, object>(){
+                ["@id"] = paymentMethod.Id,
+                ["@name"] = paymentMethod.Name,
+                ["@description"] = paymentMethod.Description,
+                ["@image"] = paymentMethod.Image,
+                ["@visible_on_pos"] = paymentMethod.VisibleOnPos,
+                ["@invoice_on_post"] = paymentMethod.InvoiceOnPost
+            }
         );
         
         if (paymentMethods.Any())
@@ -99,6 +114,7 @@ public class PaymentMethodRepository : RepositoryBase, IPaymentMethodRepository
             DateUpdated = reader.GetDateTime(5),
             ReadOnly = !reader.SafeIsDBNull(6),
             VisibleOnPos = reader.GetSafeBoolean(7),
+            InvoiceOnPost = reader.GetSafeBoolean(8),
         };
     }
 }

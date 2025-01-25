@@ -7,7 +7,7 @@
 @{
     Layout = "_Admin_Layout";
     ViewData["Title"] = Model.Customer?.Name ?? SharedLocalizer["NewCustomer"];
-    
+
     string submitBtnText = Model.Customer == null ? @SharedLocalizer["Create"] : @SharedLocalizer["Update"];
 
     string formAction = Model.Customer == null ? @Url.Action("Edit") : @Url.Action("Edit", "Customer", new { id = Model.Customer.Id });
@@ -78,7 +78,7 @@
 
                 <div class="formButtons">
                     <a class="button buttonSecondary formButton" href="@Url.Action("Index")">@SharedLocalizer["Back"]</a>
-                
+
                     @if (Model.Customer == null || !Model.Customer.ReadOnly)
                     {
                         @if (!Model.Editing)
@@ -101,6 +101,14 @@
                 <form method="post" class="deleteForm" action="@Url.Action("Delete", "Customer", new { id = Model.Customer.Id })">
                     <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
                 </form>
+            }
+        </div>
+        <div class="sidebox customersidebox">
+            @if (Model.Customer != null)
+            {
+                <div class="invoiceDetail">
+                    <a class="button buttonPrimary formButton" href="@Url.Action("GenerateInvoice", "Invoice", new { customerId = Model.Customer?.Id })">@SharedLocalizer["GenerateInvoice"]</a>
+                </div>
             }
         </div>
     </div>
