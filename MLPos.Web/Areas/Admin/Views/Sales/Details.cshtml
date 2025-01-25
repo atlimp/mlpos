@@ -53,10 +53,10 @@
                 {
                     <div class="transactionDetail">
                         <div class="transactionDetailTitle">
-                            @SharedLocalizer["InvoiceId"]:
+                            @SharedLocalizer["InvoiceNumber"]:
                         </div>
                         <div class="transactionDetailValue">
-                            <a href="@Url.Action("Details", "Invoice", new { id = Model.Transaction.InvoiceId })">@Model.Transaction.InvoiceId</a>
+                            <a href="@Url.Action("Details", "Invoice", new { id = Model.Transaction.InvoiceId })">@Model.Transaction.InvoiceNumber</a>
                         </div>
                     </div>
                 }

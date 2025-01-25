@@ -27,6 +27,22 @@
             <div class="invoiceDetails">
                 <div class="invoiceDetail">
                     <div class="invoiceDetailTitle">
+                        @SharedLocalizer["InvoiceNumber"]:
+                    </div>
+                    <div class="invoiceDetailValue">
+                        <div>@Model.Invoice.InvoiceNumber</div>
+                    </div>
+                </div>
+                <div class="invoiceDetail">
+                    <div class="invoiceDetailTitle">
+                        @SharedLocalizer["Period"]:
+                    </div>
+                    <div class="invoiceDetailValue">
+                        <div>@Model.Invoice.Period.DateFrom.ToShortDateString() - @Model.Invoice.Period.DateTo.ToShortDateString()</div>
+                    </div>
+                </div>
+                <div class="invoiceDetail">
+                    <div class="invoiceDetailTitle">
                         @SharedLocalizer["Customer"]:
                     </div>
                     <div class="invoiceDetailValue">
