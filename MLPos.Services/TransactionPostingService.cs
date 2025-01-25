@@ -18,6 +18,9 @@ namespace MLPos.Services
         private readonly IPostedTransactionLineRepository _postedTransactionLineRepository;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IProductRepository _productRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IPaymentMethodRepository _paymentMethodRepository;
+        private readonly IInvoicingService _invoicingService;
 
         private readonly IDbContext _dbContext;
 
@@ -26,6 +29,9 @@ namespace MLPos.Services
             IPostedTransactionLineRepository postedTransactionLineRepository,
             IInventoryRepository inventoryRepository,
             IProductRepository productRepository,
+            ICustomerRepository customerRepository,
+            IPaymentMethodRepository paymentMethodRepository,
+            IInvoicingService invoicingService,
             IDbContext dbContext)
         {
             _headerRepository = headerRepository;
@@ -33,6 +39,9 @@ namespace MLPos.Services
             _postedTransactionLineRepository = postedTransactionLineRepository;
             _inventoryRepository = inventoryRepository;
             _productRepository = productRepository;
+            _customerRepository = customerRepository;
+            _paymentMethodRepository = paymentMethodRepository;
+            _invoicingService = invoicingService;
             _dbContext = dbContext;
         }
 
@@ -40,6 +49,11 @@ namespace MLPos.Services
         {
             PostedTransactionHeader postedTransaction = await PostTransaction(transactionHeader, paymentMethod);
             await CreateInventoryTransactions(postedTransaction);
+
+            if (postedTransaction.Status == TransactionStatus.Posted && postedTransaction.PaymentMethod.InvoiceOnPost)
+            {
+                await _invoicingService.GenerateInvoice(postedTransaction);
+            }
 
             return postedTransaction;
         }
@@ -55,6 +69,8 @@ namespace MLPos.Services
                 _dbContext.BeginDbTransaction();
 
                 PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, paymentMethod));
+                postedTransactionHeader.Customer = await _customerRepository.GetCustomerAsync(postedTransactionHeader.Customer.Id);
+                postedTransactionHeader.PaymentMethod = await _paymentMethodRepository.GetPaymentMethodAsync(postedTransactionHeader.PaymentMethod.Id);
 
                 List<PostedTransactionLine> postedTransactionLines = new List<PostedTransactionLine>();
                 foreach (PostedTransactionLine line in this.CreateFrom(transactionHeader.Lines))
