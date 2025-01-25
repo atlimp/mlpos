@@ -73,6 +73,25 @@ namespace MLPos.Data.Postgres
                             }
                         );
         }
+        public async Task<InvoiceHeader> UpdateInvoiceHeaderAsync(InvoiceHeader invoiceHeader)
+        {
+            IEnumerable<InvoiceHeader> invoiceHeaders = await this.ExecuteQuery(
+                                        @"UPDATE INVOICEHEADER SET status = @status WHERE id = @id",
+                                        MapToInvoiceHeader,
+                                        new Dictionary<string, object>()
+                                        {
+                                            ["@status"] = (int)invoiceHeader.Status,
+                                            ["@id"] = invoiceHeader.Id,
+                                        }
+                                    );
+
+            if (invoiceHeaders.Any())
+            {
+                return invoiceHeaders.First();
+            }
+
+            return null;
+        }
 
         public InvoiceHeader MapToInvoiceHeader(NpgsqlDataReader reader)
         {
@@ -96,5 +115,6 @@ namespace MLPos.Data.Postgres
                 DateInserted = reader.GetDateTime(6)
             };
         }
+
     }
 }

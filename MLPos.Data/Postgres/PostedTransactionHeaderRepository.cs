@@ -74,6 +74,18 @@ namespace MLPos.Data.Postgres
             );
         }
 
+        public async Task<IEnumerable<PostedTransactionHeader>> GetPostedTransactionHeadersForInvoiceAsync(long invoiceId)
+        {
+            return await this.ExecuteQuery(
+                            "SELECT id, status, posclient_id, customer_id, paymentmethod_id, invoice_id, date_inserted, date_updated FROM POSTEDTRANSACTIONHEADER WHERE invoice_id = @invoice_id",
+                            MapToPostedTransactionHeader,
+                            new Dictionary<string, object>()
+                            {
+                                ["@invoice_id"] = invoiceId,
+                            }
+                        );
+        }
+
         public async Task<PostedTransactionHeader> UpdatePostedTransactionHeaderAsync(PostedTransactionHeader transactionHeader)
         {
             IEnumerable<PostedTransactionHeader> transactionHeaders = await this.ExecuteQuery(

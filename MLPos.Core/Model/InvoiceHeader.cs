@@ -15,6 +15,7 @@ namespace MLPos.Core.Model
         public Period Period { get; set; }
         public IEnumerable<InvoiceLine> Lines { get; set; } = Enumerable.Empty<InvoiceLine>();
         public decimal TotalAmount => Lines.Sum(x => x.Amount);
+        public string InvoiceNumber => $"{Id}".PadLeft(6, '0');
 
     }
 }

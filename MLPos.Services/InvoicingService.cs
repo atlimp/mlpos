@@ -90,7 +90,7 @@ namespace MLPos.Services
             }
         }
 
-        public Task<InvoiceHeader> GenerateInvoice(Customer customer, PaymentMethod paymentMethod)
+        public Task<InvoiceHeader> GenerateInvoice(Customer customer, PaymentMethod paymentMethod, Period period)
         {
             throw new NotImplementedException();
         }
@@ -121,6 +121,37 @@ namespace MLPos.Services
             }
 
             return invoiceHeaders;
+        }
+
+        public async Task<InvoiceHeader> MarkAsPaid(long invoiceId)
+        {
+            _invoiceHeaderRepository.SetDBContext(_dbContext);
+            _postedTransactionHeaderRepository.SetDBContext(_dbContext);
+
+            try
+            {
+                _dbContext.BeginDbTransaction();
+                InvoiceHeader invoice = await _invoiceHeaderRepository.GetInvoiceHeaderAsync(invoiceId);
+                invoice.Status = InvoiceStatus.Paid;
+                invoice = await _invoiceHeaderRepository.UpdateInvoiceHeaderAsync(invoice);
+
+                IEnumerable<PostedTransactionHeader> invoicedTransactions = await _postedTransactionHeaderRepository.GetPostedTransactionHeadersForInvoiceAsync(invoiceId);
+
+                foreach (PostedTransactionHeader transactionHeader in invoicedTransactions)
+                {
+                    transactionHeader.Status = TransactionStatus.Paid;
+                    await _postedTransactionHeaderRepository.UpdatePostedTransactionHeaderAsync(transactionHeader);
+                }
+
+                _dbContext.CommitDbTransaction();
+
+                return invoice;
+            }
+            catch (Exception ex)
+            {
+                _dbContext.RollbackDbTransaction();
+                throw;
+            }
         }
     }
 }

@@ -39,5 +39,12 @@ namespace MLPos.Web.Controllers
             viewModel.Invoice = await _invoicingService.GetInvoiceAsync(id);
             return View(viewModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Pay(long id)
+        {
+            await _invoicingService.MarkAsPaid(id);
+            return RedirectToAction("Details", new { id = id });
+        }
     }
 }
