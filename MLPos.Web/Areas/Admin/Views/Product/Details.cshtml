@@ -112,13 +112,16 @@
             }
         </div>
         <div class="sidebox productsidebox">
-            <div class="inventoryDetail">
-                <label class="inputLabel" for="EstimatedQuantity">
-                    @SharedLocalizer["EstimatedQuantity"]:
-                    @Html.TextBoxFor(m => m.Inventory.Quantity, new { id = "EstimatedQuantity", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
-                </label>
-                <a class="button buttonPrimary formButton" href="@Url.Action("Edit", "Inventory", new { id = Model.Product.Id })">@SharedLocalizer["UpdateInventory"]</a>
-            </div>
+            @if (Model.Product.Type == ProductType.Item)
+            {
+                <div class="inventoryDetail">
+                    <label class="inputLabel" for="EstimatedQuantity">
+                        @SharedLocalizer["EstimatedQuantity"]:
+                        @Html.TextBoxFor(m => m.Inventory.Quantity, new { id = "EstimatedQuantity", @class = "formInput" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                    </label>
+                    <a class="button buttonPrimary formButton" href="@Url.Action("Edit", "Inventory", new { id = Model.Product.Id })">@SharedLocalizer["UpdateInventory"]</a>
+                </div>
+            }
         </div>
     </div>
 </div>
