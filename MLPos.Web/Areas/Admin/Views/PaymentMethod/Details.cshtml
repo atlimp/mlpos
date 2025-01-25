@@ -54,6 +54,10 @@
                             @SharedLocalizer["PosVisible"]:
                             @Html.CheckBoxFor(m => m.PaymentMethod.VisibleOnPos, new { id = "posVisible", @class = "formInput checkbox" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
                         </label>
+                        <label class="inputLabel" for="invoiceOnPost">
+                            @SharedLocalizer["InvoiceOnPost"]:
+                            @Html.CheckBoxFor(m => m.PaymentMethod.InvoiceOnPost, new { id = "invoiceOnPost", @class = "formInput checkbox" }.ConditionalProp(!Model.Editing, "disabled", "disabled"))
+                        </label>
 
                         @if (Model.PaymentMethod != null && Model.PaymentMethod.DateInserted != DateTime.MinValue)
                         {
