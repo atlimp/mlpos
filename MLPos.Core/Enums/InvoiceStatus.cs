@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace MLPos.Core.Enums
 {
-    public enum TransactionStatus
+    public enum InvoiceStatus
     {
-        Posted = 0,
-        Canceled = 1,
-        Invoiced = 2,
-        Paid = 3
+        Invoiced = 0,
+        Paid = 1,
     }
 }

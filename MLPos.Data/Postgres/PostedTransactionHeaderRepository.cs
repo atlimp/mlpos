@@ -20,14 +20,16 @@ namespace MLPos.Data.Postgres
         public async Task<PostedTransactionHeader> CreatePostedTransactionHeaderAsync(PostedTransactionHeader transactionHeader)
         {
             IEnumerable<PostedTransactionHeader> transactionHeaders = await this.ExecuteQuery(
-                "INSERT INTO POSTEDTRANSACTIONHEADER(id, status, posclient_id, customer_id, paymentmethod_id) VALUES (@id, @status, @posclient_id, @customer_id, @paymentmethod_id) RETURNING id, status, posclient_id, customer_id, paymentmethod_id, date_inserted, date_updated",
+                @"INSERT INTO POSTEDTRANSACTIONHEADER(id, status, posclient_id, customer_id, paymentmethod_id, invoice_id)
+                    VALUES (@id, @status, @posclient_id, @customer_id, @paymentmethod_id, @invoice_id) RETURNING id, status, posclient_id, customer_id, paymentmethod_id, invoice_id, date_inserted, date_updated",
                 MapToPostedTransactionHeader,
                 new Dictionary<string, object>() {
                     ["@id"] = transactionHeader.Id,
                     ["@status"] = (int)transactionHeader.Status,
                     ["@posclient_id"] = transactionHeader.PosClientId,
                     ["@customer_id"] = transactionHeader.Customer.Id,
-                    ["@paymentmethod_id"] = transactionHeader.PaymentMethod?.Id
+                    ["@paymentmethod_id"] = transactionHeader.PaymentMethod?.Id,
+                    ["@invoice_id"] = transactionHeader.InvoiceId
                 }
             );
 
@@ -42,7 +44,7 @@ namespace MLPos.Data.Postgres
         public async Task<PostedTransactionHeader> GetPostedTransactionHeaderAsync(long transactionId, long posClientId)
         {
             IEnumerable<PostedTransactionHeader> transactionHeaders = await this.ExecuteQuery(
-                            "SELECT id, status, posclient_id, customer_id, paymentmethod_id, date_inserted, date_updated FROM POSTEDTRANSACTIONHEADER WHERE id = @id AND posclient_id = @posclient_id",
+                            "SELECT id, status, posclient_id, customer_id, paymentmethod_id, invoice_id, date_inserted, date_updated FROM POSTEDTRANSACTIONHEADER WHERE id = @id AND posclient_id = @posclient_id",
                             MapToPostedTransactionHeader,
                             new Dictionary<string, object>()
                             {
@@ -62,7 +64,7 @@ namespace MLPos.Data.Postgres
         public async Task<IEnumerable<PostedTransactionHeader>> GetPostedTransactionHeadersAsync(int limit, int offset)
         {
             return await this.ExecuteQuery(
-                "SELECT id, status, posclient_id, customer_id, paymentmethod_id, date_inserted, date_updated FROM POSTEDTRANSACTIONHEADER ORDER BY date_inserted DESC LIMIT @limit OFFSET @offset",
+                "SELECT id, status, posclient_id, customer_id, paymentmethod_id, invoice_id, date_inserted, date_updated FROM POSTEDTRANSACTIONHEADER ORDER BY date_inserted DESC LIMIT @limit OFFSET @offset",
                 MapToPostedTransactionHeader,
                 new Dictionary<string, object>()
                 {
@@ -70,6 +72,28 @@ namespace MLPos.Data.Postgres
                     ["@offset"] = offset,
                 }
             );
+        }
+
+        public async Task<PostedTransactionHeader> UpdatePostedTransactionHeaderAsync(PostedTransactionHeader transactionHeader)
+        {
+            IEnumerable<PostedTransactionHeader> transactionHeaders = await this.ExecuteQuery(
+                            "UPDATE POSTEDTRANSACTIONHEADER set status = @status, invoice_id = @invoice_id WHERE id = @id AND posclient_id = @posclient_id RETURNING id, status, posclient_id, customer_id, paymentmethod_id, invoice_id, date_inserted, date_updated",
+                            MapToPostedTransactionHeader,
+                            new Dictionary<string, object>()
+                            {
+                                ["@id"] = transactionHeader.Id,
+                                ["@status"] = (int)transactionHeader.Status,
+                                ["@posclient_id"] = transactionHeader.PosClientId,
+                                ["@invoice_id"] = transactionHeader.InvoiceId,
+                            }
+                        );
+
+            if (transactionHeaders.Any())
+            {
+                return transactionHeaders.First();
+            }
+
+            return null;
         }
 
         private PostedTransactionHeader MapToPostedTransactionHeader(NpgsqlDataReader reader)
@@ -87,8 +111,9 @@ namespace MLPos.Data.Postgres
                 {
                     Id = reader.GetSafeInt64(4)
                 },
-                DateInserted = reader.GetDateTime(5),
-                DateUpdated = reader.GetDateTime(6),
+                InvoiceId = reader.GetSafeInt64(5),
+                DateInserted = reader.GetDateTime(6),
+                DateUpdated = reader.GetDateTime(7),
             };
         }
     }

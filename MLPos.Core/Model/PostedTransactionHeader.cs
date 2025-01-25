@@ -10,6 +10,7 @@ namespace MLPos.Core.Model
     public class PostedTransactionHeader : Entity
     {
         public long PosClientId { get; set; }
+        public long? InvoiceId { get; set; }
         public TransactionStatus Status { get; set; }
         public Customer Customer { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
