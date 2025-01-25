@@ -41,7 +41,7 @@
                         <tr>
                             <td><a class="tableCol invoiceId" href="@Url.Action("Details", "Invoice", new { id = invoiceHeader.Id })">@invoiceHeader.Id</a></td>
                             <td><div class="tableCol invoiceStatus">@SharedLocalizer[invoiceHeader.Status.ToString()]</div></td>
-                            <td><div class="tableCol invoiceDate">@invoiceHeader.DateInserted.ToShortDateString()</div></td>
+                            <td><div class="tableCol invoiceDate">@invoiceHeader.Period.DateFrom.ToShortDateString() - @invoiceHeader.Period.DateFrom.ToShortDateString()</div></td>
                             <td><div class="tableCol invoiceCustomer">@invoiceHeader.Customer.Name</div></td>
                             <td><div class="tableCol invoicePaymentMethod">@invoiceHeader.PaymentMethod.Name</div></td>
                         </tr>

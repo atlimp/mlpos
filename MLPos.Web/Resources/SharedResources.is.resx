@@ -211,7 +211,7 @@
     <value>Þjónusta</value>
   </data>
   <data name="Error500" xml:space="preserve">
-    <value>Upp kom óvænt villa.  Vinsamlega reyndu aftur.q</value>
+    <value>Upp kom óvænt villa.  Vinsamlega reyndu aftur.</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Uppfæra</value>
@@ -229,7 +229,7 @@
     <value>Innskráningarkóði</value>
   </data>
   <data name="SalesTransactions" xml:space="preserve">
-    <value>Færsluskrá sölu</value>
+    <value>Sölufærslur</value>
   </data>
   <data name="Customer" xml:space="preserve">
     <value>Viðskiptamaður</value>
@@ -287,5 +287,47 @@
   </data>
   <data name="CountedQuantity" xml:space="preserve">
     <value>Talið magn</value>
+  </data>
+  <data name="Invoiced" xml:space="preserve">
+    <value>Reikningsfært</value>
+  </data>
+  <data name="Paid" xml:space="preserve">
+    <value>Greitt</value>
+  </data>
+  <data name="DateFrom" xml:space="preserve">
+    <value>Dags. frá</value>
+  </data>
+  <data name="DateTo" xml:space="preserve">
+    <value>Dags. til</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Eyða</value>
+  </data>
+  <data name="GenerateInvoice" xml:space="preserve">
+    <value>Mynda reikning</value>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>Reikningur</value>
+  </data>
+  <data name="InvoiceNumber" xml:space="preserve">
+    <value>Reikningsnúmer</value>
+  </data>
+  <data name="InvoiceOnPost" xml:space="preserve">
+    <value>Reikningsfæra við bókun</value>
+  </data>
+  <data name="InvoiceStatus" xml:space="preserve">
+    <value>Staða</value>
+  </data>
+  <data name="Invoices" xml:space="preserve">
+    <value>Reikningar</value>
+  </data>
+  <data name="MarkAsPaid" xml:space="preserve">
+    <value>Merkja sem greitt</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Tímabil</value>
+  </data>
+  <data name="SalesTransaction" xml:space="preserve">
+    <value>Sölufærsla</value>
   </data>
 </root>

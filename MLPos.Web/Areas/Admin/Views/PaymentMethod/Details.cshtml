@@ -97,5 +97,13 @@
                 </form>
             }
         </div>
+        <div class="sidebox customersidebox">
+            @if (Model.PaymentMethod != null)
+            {
+                <div class="invoiceDetail">
+                    <a class="button buttonPrimary formButton" href="@Url.Action("GenerateInvoice", "Invoice", new { paymentMethodId = Model.PaymentMethod?.Id })">@SharedLocalizer["GenerateInvoice"]</a>
+                </div>
+            }
+        </div>
     </div>
 </div>

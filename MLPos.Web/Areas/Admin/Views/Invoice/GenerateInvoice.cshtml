@@ -35,6 +35,15 @@
 <div class="container pageContainer">
     <div class="container pageContentContainer">
         <div class="container formContainer">
+            <ul class="validationErrors">
+                @if (Model.ValidationErrors != null && Model.ValidationErrors.Any())
+                {
+                    @foreach (var error in Model.ValidationErrors)
+                    {
+                        <li>@error.Error</li>
+                    }
+                }
+            </ul>
             <form class="editForm" method="POST">
                 <div class="container detailsContainer">
                     <div>

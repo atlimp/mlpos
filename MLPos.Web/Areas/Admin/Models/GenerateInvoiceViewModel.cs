@@ -9,5 +9,6 @@ namespace MLPos.Web.Models
         public IEnumerable<PaymentMethod> PaymentMethods { get; set; }
         public long? SelectedPaymentMethodId { get; set; }
         public Period Period { get; set; }
+        public IEnumerable<ValidationError> ValidationErrors { get; set; }
     }
 }
