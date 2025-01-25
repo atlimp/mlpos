@@ -99,13 +99,13 @@
     flex-direction: column;
     justify-content: flex-start;
     max-width: 1920px;
-    height: auto;
+    height: fit-content;
 }
 
 .pageContentContainer {
     overflow-y: scroll;
     flex-direction: column;
-    height: auto;
+    margin: 2em auto;
 }
 
 .pageTitle {
@@ -301,6 +301,7 @@ table, tr, th, td {
 
 .tableContainer {
     overflow: auto;
+    margin-bottom: 2em;
 }
 
 .tableHeader {
