@@ -49,6 +49,17 @@
                         <div>@SharedLocalizer[Model.Transaction.Status.ToString()]</div>
                     </div>
                 </div>
+                @if (Model.Transaction.InvoiceId != -1)
+                {
+                    <div class="transactionDetail">
+                        <div class="transactionDetailTitle">
+                            @SharedLocalizer["InvoiceId"]:
+                        </div>
+                        <div class="transactionDetailValue">
+                            <a href="@Url.Action("Details", "Invoice", new { id = Model.Transaction.InvoiceId })">@Model.Transaction.InvoiceId</a>
+                        </div>
+                    </div>
+                }
                 <div class="transactionDetail">
                     <div class="transactionDetailTitle">
                         @SharedLocalizer["TotalAmount"]:

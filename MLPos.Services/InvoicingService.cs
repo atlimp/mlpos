@@ -15,6 +15,9 @@ namespace MLPos.Services
         private readonly IInvoiceHeaderRepository _invoiceHeaderRepository;
         private readonly IInvoiceLineRepository _invoiceLineRepository;
         private readonly IPostedTransactionHeaderRepository _postedTransactionHeaderRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IPaymentMethodRepository _paymentMethodRepository;
+        private readonly IProductRepository _productRepository;
 
         private readonly IDbContext _dbContext;
 
@@ -22,11 +25,17 @@ namespace MLPos.Services
             IInvoiceHeaderRepository invoiceHeaderRepository,
             IInvoiceLineRepository invoiceLineRepository,
             IPostedTransactionHeaderRepository postedTransactionHeaderRepository,
+            ICustomerRepository customerRepository,
+            IPaymentMethodRepository paymentMethodRepository,
+            IProductRepository productRepository,
             IDbContext dbContext)
         {
             _invoiceHeaderRepository = invoiceHeaderRepository;
             _invoiceLineRepository = invoiceLineRepository;
             _postedTransactionHeaderRepository = postedTransactionHeaderRepository;
+            _customerRepository = customerRepository;
+            _paymentMethodRepository = paymentMethodRepository;
+            _productRepository = productRepository;
             _dbContext = dbContext;
         }
     
@@ -84,6 +93,34 @@ namespace MLPos.Services
         public Task<InvoiceHeader> GenerateInvoice(Customer customer, PaymentMethod paymentMethod)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<InvoiceHeader> GetInvoiceAsync(long invoiceId)
+        {
+            InvoiceHeader invoiceHeader = await _invoiceHeaderRepository.GetInvoiceHeaderAsync(invoiceId);
+            invoiceHeader.Customer = await _customerRepository.GetCustomerAsync(invoiceHeader.Customer.Id);
+            invoiceHeader.PaymentMethod = await _paymentMethodRepository.GetPaymentMethodAsync(invoiceHeader.PaymentMethod.Id);
+            invoiceHeader.Lines = await _invoiceLineRepository.GetInvoiceLinesAsync(invoiceId);
+
+            foreach (InvoiceLine line in invoiceHeader.Lines)
+            {
+                line.Product = await _productRepository.GetProductAsync(line.Product.Id);
+            }
+
+            return invoiceHeader;
+        }
+
+        public async Task<IEnumerable<InvoiceHeader>> GetInvoicesAsync(int limit, int offset)
+        {
+            IEnumerable<InvoiceHeader> invoiceHeaders = await _invoiceHeaderRepository.GetInvoiceHeadersAsync(limit, offset);
+
+            foreach (InvoiceHeader invoice in invoiceHeaders)
+            {
+                invoice.Customer = await _customerRepository.GetCustomerAsync(invoice.Customer.Id);
+                invoice.PaymentMethod = await _paymentMethodRepository.GetPaymentMethodAsync(invoice.PaymentMethod.Id);
+            }
+
+            return invoiceHeaders;
         }
     }
 }

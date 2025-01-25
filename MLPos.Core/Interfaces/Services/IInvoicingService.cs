@@ -11,5 +11,7 @@ namespace MLPos.Core.Interfaces.Services
     {
         public Task<InvoiceHeader> GenerateInvoice(PostedTransactionHeader transactionHeader);
         public Task<InvoiceHeader> GenerateInvoice(Customer customer, PaymentMethod paymentMethod);
+        public Task<IEnumerable<InvoiceHeader>> GetInvoicesAsync(int limit, int offset);
+        public Task<InvoiceHeader> GetInvoiceAsync(long invoiceId);
     }
 }

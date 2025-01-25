@@ -1,0 +1,87 @@
+@using MLPos.Web.Models
+@using MLPos.Core.Model
+@using MLPos.Web.Utils
+@using Microsoft.Extensions.Localization
+@using MLPos.Web
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@model InvoiceViewModel
+@{
+    Layout = "_Admin_Layout";
+    ViewData["Title"] = SharedLocalizer["Invoice"];
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Invoices.css">
+}
+
+@section Scripts {
+}
+
+
+<div class="container pageContainer">
+    <div class="container pageContentContainer invoiceContainer">
+        <div class="container invoiceDetailsContainer">
+                <div class="invoiceImageContainer">
+                    <img class="invoiceImage" src="@Model.Invoice.Customer.Image" />
+                </div>
+            <div class="invoiceDetails">
+                <div class="invoiceDetail">
+                    <div class="invoiceDetailTitle">
+                        @SharedLocalizer["Customer"]:
+                    </div>
+                    <div class="invoiceDetailValue">
+                        <a href="@Url.Action("Details", "Customer", new { id = Model.Invoice.Customer.Id })">@Model.Invoice.Customer.Name</a>
+                    </div>
+                </div>
+                <div class="invoiceDetail">
+                    <div class="invoiceDetailTitle">
+                        @SharedLocalizer["PaymentMethod"]:
+                    </div>
+                    <div class="invoiceDetailValue">
+                        <a href="@Url.Action("Details", "PaymentMethod", new { id = Model.Invoice.PaymentMethod.Id })">@Model.Invoice.PaymentMethod.Name</a>
+                    </div>
+                </div>
+                <div class="invoiceDetail">
+                    <div class="invoiceDetailTitle">
+                        @SharedLocalizer["InvoiceStatus"]:
+                    </div>
+                    <div class="invoiceDetailValue">
+                        <div>@SharedLocalizer[Model.Invoice.Status.ToString()]</div>
+                    </div>
+                </div>
+                <div class="invoiceDetail">
+                    <div class="invoiceDetailTitle">
+                        @SharedLocalizer["TotalAmount"]:
+                    </div>
+                    <div class="invoiceDetailValue">
+                        <div>@Model.Invoice.TotalAmount kr.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container tableContainer">
+            <table class="invoiceTable invoiceTable">
+                <thead class="tableHeader">
+                    <tr>
+                        <th><div class="tableCol invoiceId">@SharedLocalizer["Id"]</div></th>
+                        <th><div class="tableCol invoiceProduct">@SharedLocalizer["Product"]</div></th>
+                        <th><div class="tableCol invoiceDate">@SharedLocalizer["Quantity"]</div></th>
+                        <th><div class="tableCol invoiceCustomer">@SharedLocalizer["Amount"]</div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in Model.Invoice.Lines)
+                    {
+                        <tr>
+                            <td><div class="tableCol invoiceId">@line.Id</div></td>
+                            <td><a class="tableCol invoiceProduct" href="@Url.Action("Details", "Product", new { id = line.Product.Id })">@line.Product.Name</a></td>
+                            <td><div class="tableCol invoiceDate">@line.Quantity</div></td>
+                            <td><div class="tableCol invoiceCustomer">@line.Amount kr.</div></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <a class="button buttonSecondary formButton" href="@Url.Action("Index")">@SharedLocalizer["Back"]</a>
+    </div>
+</div>

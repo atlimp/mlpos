@@ -14,5 +14,7 @@ namespace MLPos.Core.Model
         public PaymentMethod PaymentMethod { get; set; }
         public Period Period { get; set; }
         public IEnumerable<InvoiceLine> Lines { get; set; } = Enumerable.Empty<InvoiceLine>();
+        public decimal TotalAmount => Lines.Sum(x => x.Amount);
+
     }
 }

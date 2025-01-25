@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace MLPos.Data.Postgres
 {
@@ -35,6 +36,18 @@ namespace MLPos.Data.Postgres
             }
 
             return null;
+        }
+
+        public async Task<IEnumerable<InvoiceLine>> GetInvoiceLinesAsync(long invoiceId)
+        {
+            return await this.ExecuteQuery(
+                            @"SELECT id, product_id, quantity, amount, date_inserted FROM INVOICELINE WHERE invoice_id = @invoice_id",
+                            MapToInvoiceLine,
+                            new Dictionary<string, object>()
+                            {
+                                ["@invoice_id"] = invoiceId,
+                            }
+                        );
         }
 
         public InvoiceLine MapToInvoiceLine(NpgsqlDataReader reader)

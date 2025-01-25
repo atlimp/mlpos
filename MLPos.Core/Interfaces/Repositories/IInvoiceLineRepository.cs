@@ -10,5 +10,6 @@ namespace MLPos.Core.Interfaces.Repositories
     public interface IInvoiceLineRepository : IBaseRepository
     {
         public Task<InvoiceLine> CreateInvoiceLineAsync(long invoiceId, InvoiceLine line);
+        public Task<IEnumerable<InvoiceLine>> GetInvoiceLinesAsync(long invoiceId);
     }
 }

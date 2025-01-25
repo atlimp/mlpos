@@ -1,4 +1,5 @@
 ﻿using MLPos.Core.Enums;
+using MLPos.Core.Exceptions;
 using MLPos.Core.Interfaces.Repositories;
 using MLPos.Core.Model;
 using MLPos.Data.Postgres.Helpers;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace MLPos.Data.Postgres
 {
@@ -38,7 +40,40 @@ namespace MLPos.Data.Postgres
 
             return null;
         }
-        
+
+        public async Task<InvoiceHeader> GetInvoiceHeaderAsync(long invoiceId)
+        {
+            IEnumerable<InvoiceHeader> invoiceHeaders = await this.ExecuteQuery(
+                                        "SELECT id, status, customer_id, paymentmethod_id, period_from, period_to, date_inserted FROM INVOICEHEADER WHERE id = @id",
+                                        MapToInvoiceHeader,
+                                        new Dictionary<string, object>()
+                                        {
+                                            ["@id"] = invoiceId,
+                                        }
+                                    );
+
+            if (invoiceHeaders.Any())
+            {
+                return invoiceHeaders.First();
+            }
+
+            throw new EntityNotFoundException(typeof(InvoiceHeader), invoiceId);
+
+        }
+
+        public async Task<IEnumerable<InvoiceHeader>> GetInvoiceHeadersAsync(int limit, int offset)
+        {
+            return await this.ExecuteQuery(
+                            "SELECT id, status, customer_id, paymentmethod_id, period_from, period_to, date_inserted FROM INVOICEHEADER ORDER BY date_inserted DESC LIMIT @limit OFFSET @offset",
+                            MapToInvoiceHeader,
+                            new Dictionary<string, object>()
+                            {
+                                ["@limit"] = limit,
+                                ["@offset"] = offset,
+                            }
+                        );
+        }
+
         public InvoiceHeader MapToInvoiceHeader(NpgsqlDataReader reader)
         {
             return new InvoiceHeader
