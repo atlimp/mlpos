@@ -16,6 +16,17 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/Customer.css">
 }
+
+@section Scripts {
+    <script src="~/js/imagepreview.js"></script>
+    <script type="text/javascript">
+        new ImagePreview({
+            imageInputId: '#image',
+            imagePreviewClass: '.cardImage'
+        });
+    </script>
+}
+
 <div class="container pageContainer">
     <div class="container pageContentContainer">
         <div class="container formContainer">
@@ -38,7 +49,7 @@
                         {
                             <label class="inputLabel" for="image">
                                 @SharedLocalizer["Image"]:
-                                <input type="file" name="image" id="image" class="formInput" />
+                                <input type="file" name="image" id="image" class="formInput" accept="image/png, image/jpeg" />
                             </label>
                         }
                         <label class="inputLabel" for="name">
