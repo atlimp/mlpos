@@ -99,10 +99,11 @@
     flex-direction: column;
     justify-content: flex-start;
     max-width: 1920px;
-    height: fit-content;
+    height: auto;
 }
 
 .pageContentContainer {
+    height: auto;
     overflow-y: scroll;
     flex-direction: column;
     margin: 2em auto;
