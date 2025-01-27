@@ -301,7 +301,6 @@ table, tr, th, td {
 }
 
 .tableContainer {
-    overflow: auto;
     margin-bottom: 2em;
 }
 
