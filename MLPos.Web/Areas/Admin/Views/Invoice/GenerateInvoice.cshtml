@@ -97,7 +97,7 @@
                         <label class="inputLabel" for="customerId">
                             @SharedLocalizer["Customer"]:
                             @Html.TextBoxFor(m => m.SelectedCustomerId, new { id = "customerId", @class = "formInput", required = true, hidden = "hidden" })
-                            <input type="text" id="customerLookupInput" class="lookupInput" />
+                            <input type="text" id="customerLookupInput" class="lookupInput" value="@Model.Customers.FirstOrDefault(c => c.Id == Model.SelectedCustomerId)?.Name" />
                             <div class="container lookupContainer hidden" id="customerLookupList">
                                 @foreach (Customer customer in Model.Customers) {
                                     <div class="container lookupCard customerLookupCard" onclick="(() => customerSelected(@customer.Id, '@customer.Name'))()">
@@ -115,7 +115,7 @@
                         <label class="inputLabel" for="paymentMethodId">
                             @SharedLocalizer["PaymentMethod"]:
                             @Html.TextBoxFor(m => m.SelectedPaymentMethodId, new { id = "paymentMethodId", @class = "formInput", required = true, hidden = "hidden" })
-                            <input type="text" id="paymentMethodLookupInput" class="lookupInput" />
+                            <input type="text" id="paymentMethodLookupInput" class="lookupInput" value="@Model.PaymentMethods.FirstOrDefault(c => c.Id == Model.SelectedPaymentMethodId)?.Name" />
                             <div class="container lookupContainer hidden" id="paymentMethodLookupList">
                                 @foreach (PaymentMethod paymentMethod in Model.PaymentMethods)
                                 {

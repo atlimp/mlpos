@@ -353,6 +353,8 @@ table, tr, th, td {
 
 .lookupContainer {
     width: 100%;
+    max-height: 11em;
+    overflow: scroll;
     flex-direction: column;
 }
 
