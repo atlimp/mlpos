@@ -263,13 +263,13 @@ input[type=checkbox]:disabled {
 
 .deleteForm {
     width: 100%;
-    margin-top: 5em;
 }
 
 .deleteButton {
     width: 100%;
-    background-color: red;
-    height: 4em;
+    background-color: var(--red);
+    color: var(--yellow);
+    min-height: 2em;
 }
 
 .pageNav {
@@ -314,17 +314,25 @@ table, tr, th, td {
 }
 
 .sidebox {
+    font-size: 12px;
     margin-top: 3em;
+    min-width: 20em;
     border: 1px solid var(--yellow);
     background: var(--platinum);
     border-radius: 5px;
-    padding: 1em;
+    padding: 0 1em;
     height: fit-content;
 }
 
 .sideboxitem {
     padding: 1em 0;
+    width: 100%;
 }
+
+.sideboxitem .button {
+    width: 100%;
+}
+
 .sideboxitem:not(:first-child) {
     border-top: 1px solid var(--yellow);
 }

@@ -114,14 +114,14 @@
                 @Html.TextBoxFor(m => m.Product.Image, new { hidden = "hidden" })
 
             </form>
+        </div>
+        <div class="sidebox productsidebox">
             @if (Model.Editing && !Model.NewProduct)
             {
-                <form method="post" class="deleteForm" action="@Url.Action("Delete", "Product", new { id = Model.Product.Id })">
+                <form method="post" class="deleteForm sideboxitem" action="@Url.Action("Delete", "Product", new { id = Model.Product.Id })">
                     <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
                 </form>
             }
-        </div>
-        <div class="sidebox productsidebox">
             @if (Model.Product?.Type == ProductType.Item)
             {
                 <div class="sideboxitem inventoryDetail">
