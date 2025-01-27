@@ -63,6 +63,7 @@ public class ProductController : AdminControllerBase
         {
             _logger.LogInformation("Fetching product with id {id}", id);
             product = await _productService.GetProductAsync(id);
+            model.Inventory = await _productService.GetProductInventoryAsync(product.Id);
         }
         catch(EntityNotFoundException e)
         {
