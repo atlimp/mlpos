@@ -3,10 +3,6 @@
     height: fit-content;
 }
 
-.tableContainer {
-    padding-right: 2em;
-}
-
 .invoiceTable {
     border: 1px solid var(--platinum);
     width: 100%;
@@ -23,7 +19,7 @@
 }
 
 .invoiceId {
-    width: 2.5em;
+    width: 5em;
     text-align: left;
 }
 
@@ -38,18 +34,16 @@
 }
 
 .invoiceDate {
-    width: 6em;
-    text-align: left;
+    display: none;
 }
 
 .invoiceCustomer {
-    width: 10em;
+    width: 100%;
     text-align: left;
 }
 
 .invoicePaymentMethod {
-    width: 6em;
-    text-align: left;
+    display: none;
 }
 
 .invoiceDetailsContainer {
@@ -99,36 +93,41 @@
     text-align: right;
 }
 
-    .invoiceDetailValue > div, .invoiceDetailValue > a {
-        margin: auto;
-        text-align: right;
-    }
+.invoiceDetailValue > div, .invoiceDetailValue > a {
+    margin: auto;
+    text-align: right;
+}
 
 
 
 @media(min-width: 600px) {
     .invoiceId {
-        width: 2.5em;
+        width: 100%;
+        display: block;
         text-align: left;
     }
 
     .invoiceStatus {
-        width: 6em;
+        width: 100%;
+        display: block;
         text-align: left;
     }
 
     .invoiceDate {
-        width: 12em;
+        width: 100%;
+        display: block;
         text-align: left;
     }
 
     .invoiceCustomer {
         width: 100%;
+        display: block;
         text-align: left;
     }
 
     .invoicePaymentMethod {
         width: 100%;
+        display: block;
         text-align: left;
     }
 
