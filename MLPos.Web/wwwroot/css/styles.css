@@ -89,6 +89,14 @@ a {
   margin: 0.5em 0;
   font-size: 1.25em;
 }
+.filterLabel {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0.5em 0;
+  font-size: 1.25em;
+}
 
 .validationErrors {
     min-height: 3em;

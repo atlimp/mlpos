@@ -400,6 +400,17 @@ table, tr, th, td {
     font-size: 1rem;
 }
 
+.filterImage {
+    max-height: 2em;
+    max-width: 2em;
+    height: auto;
+    width: auto;
+}
+
+inputLabelRadio {
+    flex-direction: row;
+}
+
 
 
 

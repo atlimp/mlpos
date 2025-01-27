@@ -8,6 +8,12 @@
 @{
     Layout = "_Admin_Layout";
     ViewData["Title"] = SharedLocalizer["SalesTransactions"];
+
+    Dictionary<string, object> queryParameters = new Dictionary<string, object>();
+    queryParameters["customerId"] = Model.FilterOptions.SelectedCustomerId;
+    queryParameters["paymentMethodId"] = Model.FilterOptions.SelectedPaymentMethodId;
+    queryParameters["dateFrom"] = Model.FilterOptions.DateFrom;
+    queryParameters["dateTo"] = Model.FilterOptions.DateTo;
 }
 
 @section Styles {
@@ -15,6 +21,62 @@
 }
 
 @section Scripts {
+    <script src="~/js/search.js"></script>
+    <script type="text/javascript">
+        const customerLookupList = document.querySelector('#customerLookupList');
+        const customerSearchInput = document.querySelector('#customerLookupInput');
+        new Search({
+            searchInput: customerSearchInput,
+            listElement: customerLookupList,
+            cardClassName: '.customerLookupCard',
+            hideClassName: 'hideCard',
+            lookupClasses: [ '.customerLookupName', '.customerLookupEmail' ]
+        });
+
+        const paymentMethodLookupList = document.querySelector('#paymentMethodLookupList');
+        const paymentMethodSearchInput = document.querySelector('#paymentMethodLookupInput');
+        new Search({
+            searchInput: paymentMethodSearchInput,
+            listElement: paymentMethodLookupList,
+            cardClassName: '.paymentMethodLookupCard',
+            hideClassName: 'hideCard',
+            lookupClasses: [ '.paymentMethodLookupName' ]
+        });
+
+        customerSearchInput.addEventListener('click', () => {
+            customerLookupList.classList.toggle('hidden');
+        });
+
+        customerSearchInput.addEventListener('input', () => {
+            document.querySelector('#customerId').value = '';
+        });
+
+        const customerSelected = (id, name) => {
+            customerSearchInput.value = name;
+            document.querySelector('#customerId').value = id;
+            customerLookupList.classList.add('hidden');
+        }
+
+        paymentMethodSearchInput.addEventListener('click', () => {
+            paymentMethodLookupList.classList.toggle('hidden');
+        });
+
+        paymentMethodSearchInput.addEventListener('input', () => {
+            document.querySelector('#paymentMethodId').value = '';
+        });
+
+        const paymentMethodSelected = (id, name) => {
+            paymentMethodSearchInput.value = name;
+            document.querySelector('#paymentMethodId').value = id;
+            paymentMethodLookupList.classList.add('hidden');
+        }
+
+        const filterForm = document.querySelector('#filterForm');
+        const toggleFilter = document.querySelector('#toggleFilter');
+        toggleFilter.addEventListener('click', () => {
+            filterForm.classList.toggle('hidden');
+        });
+    </script>
 }
 
 
@@ -23,6 +85,74 @@
         <div>
             <h1>@SharedLocalizer["SalesTransactions"]</h1>
         </div>
+        <div id="toggleFilter"><img class="filterImage" src="~/img/icons/filter.png" /></div>
+        <form class="filter hidden" id="filterForm">
+            <label class="inputLabel" for="customerId">
+                @SharedLocalizer["Customer"]:
+                <input type="text" id="customerId" class="formInput" hidden="hidden" name="customerId" value="@Model.FilterOptions.SelectedCustomerId" />
+                <input type="text" id="customerLookupInput" class="lookupInput" value="@Model.FilterOptions.Customers.FirstOrDefault(c => c.Id == Model.FilterOptions.SelectedCustomerId)?.Name" />
+                <div class="container lookupContainer hidden" id="customerLookupList">
+                    @foreach (Customer customer in Model.FilterOptions.Customers)
+                    {
+                        <div class="container lookupCard customerLookupCard" onclick="(() => customerSelected(@customer.Id, '@customer.Name'))()">
+                            <div class="lookupCardImageContainer">
+                                <img src="@customer.Image" class="lookupCardImage" />
+                            </div>
+                            <div class="lookupCardDetails">
+                                <div class="lookupCardTitle customerLookupName">@customer.Name</div>
+                                <div class="lookupCardSubTitle customerLookupEmail">@customer.Email</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </label>
+
+            <label class="inputLabel" for="paymentMethodId">
+                @SharedLocalizer["PaymentMethod"]:
+                <input type="text" id="paymentMethodId" class="formInput" hidden="hidden" name="paymentMethodId" value="@Model.FilterOptions.SelectedPaymentMethodId" />
+                <input type="text" id="paymentMethodLookupInput" class="lookupInput" value="@Model.FilterOptions.PaymentMethods.FirstOrDefault(c => c.Id == Model.FilterOptions.SelectedPaymentMethodId)?.Name" />
+                <div class="container lookupContainer hidden" id="paymentMethodLookupList">
+                    @foreach (PaymentMethod paymentMethod in Model.FilterOptions.PaymentMethods)
+                    {
+                        <div class="container lookupCard paymentMethodLookupCard" onclick="(() => paymentMethodSelected(@paymentMethod.Id, '@paymentMethod.Name'))()">
+                            <div class="lookupCardImageContainer">
+                                <img src="@paymentMethod.Image" class="lookupCardImage" />
+                            </div>
+                            <div class="lookupCardDetails">
+                                <div class="lookupCardTitle paymentMethodLookupName">@paymentMethod.Name</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </label>
+
+            <label class="filterLabel" for="dateFrom">
+                @SharedLocalizer["DateFrom"]:
+                <input type="date" id="dateFrom" name="dateFrom" class="lookupInput" value="@Model.FilterOptions.DateFrom" />
+            </label>
+            <label class="filterLabel" for="dateTo">
+                @SharedLocalizer["DateTo"]:
+                <input type="date" id="dateTo" name="dateTo" class="lookupInput" value="@Model.FilterOptions.DateTo" />
+            </label>
+            <div>
+                @foreach (int key in Model.FilterOptions.StatusValues.Keys) {
+                    <label class="filterLabel" for="@Model.FilterOptions.StatusValues[key]">
+                        @Model.FilterOptions.StatusValues[key]:
+                        @if (key == (int)Model.FilterOptions.Status)
+                        {
+                            <input type="radio" id="@Model.FilterOptions.StatusValues[key]" name="status" class="lookupInput" value="@key" checked />
+                        }
+                        else
+                        {
+                            <input type="radio" id="@Model.FilterOptions.StatusValues[key]" name="status" class="lookupInput" value="@key" />
+                        }
+                    </label>
+
+                }
+            </div>
+
+            <button class="button buttonPrimary" type="submit">Search</button>
+        </form>
     </div>
     <div class="container tableContainer">
         <table class="transactionTable salesTransactionTable">
@@ -51,16 +181,18 @@
     </div>
     <div class="pageNav">
         <div class="pageNavLink pagePrev">
-            @if (Model.PageNum > 1)
-            {
-                <a href="@Url.Action("Index", "Sales" , new { page = Model.PageNum - 1 })">@SharedLocalizer["PreviousPage"]</a>
+            @* @if (Model.PageNum > 1) *@
+            @{
+                queryParameters["page"] = Model.PageNum - 1;
+                <a href="@Url.Action("Index", "Sales" , queryParameters)">@SharedLocalizer["PreviousPage"]</a>
             }
         </div>
         <div class="pageNavTitle currPage">@Model.PageNum</div>
         <div class="pageNavLink pageNext">
-            @if (Model.HasMorePages)
-            {
-                <a class="pageNavLink pageNext" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum + 1 })">@SharedLocalizer["NextPage"]</a>
+            @* @if (Model.HasMorePages) *@
+            @{
+                queryParameters["page"] = Model.PageNum + 1;
+                <a class="pageNavLink pageNext" href="@Url.Action("Index", "Sales" , queryParameters)">@SharedLocalizer["NextPage"]</a>
             }
         </div>
     </div>
