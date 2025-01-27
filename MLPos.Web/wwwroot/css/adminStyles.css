@@ -319,6 +319,23 @@ table, tr, th, td {
     height: fit-content;
 }
 
+.newButton {
+    width: 2em;
+    height: 2em;
+    overflow: hidden;
+    display: flex;
+    padding: 0.25em;
+}
+
+.newButtonImage {
+    margin: auto;
+    max-width: 1.5em;
+    max-height: 1.5em;
+    width: auto;
+    height: auto;
+}
+
+
 @media(min-width: 600px) {
     .cardImage {
         max-width: 16em;
