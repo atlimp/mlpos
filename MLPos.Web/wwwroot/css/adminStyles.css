@@ -277,12 +277,9 @@ input[type=checkbox]:disabled {
     justify-content: flex-start;
 }
 
-.pageNavLink {
+.pageNavLink , .pageNavTitle {
     width: 4em;
-}
-
-.pageNavTitle {
-    width: 4em;
+    text-align: center;
 }
 
 table {

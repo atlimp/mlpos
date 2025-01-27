@@ -50,13 +50,17 @@
         </table>
     </div>
     <div class="pageNav">
-        @if (Model.PageNum > 1) {
-            <a class="pageNavLink pagePrev" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum - 1 })">@SharedLocalizer["PreviousPage"]</a>
-        }
+        <div class="pageNavLink pagePrev">
+            @if (Model.PageNum > 1) {
+                <a href="@Url.Action("Index", "Sales" , new { page = Model.PageNum - 1 })">@SharedLocalizer["PreviousPage"]</a>
+            }
+        </div>
         <div class="pageNavTitle currPage">@Model.PageNum</div>
-        @if (Model.HasMorePages) {
-            <a class="pageNavLink pageNext" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum + 1 })">@SharedLocalizer["NextPage"]</a>
-        }
+        <div class="pageNavLink pageNext">
+            @if (Model.HasMorePages) {
+                <a class="pageNavLink pageNext" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum + 1 })">@SharedLocalizer["NextPage"]</a>
+            }
+        </div>
     </div>
 
     <div class="formButtons">
