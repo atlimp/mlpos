@@ -29,6 +29,48 @@
 }
 
 @section Scripts {
+    <script src="~/js/search.js"></script>
+    <script type="text/javascript">
+        const customerLookupList = document.querySelector('#customerLookupList');
+        const customerSearchInput = document.querySelector('#customerLookupInput');
+        new Search({
+            searchInput: customerSearchInput,
+            listElement: customerLookupList,
+            cardClassName: '.customerLookupCard',
+            hideClassName: 'hideCard',
+            lookupClasses: [ '.customerLookupName', '.customerLookupEmail' ]
+        });
+
+        const paymentMethodLookupList = document.querySelector('#paymentMethodLookupList');
+        const paymentMethodSearchInput = document.querySelector('#paymentMethodLookupInput');
+        new Search({
+            searchInput: paymentMethodSearchInput,
+            listElement: paymentMethodLookupList,
+            cardClassName: '.paymentMethodLookupCard',
+            hideClassName: 'hideCard',
+            lookupClasses: [ '.paymentMethodLookupName' ]
+        });
+
+        customerSearchInput.addEventListener('focus', () => {
+            customerLookupList.classList.remove('hidden');
+        });
+
+        const customerSelected = (id, name) => {
+            customerSearchInput.value = name;
+            document.querySelector('#customerId').value = id;
+            customerLookupList.classList.add('hidden');
+        }
+
+        paymentMethodSearchInput.addEventListener('focus', () => {
+            paymentMethodLookupList.classList.remove('hidden');
+        });
+
+        const paymentMethodSelected = (id, name) => {
+            paymentMethodSearchInput.value = name;
+            document.querySelector('#paymentMethodId').value = id;
+            paymentMethodLookupList.classList.add('hidden');
+        }
+    </script>
 }
 
 
@@ -54,11 +96,39 @@
                     <div>
                         <label class="inputLabel" for="customerId">
                             @SharedLocalizer["Customer"]:
-                            @Html.DropDownListFor(m => m.SelectedCustomerId, new SelectList(customers, "Key", "Value"), new { id = "type", @class = "formInput", required = true })
+                            @Html.TextBoxFor(m => m.SelectedCustomerId, new { id = "customerId", @class = "formInput", required = true, hidden = "hidden" })
+                            <input type="text" id="customerLookupInput" class="lookupInput" />
+                            <div class="container lookupContainer hidden" id="customerLookupList">
+                                @foreach (Customer customer in Model.Customers) {
+                                    <div class="container lookupCard customerLookupCard" onclick="(() => customerSelected(@customer.Id, '@customer.Name'))()">
+                                        <div class="lookupCardImageContainer">
+                                            <img src="@customer.Image" class="lookupCardImage"/>
+                                        </div>
+                                        <div class="lookupCardDetails">
+                                            <div class="lookupCardTitle customerLookupName">@customer.Name</div>
+                                            <div class="lookupCardSubTitle customerLookupEmail">@customer.Email</div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                         </label>
                         <label class="inputLabel" for="paymentMethodId">
                             @SharedLocalizer["PaymentMethod"]:
-                            @Html.DropDownListFor(m => m.SelectedPaymentMethodId, new SelectList(paymentMethods, "Key", "Value"), new { id = "type", @class = "formInput", required = true })
+                            @Html.TextBoxFor(m => m.SelectedPaymentMethodId, new { id = "paymentMethodId", @class = "formInput", required = true, hidden = "hidden" })
+                            <input type="text" id="paymentMethodLookupInput" class="lookupInput" />
+                            <div class="container lookupContainer hidden" id="paymentMethodLookupList">
+                                @foreach (PaymentMethod paymentMethod in Model.PaymentMethods)
+                                {
+                                    <div class="container lookupCard paymentMethodLookupCard" onclick="(() => paymentMethodSelected(@paymentMethod.Id, '@paymentMethod.Name'))()">
+                                        <div class="lookupCardImageContainer">
+                                            <img src="@paymentMethod.Image" class="lookupCardImage" />
+                                        </div>
+                                        <div class="lookupCardDetails">
+                                            <div class="lookupCardTitle paymentMethodLookupName">@paymentMethod.Name</div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                         </label>
                         <label class="inputLabel" for="dateFrom">
                             @SharedLocalizer["DateFrom"]:
