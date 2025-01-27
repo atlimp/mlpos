@@ -79,10 +79,26 @@ namespace MLPos.Web.Controllers
                 Id = (long)model.SelectedPaymentMethodId,
             };
 
+            var validateResult = await _invoicingService.ValidateInvoiceGeneration(customer, paymentMethod, model.Period);
+            List<ValidationError> validationErrors = validateResult.Item2.ToList();
 
-            InvoiceHeader invoice = await _invoicingService.GenerateInvoice(customer, paymentMethod, model.Period);
+            if (validateResult.Item1)
+            {
+                InvoiceHeader invoice = await _invoicingService.GenerateInvoice(customer, paymentMethod, model.Period);
 
-            return RedirectToAction("Details", new { id = invoice.Id });
+                if (invoice != null)
+                {
+                    return RedirectToAction("Details", new { id = invoice.Id });
+                }
+
+                validationErrors.Add(new ValidationError{
+                    Error = "No lines were found for given parameters"
+                });            }
+
+            model.Customers = await _customerService.GetCustomersAsync();
+            model.PaymentMethods = await _paymentMethodService.GetPaymentMethodsAsync();
+            model.ValidationErrors = validationErrors;
+            return View(model);
         }
     }
 }

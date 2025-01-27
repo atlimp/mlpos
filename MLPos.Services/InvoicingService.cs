@@ -89,6 +89,12 @@ namespace MLPos.Services
             };
 
             IEnumerable<InvoiceLine> readyInvoiceLines = AggregateLines(transactions);
+
+            if (readyInvoiceLines.Count() <= 0)
+            {
+                return null;
+            }
+
             try
             {
                 _dbContext.BeginDbTransaction();
@@ -210,6 +216,36 @@ namespace MLPos.Services
                 _dbContext.RollbackDbTransaction();
                 throw;
             }
+        }
+
+        public async Task<Tuple<bool, IEnumerable<ValidationError>>> ValidateInvoiceGeneration(Customer customer, PaymentMethod paymentMethod, Period period)
+        {
+            bool ret = true;
+            List<ValidationError> validationErrors = new List<ValidationError>();
+
+            bool exists = await _customerRepository.CustomerExistsAsync(customer.Id);
+
+            if (!exists)
+            {
+                validationErrors.Add(new ValidationError { Error = $"Customer with Id {customer.Id} was not found" });
+                ret = false;
+            }
+
+            exists = await _paymentMethodRepository.PaymentMethodExistsAsync(paymentMethod.Id);
+
+            if (!exists)
+            {
+                validationErrors.Add(new ValidationError { Error = $"Payment method with Id {paymentMethod.Id} was not found" });
+                ret = false;
+            }
+
+            if ((period.DateTo - period.DateFrom).TotalDays > 31)
+            {
+                validationErrors.Add(new ValidationError { Error = $"Period may be at most 31 days." });
+                ret = false;
+            }
+
+            return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
         }
     }
 }

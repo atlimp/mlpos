@@ -54,19 +54,19 @@
                     <div>
                         <label class="inputLabel" for="customerId">
                             @SharedLocalizer["Customer"]:
-                            @Html.DropDownListFor(m => m.SelectedCustomerId, new SelectList(customers, "Key", "Value"), new { id = "type", @class = "formInput", Selected = 1 })
+                            @Html.DropDownListFor(m => m.SelectedCustomerId, new SelectList(customers, "Key", "Value"), new { id = "type", @class = "formInput", required = true })
                         </label>
                         <label class="inputLabel" for="paymentMethodId">
                             @SharedLocalizer["PaymentMethod"]:
-                            @Html.DropDownListFor(m => m.SelectedPaymentMethodId, new SelectList(paymentMethods, "Key", "Value"), new { id = "type", @class = "formInput" })
+                            @Html.DropDownListFor(m => m.SelectedPaymentMethodId, new SelectList(paymentMethods, "Key", "Value"), new { id = "type", @class = "formInput", required = true })
                         </label>
                         <label class="inputLabel" for="dateFrom">
                             @SharedLocalizer["DateFrom"]:
-                            @Html.TextBoxFor(m => m.Period.DateFrom, new { id = "dateFrom", @class = "formInput", Type = "date" })
+                            @Html.TextBoxFor(m => m.Period.DateFrom, new { id = "dateFrom", @class = "formInput", Type = "date", required = true })
                         </label>
                         <label class="inputLabel" for="dateTo">
                             @SharedLocalizer["DateTo"]:
-                            @Html.TextBoxFor(m => m.Period.DateTo, new { id = "dateTo", @class = "formInput", Type = "date" })
+                            @Html.TextBoxFor(m => m.Period.DateTo, new { id = "dateTo", @class = "formInput", Type = "date", required = true })
                         </label>
                     </div>
                 </div>
