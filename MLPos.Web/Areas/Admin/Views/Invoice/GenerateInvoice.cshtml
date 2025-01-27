@@ -51,8 +51,8 @@
             lookupClasses: [ '.paymentMethodLookupName' ]
         });
 
-        customerSearchInput.addEventListener('focus', () => {
-            customerLookupList.classList.remove('hidden');
+        customerSearchInput.addEventListener('click', () => {
+            customerLookupList.classList.toggle('hidden');
         });
 
         const customerSelected = (id, name) => {
@@ -61,8 +61,8 @@
             customerLookupList.classList.add('hidden');
         }
 
-        paymentMethodSearchInput.addEventListener('focus', () => {
-            paymentMethodLookupList.classList.remove('hidden');
+        paymentMethodSearchInput.addEventListener('click', () => {
+            paymentMethodLookupList.classList.toggle('hidden');
         });
 
         const paymentMethodSelected = (id, name) => {
