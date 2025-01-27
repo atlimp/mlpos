@@ -70,7 +70,11 @@ namespace MLPos.Services
 
                 PostedTransactionHeader postedTransactionHeader = await _postedTransactionHeaderRepository.CreatePostedTransactionHeaderAsync(this.CreateFrom(transactionHeader, paymentMethod));
                 postedTransactionHeader.Customer = await _customerRepository.GetCustomerAsync(postedTransactionHeader.Customer.Id);
-                postedTransactionHeader.PaymentMethod = await _paymentMethodRepository.GetPaymentMethodAsync(postedTransactionHeader.PaymentMethod.Id);
+
+                if (postedTransactionHeader.PaymentMethod.Id != -1)
+                {
+                    postedTransactionHeader.PaymentMethod = await _paymentMethodRepository.GetPaymentMethodAsync(postedTransactionHeader.PaymentMethod.Id);
+                }
 
                 List<PostedTransactionLine> postedTransactionLines = new List<PostedTransactionLine>();
                 foreach (PostedTransactionLine line in this.CreateFrom(transactionHeader.Lines))

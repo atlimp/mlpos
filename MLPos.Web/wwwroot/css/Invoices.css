@@ -1,3 +1,8 @@
+#generateInvoiceTitle {
+    min-height: 0em;
+    height: fit-content;
+}
+
 .tableContainer {
     padding-right: 2em;
 }
