@@ -165,6 +165,9 @@
       <Content Update="Views\Shared\_Layout.cshtml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Content Update="wwwroot\css\printStyles.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Update="wwwroot\img\icons\invoice.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>

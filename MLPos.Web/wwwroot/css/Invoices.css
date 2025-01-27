@@ -51,7 +51,6 @@
     display: flex;
     flex-direction: column;
     height: fit-content;
-    padding-right: 2em;
     margin-bottom: 2em;
 }
 
@@ -73,6 +72,7 @@
 }
 
 .invoiceDetails {
+    margin-top: 2em;
     max-width: 32em;
 }
 
@@ -97,8 +97,6 @@
     margin: auto;
     text-align: right;
 }
-
-
 
 @media(min-width: 600px) {
     .invoiceId {
@@ -133,14 +131,15 @@
 
     .invoiceDetailsContainer {
         flex-direction: row;
+        justify-content: space-between;
     }
 
     .invoiceDetails {
-        margin: auto;
+        margin: auto 0;
     }
 
     .invoiceImageContainer {
-        margin: auto auto auto 4em;
+        margin: auto 4em;
     }
 }
 @media(min-width: 850px) {

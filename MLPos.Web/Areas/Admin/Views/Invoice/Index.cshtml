@@ -58,4 +58,9 @@
             <a class="pageNavLink pageNext" href="@Url.Action("Index", "Sales" , new { page = Model.PageNum + 1 })">@SharedLocalizer["NextPage"]</a>
         }
     </div>
+
+    <div class="formButtons">
+        <div></div>
+        <a class="button buttonPrimary formButton" href="@Url.Action("GenerateInvoice", "Invoice")">@SharedLocalizer["GenerateInvoice"]</a>
+    </div>
 </div>
