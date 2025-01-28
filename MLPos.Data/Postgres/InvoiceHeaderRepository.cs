@@ -93,6 +93,22 @@ namespace MLPos.Data.Postgres
             return null;
         }
 
+        public async Task<IEnumerable<InvoiceHeader>> GetInvoiceHeadersAsync(InvoiceQueryFilter queryFilter, int limit, int offset)
+        {
+            string query = "SELECT id, status, customer_id, paymentmethod_id, period_from, period_to, date_inserted FROM INVOICEHEADER WHERE ";
+            Tuple<string, Dictionary<string, object>> parsed = ParseQueryFilter(queryFilter);
+            query = query + parsed.Item1;
+            query = query + "ORDER BY date_inserted DESC LIMIT @limit OFFSET @offset";
+
+            parsed.Item2["@limit"] = limit;
+            parsed.Item2["@offset"] = offset;
+
+            return await this.ExecuteQuery(
+                                        query,
+                                        MapToInvoiceHeader,
+                                        parsed.Item2
+                                    );
+        }
         public InvoiceHeader MapToInvoiceHeader(NpgsqlDataReader reader)
         {
             return new InvoiceHeader
@@ -116,5 +132,43 @@ namespace MLPos.Data.Postgres
             };
         }
 
+
+        private Tuple<string, Dictionary<string, object>> ParseQueryFilter(InvoiceQueryFilter queryFilter)
+        {
+            StringBuilder sb = new StringBuilder();
+            Dictionary<string, object> filters = new Dictionary<string, object>();
+            sb.Append("1=1 ");
+
+            if (queryFilter != null)
+            {
+                if (queryFilter.Period != null)
+                {
+                    sb.Append("AND date_inserted >= @period_from ");
+                    filters["@period_from"] = queryFilter.Period.DateFrom;
+                    sb.Append("AND date_inserted <= @period_to ");
+                    filters["@period_to"] = queryFilter.Period.DateTo;
+                }
+
+                if (queryFilter.Status != null)
+                {
+                    sb.Append("AND status = @status ");
+                    filters["@status"] = (int)queryFilter.Status;
+                }
+
+                if (queryFilter.CustomerId != null)
+                {
+                    sb.Append("AND customer_id = @customer_id ");
+                    filters["@customer_id"] = queryFilter.CustomerId;
+                }
+
+                if (queryFilter.PaymentMethodId != null)
+                {
+                    sb.Append("AND paymentmethod_id = @paymentmethod_id ");
+                    filters["@paymentmethod_id"] = queryFilter.PaymentMethodId;
+                }
+            }
+
+            return new Tuple<string, Dictionary<string, object>>(sb.ToString(), filters);
+        }
     }
 }

@@ -411,9 +411,6 @@ inputLabelRadio {
     flex-direction: row;
 }
 
-
-
-
 @media(min-width: 600px) {
     .cardImage {
             max-width: 16em;
@@ -439,10 +436,6 @@ inputLabelRadio {
 
         .adminContainer {
             flex-direction: row;
-        }
-
-        .titleContainer {
-            min-height: 10em;
         }
 
         .navContainer {

@@ -12,6 +12,6 @@ namespace MLPos.Web.Models
         public string? DateFrom { get; set; }
         public string? DateTo { get; set; }
         public Dictionary<int, string> StatusValues { get; set; }
-        public TransactionStatus Status { get; set; }
+        public int Status { get; set; }
     }
 }

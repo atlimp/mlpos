@@ -7,4 +7,6 @@ public class InvoiceListViewModel
     public IEnumerable<InvoiceHeader> Invoices { get; set; }
     public int PageNum { get; set; }
     public bool HasMorePages { get; set; }
+    public FilterOptions FilterOptions { get; set; }
+
 }

@@ -80,7 +80,13 @@ namespace MLPos.Web.Controllers
             viewModel.FilterOptions.DateFrom = queryFilter.Period?.DateFrom.ToString("yyyy-MM-dd");
             viewModel.FilterOptions.DateTo = queryFilter.Period?.DateTo.ToString("yyyy-MM-dd");
 
-            viewModel.FilterOptions.Status = queryFilter.Status ?? TransactionStatus.Posted;
+            viewModel.FilterOptions.Status = -1;
+            if (queryFilter.Status != null)
+            {
+                viewModel.FilterOptions.Status = (int)queryFilter.Status;
+            }
+
+
             viewModel.FilterOptions.StatusValues = new Dictionary<int, string>();
             foreach (int val in Enum.GetValues(typeof(TransactionStatus)))
             {

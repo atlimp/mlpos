@@ -14,6 +14,7 @@
     queryParameters["paymentMethodId"] = Model.FilterOptions.SelectedPaymentMethodId;
     queryParameters["dateFrom"] = Model.FilterOptions.DateFrom;
     queryParameters["dateTo"] = Model.FilterOptions.DateTo;
+    queryParameters["status"] = Model.FilterOptions.Status;
 }
 
 @section Styles {
@@ -137,7 +138,6 @@
             <div>
                 @foreach (int key in Model.FilterOptions.StatusValues.Keys) {
                     <label class="filterLabel" for="@Model.FilterOptions.StatusValues[key]">
-                        @Model.FilterOptions.StatusValues[key]:
                         @if (key == (int)Model.FilterOptions.Status)
                         {
                             <input type="radio" id="@Model.FilterOptions.StatusValues[key]" name="status" class="lookupInput" value="@key" checked />
@@ -146,6 +146,7 @@
                         {
                             <input type="radio" id="@Model.FilterOptions.StatusValues[key]" name="status" class="lookupInput" value="@key" />
                         }
+                        @Model.FilterOptions.StatusValues[key]
                     </label>
 
                 }
@@ -181,16 +182,16 @@
     </div>
     <div class="pageNav">
         <div class="pageNavLink pagePrev">
-            @* @if (Model.PageNum > 1) *@
-            @{
+            @if (Model.PageNum > 1)
+            {
                 queryParameters["page"] = Model.PageNum - 1;
                 <a href="@Url.Action("Index", "Sales" , queryParameters)">@SharedLocalizer["PreviousPage"]</a>
             }
         </div>
         <div class="pageNavTitle currPage">@Model.PageNum</div>
         <div class="pageNavLink pageNext">
-            @* @if (Model.HasMorePages) *@
-            @{
+            @if (Model.HasMorePages)
+            {
                 queryParameters["page"] = Model.PageNum + 1;
                 <a class="pageNavLink pageNext" href="@Url.Action("Index", "Sales" , queryParameters)">@SharedLocalizer["NextPage"]</a>
             }
