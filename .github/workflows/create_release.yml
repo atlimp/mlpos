@@ -13,10 +13,14 @@ jobs:
       - name: Set env variables
         run: |
             release_name=$(echo "${{ github.ref }}" | cut -f 3 -d '/')
-            is_prerelease=false
             artifact_name=$(echo "${{ github.repository }}" | cut -f 2 -d '/')
 
             artifact_name="$artifact_name-$release_name"
+
+            is_prerelease=false
+            if [ ${{ github.ref_name }} != "master" ]; then
+                is_prerelease=true
+            fi
             
             echo release_name=$release_name >> $GITHUB_ENV
             echo is_prerelease=$is_prerelease >> $GITHUB_ENV
