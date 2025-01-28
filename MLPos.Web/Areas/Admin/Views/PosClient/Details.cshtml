@@ -79,12 +79,14 @@
                 @Html.TextBoxFor(m => m.PosClient.Id, new { hidden = "hidden" })
 
             </form>
-            @if (Model.Editing && !Model.NewPosClient)
-            {
-                <form method="post" class="deleteForm" action="@Url.Action("Delete", "PosClient", new { id = Model.PosClient.Id })">
-                    <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
-                </form>
-            }
-        </div>
+            </div>
+            <div class="sidebox productsidebox">
+                @if (Model.Editing && !Model.NewPosClient)
+                {
+                    <form method="post" class="deleteForm sideboxitem" action="@Url.Action("Delete", "PosClient", new { id = Model.PosClient.Id })">
+                        <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
+                    </form>
+                }
+            </div>
     </div>
 </div>

@@ -1,7 +1,3 @@
-.tableContainer {
-    padding-right: 2em;
-}
-
 .salesTransactionTable {
     border: 1px solid var(--platinum);
     width: 100%;
@@ -28,8 +24,7 @@
 }
 
 .salesDate {
-    width: 6em;
-    text-align: left;
+    display: none;
 }
 
 .salesCustomer {
@@ -38,8 +33,7 @@
 }
 
 .salesPaymentMethod {
-    width: 6em;
-    text-align: left;
+    display: none;
 }
 
 .transactionDetailsContainer {
@@ -98,17 +92,18 @@
 
 @media(min-width: 600px) {
     .salesId {
-        width: 2.5em;
+        width: 100%;
         text-align: left;
     }
 
     .salesStatus {
-        width: 6em;
+        width: 100%;
         text-align: left;
     }
 
     .salesDate {
-        width: 6em;
+        display: block;
+        width: 100%;
         text-align: left;
     }
 
@@ -118,6 +113,7 @@
     }
 
     .salesPaymentMethod {
+        display: block;
         width: 100%;
         text-align: left;
     }

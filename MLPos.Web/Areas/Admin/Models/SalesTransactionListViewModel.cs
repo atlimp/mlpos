@@ -7,4 +7,5 @@ public class SalesTransactionListViewModel
     public IEnumerable<PostedTransactionHeader> Transactions { get; set; }
     public int PageNum { get; set; }
     public bool HasMorePages { get; set; }
+    public FilterOptions FilterOptions { get; set; }
 }

@@ -104,11 +104,11 @@
     justify-content: flex-start;
     max-width: 1920px;
     height: auto;
+    overflow: auto;
 }
 
 .pageContentContainer {
     height: auto;
-    overflow-y: scroll;
     flex-direction: column;
     margin: 2em auto;
 }
@@ -120,7 +120,6 @@
 .titleContainer {
     width: auto;
     height: auto;
-    min-height: 10em;
     margin: 1em;
     justify-content: space-between;
     flex-direction: column;
@@ -263,13 +262,13 @@ input[type=checkbox]:disabled {
 
 .deleteForm {
     width: 100%;
-    margin-top: 5em;
 }
 
 .deleteButton {
     width: 100%;
-    background-color: red;
-    height: 4em;
+    background-color: var(--red);
+    color: var(--yellow);
+    min-height: 2em;
 }
 
 .pageNav {
@@ -278,12 +277,9 @@ input[type=checkbox]:disabled {
     justify-content: flex-start;
 }
 
-.pageNavLink {
+.pageNavLink , .pageNavTitle {
     width: 4em;
-}
-
-.pageNavTitle {
-    width: 4em;
+    text-align: center;
 }
 
 table {
@@ -305,7 +301,9 @@ table, tr, th, td {
 }
 
 .tableContainer {
+    margin-top: 2em;
     margin-bottom: 2em;
+    height: fit-content;
 }
 
 .tableHeader {
@@ -314,17 +312,25 @@ table, tr, th, td {
 }
 
 .sidebox {
+    font-size: 12px;
     margin-top: 3em;
+    min-width: 20em;
     border: 1px solid var(--yellow);
     background: var(--platinum);
     border-radius: 5px;
-    padding: 1em;
+    padding: 0 1em;
     height: fit-content;
 }
 
 .sideboxitem {
     padding: 1em 0;
+    width: 100%;
 }
+
+.sideboxitem .button {
+    width: 100%;
+}
+
 .sideboxitem:not(:first-child) {
     border-top: 1px solid var(--yellow);
 }
@@ -347,6 +353,8 @@ table, tr, th, td {
 
 .lookupContainer {
     width: 100%;
+    max-height: 11em;
+    overflow: scroll;
     flex-direction: column;
 }
 
@@ -392,8 +400,16 @@ table, tr, th, td {
     font-size: 1rem;
 }
 
+.filterImage {
+    max-height: 2em;
+    max-width: 2em;
+    height: auto;
+    width: auto;
+}
 
-
+inputLabelRadio {
+    flex-direction: row;
+}
 
 @media(min-width: 600px) {
     .cardImage {

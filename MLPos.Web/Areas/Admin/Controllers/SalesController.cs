@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using MLPos.Core.Enums;
 using MLPos.Core.Interfaces.Services;
 using MLPos.Core.Model;
@@ -12,9 +13,15 @@ namespace MLPos.Web.Controllers
     public class SalesController : AdminControllerBase
     {
         private readonly ITransactionService _transactionService;
-        public SalesController(ITransactionService transactionService)
+        private readonly ICustomerService _customerService;
+        private readonly IPaymentMethodService _paymentMethodService;
+        private readonly IStringLocalizer<SharedResources> _sharedLocalizer;
+        public SalesController(ITransactionService transactionService, ICustomerService customerService, IPaymentMethodService paymentMethodService, IStringLocalizer<SharedResources> sharedLocalizer)
         {
             _transactionService = transactionService;
+            _customerService = customerService;
+            _paymentMethodService = paymentMethodService;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         [HttpGet]
@@ -49,7 +56,7 @@ namespace MLPos.Web.Controllers
                         period = new Period();
                     }
 
-                    period.DateFrom = toDate;
+                    period.DateTo = toDate;
                 }
 
                 queryFilter.Period = period;
@@ -61,6 +68,30 @@ namespace MLPos.Web.Controllers
             viewModel.PageNum = page;
             viewModel.Transactions = await _transactionService.GetPostedTransactionHeadersAsync(queryFilter, limit, offset);
             viewModel.HasMorePages = viewModel.Transactions.Count() >= Constants.LIST_PAGE_SIZE;
+
+            viewModel.FilterOptions = new FilterOptions();
+
+            viewModel.FilterOptions.Customers = await _customerService.GetCustomersAsync();
+            viewModel.FilterOptions.SelectedCustomerId = queryFilter.CustomerId;
+
+            viewModel.FilterOptions.PaymentMethods = await _paymentMethodService.GetPaymentMethodsAsync();
+            viewModel.FilterOptions.SelectedPaymentMethodId = queryFilter.PaymentMethodId;
+
+            viewModel.FilterOptions.DateFrom = queryFilter.Period?.DateFrom.ToString("yyyy-MM-dd");
+            viewModel.FilterOptions.DateTo = queryFilter.Period?.DateTo.ToString("yyyy-MM-dd");
+
+            viewModel.FilterOptions.Status = -1;
+            if (queryFilter.Status != null)
+            {
+                viewModel.FilterOptions.Status = (int)queryFilter.Status;
+            }
+
+
+            viewModel.FilterOptions.StatusValues = new Dictionary<int, string>();
+            foreach (int val in Enum.GetValues(typeof(TransactionStatus)))
+            {
+                viewModel.FilterOptions.StatusValues[val] = _sharedLocalizer[((TransactionStatus)val).ToString()];
+            }
             return View(viewModel);
         }
 

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using MLPos.Core.Enums;
 using MLPos.Core.Interfaces.Services;
 using MLPos.Core.Model;
 using MLPos.Web.Controllers;
@@ -13,27 +15,85 @@ namespace MLPos.Web.Controllers
         private readonly IInvoicingService _invoicingService;
         private readonly ICustomerService _customerService;
         private readonly IPaymentMethodService _paymentMethodService;
-        public InvoiceController(IInvoicingService invoicingService, ICustomerService customerService, IPaymentMethodService paymentMethodService)
+        private readonly IStringLocalizer<SharedResources> _sharedLocalizer;
+
+        public InvoiceController(IInvoicingService invoicingService, ICustomerService customerService, IPaymentMethodService paymentMethodService, IStringLocalizer<SharedResources> sharedLocalizer)
         {
             _invoicingService = invoicingService;
             _customerService = customerService;
             _paymentMethodService = paymentMethodService;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(int page = 1, [FromQuery] InvoiceQueryFilter? queryFilter = null, [FromQuery] string? dateFrom = null, [FromQuery] string? dateTo = null)
         {
             if (page < 1)
             {
                 page = 1;
             }
 
+            if (queryFilter == null)
+            {
+                queryFilter = new InvoiceQueryFilter();
+            }
+
+            if (!(dateFrom == null && dateTo == null))
+            {
+                Period? period = null;
+                if (DateTime.TryParse(dateFrom, out DateTime fromDate))
+                {
+                    if (period == null)
+                    {
+                        period = new Period();
+                    }
+
+                    period.DateFrom = fromDate;
+                }
+                if (DateTime.TryParse(dateTo, out DateTime toDate))
+                {
+                    if (period == null)
+                    {
+                        period = new Period();
+                    }
+
+                    period.DateTo = toDate;
+                }
+
+                queryFilter.Period = period;
+            }
+
             int limit = Constants.LIST_PAGE_SIZE;
             int offset = (page - 1) * limit;
             InvoiceListViewModel viewModel = new InvoiceListViewModel();
             viewModel.PageNum = page;
-            viewModel.Invoices = await _invoicingService.GetInvoicesAsync(limit, offset);
+            viewModel.Invoices = await _invoicingService.GetInvoicesAsync(queryFilter, limit, offset);
             viewModel.HasMorePages = viewModel.Invoices.Count() >= Constants.LIST_PAGE_SIZE;
+
+            viewModel.FilterOptions = new FilterOptions();
+
+            viewModel.FilterOptions.Customers = await _customerService.GetCustomersAsync();
+            viewModel.FilterOptions.SelectedCustomerId = queryFilter.CustomerId;
+
+            viewModel.FilterOptions.PaymentMethods = await _paymentMethodService.GetPaymentMethodsAsync();
+            viewModel.FilterOptions.SelectedPaymentMethodId = queryFilter.PaymentMethodId;
+
+            viewModel.FilterOptions.DateFrom = queryFilter.Period?.DateFrom.ToString("yyyy-MM-dd");
+            viewModel.FilterOptions.DateTo = queryFilter.Period?.DateTo.ToString("yyyy-MM-dd");
+
+            viewModel.FilterOptions.Status = -1;
+            if (queryFilter.Status != null)
+            {
+                viewModel.FilterOptions.Status = (int)queryFilter.Status;
+            }
+
+
+            viewModel.FilterOptions.StatusValues = new Dictionary<int, string>();
+            foreach (int val in Enum.GetValues(typeof(InvoiceStatus)))
+            {
+                viewModel.FilterOptions.StatusValues[val] = _sharedLocalizer[((InvoiceStatus)val).ToString()];
+            }
+
             return View(viewModel);
         }
 

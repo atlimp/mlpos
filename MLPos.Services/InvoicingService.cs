@@ -247,5 +247,18 @@ namespace MLPos.Services
 
             return new Tuple<bool, IEnumerable<ValidationError>>(ret, validationErrors);
         }
+
+        public async Task<IEnumerable<InvoiceHeader>> GetInvoicesAsync(InvoiceQueryFilter queryFilter, int limit, int offset)
+        {
+            IEnumerable<InvoiceHeader> invoiceHeaders = await _invoiceHeaderRepository.GetInvoiceHeadersAsync(queryFilter, limit, offset);
+
+            foreach (InvoiceHeader invoice in invoiceHeaders)
+            {
+                invoice.Customer = await _customerRepository.GetCustomerAsync(invoice.Customer.Id);
+                invoice.PaymentMethod = await _paymentMethodRepository.GetPaymentMethodAsync(invoice.PaymentMethod.Id);
+            }
+
+            return invoiceHeaders;
+        }
     }
 }
