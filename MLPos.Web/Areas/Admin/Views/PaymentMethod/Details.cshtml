@@ -100,17 +100,17 @@
                 @Html.TextBoxFor(m => m.PaymentMethod.Image, new { hidden = "hidden" })
 
             </form>
+        </div>
+        <div class="sidebox paymentMethodSidebox">
             @if (Model.Editing && !Model.NewPaymentMethod)
             {
-                <form method="post" class="deleteForm" action="@Url.Action("Delete", "PaymentMethod", new { id = Model.PaymentMethod.Id })">
+                <form method="post" class="deleteForm sideboxitem" action="@Url.Action("Delete", "PaymentMethod", new { id = Model.PaymentMethod?.Id })">
                     <button class="button buttonSecondary deleteButton">@SharedLocalizer["Delete"]</button>
                 </form>
             }
-        </div>
-        <div class="sidebox customersidebox">
             @if (Model.PaymentMethod != null)
             {
-                <div class="invoiceDetail">
+                <div class="invoiceDetail sideboxitem">
                     <a class="button buttonPrimary formButton" href="@Url.Action("GenerateInvoice", "Invoice", new { paymentMethodId = Model.PaymentMethod?.Id })">@SharedLocalizer["GenerateInvoice"]</a>
                 </div>
             }
